@@ -1,5 +1,5 @@
 import {useState, React} from "react";
-import LoginDiag from "../components/loginDiag";
+import LoginDiag from "../components/LoginDiag";
 import {
     Flex,
     Heading,
@@ -8,7 +8,7 @@ import {
     Link,
     useColorModeValue
   } from '@chakra-ui/react';
-import RegisterDiag from "../components/registerDiag";
+import RegisterDiag from "../components/RegisterDiag";
 
 export default function LoginPage() {
     const [logOrReg, setLogOrReg] = useState(false);
