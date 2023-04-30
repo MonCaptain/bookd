@@ -32,13 +32,13 @@ import {
                         align={'start'}
                         justify={'space-between'}>
                         <Checkbox>Remember me</Checkbox>
-                        <Link color={'blue.400'}>Forgot password?</Link>
+                        <Link color={'orange.400'}>Forgot password?</Link>
                     </Stack>
                     <Button
-                        bg={'blue.400'}
+                        bg={'orange.400'}
                         color={'white'}
                         _hover={{
-                        bg: 'blue.500',
+                        bg: 'orange.500',
                         }}>
                         Sign in
                     </Button>
