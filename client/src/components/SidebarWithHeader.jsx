@@ -9,7 +9,6 @@ import {
   VStack,
   Icon,
   useColorModeValue,
-  Link,
   Drawer,
   DrawerContent,
   Text,
@@ -22,20 +21,21 @@ import {
 } from '@chakra-ui/react';
 import {
   FiHome,
-  FiTrendingUp,
-  FiCompass,
-  FiStar,
   FiSettings,
   FiMenu,
   FiBell,
   FiChevronDown,
+  FiBookOpen,
+  FiCheck,
+  FiTrash2
 } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 
 const LinkItems = [
-  { name: 'Home', icon: FiHome },
-  { name: 'Trending', icon: FiTrendingUp },
-  { name: 'Explore', icon: FiCompass },
-  { name: 'Favourites', icon: FiStar },
+  { name: 'Home', icon: FiHome, path: "/"},
+  { name: 'Currently Reading', icon: FiBookOpen, path: "/reading" },
+  { name: 'Completed', icon: FiCheck, path: "/completed" },
+  { name: 'Dropped', icon: FiTrash2, path: "/dropped"},
   { name: 'Settings', icon: FiSettings },
 ];
 
@@ -88,7 +88,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon}>
+        <NavItem key={link.name} icon={link.icon} href={link.path}>
           {link.name}
         </NavItem>
       ))}
@@ -96,9 +96,10 @@ const SidebarContent = ({ onClose, ...rest }) => {
   );
 };
 
-const NavItem = ({ icon, children, ...rest }) => {
+const NavItem = ({ icon, children, href, ...rest }) => {
   return (
-    <Link href="#" style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
+    <Link to={href}>
+    {/* <Link to={href} style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}> */}
       <Flex
         align="center"
         p="4"
@@ -107,7 +108,7 @@ const NavItem = ({ icon, children, ...rest }) => {
         role="group"
         cursor="pointer"
         _hover={{
-          bg: 'cyan.400',
+          bg: 'orange.400',
           color: 'white',
         }}
         {...rest}>

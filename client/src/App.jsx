@@ -1,18 +1,27 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
-import SidebarWithHeader from './components/SidebarWithHeader'
-import LoginPage from './pages/LoginPage'
+import {
+  createBrowserRouter,
+  Route,
+  createRoutesFromElements,
+  RouterProvider,
+} from "react-router-dom";
+import BookList from './pages/BookList';
+import RootLayout from "./layouts/RootLayout"
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="/" element={<RootLayout />}>
+      <Route path="/reading" element={<BookList listType={"reading"}/>}/>
+      <Route path="/completed" element={<BookList listType={"completed"}/>}/>
+      <Route path="/dropped" element={<BookList listType={"dropped"}/>}/>
+    </Route>
+  )
+);
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-    
-      // <SidebarWithHeader/>
-      <LoginPage/>
-    
+    <RouterProvider router={router}/>    
   )
 }
 
