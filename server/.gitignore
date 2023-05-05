@@ -1,0 +1,17 @@
+# Environment Files
+env
+.env
+
+# VSCode Files
+.vscode
+
+# Database migrations
+server/*/migrations/*
+!server/*/migrations/__init__.py
+
+# Pycache
+*/**__pycache__
+*/*/__pycache__
+
+# Server Database
+db.sqlite3
