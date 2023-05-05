@@ -49,7 +49,7 @@ Just click the link at local host to be redirected. This application uses vite, 
    cd server
    ```
 
-1. Install `virtualenv` on your system.
+2. Install `virtualenv` on your system.
 
    **Unix/macOS**
 
@@ -69,13 +69,13 @@ Just click the link at local host to be redirected. This application uses vite, 
    py -m pip install --user virtualenv
    ```
 
-1. Create the virtual environment
+3. Create the virtual environment
 
    ```txt
    virutalenv env
    ```
 
-1. Run the virtual environment in your system.
+4. Run the virtual environment in your system.
 
    **Unix/macOS**
 
@@ -95,11 +95,44 @@ Just click the link at local host to be redirected. This application uses vite, 
    Set-ExecutionPolicy RemoteSigned
    ```
 
-1. Install the packages in `requirements.txt`.
+5. Install the packages in `requirements.txt`.
 
    ```txt
    pip install -r requirements.txt
    ```
+
+6. create a `.env` file within `server/`
+
+   ```txt
+   cp .env.example .env
+   ```
+
+7. Run secret_key.py to get Django secret key
+
+   ```txt
+   python scripts/secret_key.py
+   ```
+
+8. Enter the Django secret_key in the `.env` file you created.
+
+   ```txt
+   SECRET_KEY="<Your secret key>"
+   ```
+
+9. Set up and migrate the database.
+
+   Prior to running these commands, make sure that your project Environment Variables are set up
+
+   ```txt
+   python manage.py makemigrations
+   python manage.py migrate
+   ```
+
+10. Create a superuser (Owner Account)
+
+    ```txt
+    python manage.py createsuperuser
+    ```
 
 #### Run Server
 
