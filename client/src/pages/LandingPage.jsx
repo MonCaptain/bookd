@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { BiLogIn } from 'react-icons/bi';
 import { BsPersonAdd } from 'react-icons/bs';
-import LandingPageNavBar from '../components/LandingPageNavBar';
+import LandingPageNavBar from '../components/landingPageNavBar';
 
 function SplitScreen() {
   return (
