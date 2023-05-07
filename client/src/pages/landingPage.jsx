@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { BiLogIn } from "react-icons/bi";
 import { BsPersonAdd } from "react-icons/bs";
-import LandingPageNavBar from "../components/landingPageNavBar";
+import { Link } from "react-router-dom";
 
 function SplitScreen() {
   return (
@@ -51,7 +51,7 @@ function SplitScreen() {
             Sign up now for free and experience the convenience for yourself!
           </Text>
           <Stack direction={{ base: "column", md: "row" }} spacing={4}>
-            <Button
+            <Link to="/login"><Button
               rounded={"full"}
               variant={"outline"}
               color={"orange.400"}
@@ -60,6 +60,8 @@ function SplitScreen() {
             >
               Sign In
             </Button>
+            </Link>
+            <Link to={"/register"}>
             <Button
               rounded={"full"}
               variant={"solid"}
@@ -70,6 +72,7 @@ function SplitScreen() {
             >
               Sign up
             </Button>
+            </Link>
           </Stack>
         </Stack>
       </Flex>
@@ -89,7 +92,6 @@ function SplitScreen() {
 export default function LandingPage() {
   return (
     <Stack minH={"100vh"} flexDir={"column"}>
-      <LandingPageNavBar />
       <SplitScreen />
     </Stack>
   );

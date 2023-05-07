@@ -10,8 +10,8 @@ import {
   } from '@chakra-ui/react';
 import RegisterDiag from "../components/RegisterDiag";
 
-export default function LoginPage() {
-    const [logOrReg, setLogOrReg] = useState(false);
+export default function LoginPage({logOrRegValue}) {
+    const [logOrReg, setLogOrReg] = useState(logOrRegValue);
     return (
         <Flex
             minH={'100vh'}
@@ -38,8 +38,8 @@ export default function LoginPage() {
                 <Stack pt={6}>
                     {
                     logOrReg ? 
-                    <Text align={'center'}>Already have an account? Click <Link color={'orange.400'} onClick={(e) => setLogOrReg(false)} >here</Link> 👈</Text> :
-                    <Text align={'center'}>Haven't joined yet? Click <Link color={'orange.400'} onClick={(e) => setLogOrReg(true)} >here</Link> 👈</Text>
+                    <Text align={'center'}>Haven't joined yet? Click <Link color={'orange.400'} onClick={(e) => setLogOrReg(false)} >here</Link> 👈</Text> :
+                    <Text align={'center'}>Already have an account? Click <Link color={'orange.400'} onClick={(e) => setLogOrReg(true)} >here</Link> 👈</Text>
                     }
                 </Stack>
             </Stack>
