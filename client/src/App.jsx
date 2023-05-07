@@ -22,14 +22,20 @@ const authedRouter = createBrowserRouter(
     </Route>
   )
 );
+import Dashboard from './pages/explorePage';
 
 const notAuthedRouter = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<RootLayout />}>
-      <Route index element={<LandingPage />} />
-      <Route path="/login" element={<LoginPage logOrRegValue={true} />} />
-      <Route path="/register" element={<LoginPage logOrRegValue={false} />} />
+    <Route path="">
+      <Route path="/" element={<RootLayout />}>
+        <Route index element={<LandingPage />} />
+        <Route path="/login" element={<LoginPage logOrRegValue={true} />} />
+        <Route path="/register" element={<LoginPage logOrRegValue={false} />} />
+        
+      </Route>
+      <Route path="/explorer" element={<Dashboard/>}/>
     </Route>
+      
   )
 );
 

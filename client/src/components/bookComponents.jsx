@@ -1,6 +1,6 @@
 import { Button, Card, CardBody, CardFooter, CardHeader, Heading, Image, Stack, Text} from "@chakra-ui/react"
 
-export default function BookCard (props) {
+export default function BookCard ({cover, author, pagecount, title}) {
     // console.log(props)
     return (
         <Card minW={'500px'}
@@ -11,20 +11,20 @@ export default function BookCard (props) {
             <Image
                 objectFit='cover'
                 maxW={{ base: '100%', sm: '200px' }}
-                src={props.cover}
+                src={cover}
                 alt='Caffe Latte'
             />
             <Stack>
                 <CardHeader>
-                    <Heading size={'lg'}>{props.title}</Heading>
+                    <Heading size={'lg'}>{title}</Heading>
                     <Heading size={'md'} py='2'>
-                    Written by {props.author}
+                    Written by {author}
                 </Heading>
                 </CardHeader>
                 <CardBody>
 
                 
-                <Text>{props.pagecount ? `${props.pagecount} pages` : "Page count unavailable."}</Text>
+                <Text>{pagecount ? `${pagecount} pages` : "Page count unavailable."}</Text>
 
                 </CardBody>
 

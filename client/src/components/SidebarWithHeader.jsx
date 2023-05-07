@@ -26,20 +26,23 @@ import {
   FiBookOpen,
   FiCheck,
   FiTrash2,
+  FiBook
 } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { useColorMode } from "@chakra-ui/react";
-import { MoonIcon, SunIcon } from "@chakra-ui/icons";
+import { HamburgerIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
+import SearchBar from "./search";
 
 const LinkItems = [
   { name: "Home", icon: FiHome, path: "/" },
   { name: "Currently Reading", icon: FiBookOpen, path: "/reading" },
   { name: "Completed", icon: FiCheck, path: "/completed" },
   { name: "Dropped", icon: FiTrash2, path: "/dropped" },
+  { name: "Explore", icon: FiBook, path:"/explorer" },
   { name: "Settings", icon: FiSettings },
 ];
 
-export default function SidebarWithHeader({ children }) {
+export default function SidebarWithHeader({ children, withSearch }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
@@ -61,7 +64,7 @@ export default function SidebarWithHeader({ children }) {
         </DrawerContent>
       </Drawer>
       {/* mobilenav */}
-      <MobileNav onOpen={onOpen} />
+      <MobileNav onOpen={onOpen} withSearch={withSearch} />
       <Box ml={{ base: 0, md: 60 }} p="4">
         {children}
       </Box>
@@ -129,7 +132,7 @@ const NavItem = ({ icon, children, href, ...rest }) => {
   );
 };
 
-const MobileNav = ({ onOpen, ...rest }) => {
+const MobileNav = ({ withSearch, onOpen, ...rest }) => {
   const { colorMode, toggleColorMode } = useColorMode();
 
   return (
@@ -149,7 +152,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
         onClick={onOpen}
         variant="outline"
         aria-label="open menu"
-        icon={<SunIcon />}
+        icon={<HamburgerIcon/>}
       />
 
       <Text
@@ -160,6 +163,8 @@ const MobileNav = ({ onOpen, ...rest }) => {
       >
         Logo
       </Text>
+
+      {withSearch ? <SearchBar/> : null}
 
       <HStack spacing={{ base: "0", md: "6" }}>
         <IconButton

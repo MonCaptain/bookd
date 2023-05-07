@@ -1,17 +1,10 @@
-import { Box, Flex, Icon, Input, SimpleGrid ,Stack} from "@chakra-ui/react";
+import { Box, SimpleGrid ,Stack} from "@chakra-ui/react";
 import { searchQuery } from '../api/bookAPI'
 import BookCard from "../components/bookComponents";
-import { useState, useEffect } from "react";
-import SearchBar from "../components/search";
+import { useState } from "react";
+import SidebarWithHeader from "../components/SidebarWithHeader";
 
-
-const populateBooks = (bookList) => {
-    
-    // console.log(elementList)
-    return elementList
-}
-
-export default function Dashboard() {
+export default function ExplorePage() {
     let [fetchedBooks, setFetchedBooks] = useState([])
     let [toSearch, setToSearch] = useState("")
     const fetchBooks = () => {
@@ -43,8 +36,8 @@ export default function Dashboard() {
 
     return (
     <Box>
+        <SidebarWithHeader withSearch/>
         <Stack>
-            <SearchBar handleChange={(e) => handleSearch(e)}></SearchBar>
             <SimpleGrid spacing={4} columns={{base: 1, md: 3}} >
                 {fetchedBooks}
             </SimpleGrid>
