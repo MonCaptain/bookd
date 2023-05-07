@@ -4,6 +4,7 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import SidebarWithHeader from './components/SidebarWithHeader'
 import LoginPage from './pages/LoginPage'
+import Dashboard from './pages/dashboard'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -11,7 +12,7 @@ function App() {
   return (
     
       // <SidebarWithHeader/>
-      <LoginPage/>
+      <Dashboard></Dashboard>
     
   )
 }
