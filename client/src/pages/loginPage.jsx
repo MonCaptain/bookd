@@ -10,8 +10,8 @@ import {
   } from '@chakra-ui/react';
 import RegisterDiag from "../components/RegisterDiag";
 
-export default function LoginPage() {
-    const [logOrReg, setLogOrReg] = useState(false);
+export default function LoginPage({logOrRegValue}) {
+    const [logOrReg, setLogOrReg] = useState(logOrRegValue);
     return (
         <Flex
             minH={'100vh'}
