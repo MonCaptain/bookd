@@ -47,7 +47,7 @@ function SplitScreen() {
           </Heading>
           <Text fontSize={{ base: "md", lg: "lg" }} color={"gray.500"}>
             Never lose a great read again. Save time and hassle by easily accessing
-            your bookmarks from any device whehter at home or on the go.
+            your bookmarks from any device whether at home or on the go.
             Sign up now for free and experience the convenience for yourself!
           </Text>
           <Stack direction={{ base: "column", md: "row" }} spacing={4}>
