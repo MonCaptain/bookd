@@ -49,10 +49,6 @@ function SplitScreen() {
             Never lose a great read again. Save time and hassle by easily accessing
             your bookmarks from any device whehter at home or on the go.
             Sign up now for free and experience the convenience for yourself!
-            {/* Save time and hassle by easily accessing
-            your bookmarks from any device. Whether you're at home or on the go,
-            our app ensures you'll never miss a beat. */}
-             
           </Text>
           <Stack direction={{ base: "column", md: "row" }} spacing={4}>
             <Button
