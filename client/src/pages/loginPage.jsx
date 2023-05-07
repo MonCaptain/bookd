@@ -38,8 +38,8 @@ export default function LoginPage({logOrRegValue}) {
                 <Stack pt={6}>
                     {
                     logOrReg ? 
-                    <Text align={'center'}>Already have an account? Click <Link color={'orange.400'} onClick={(e) => setLogOrReg(false)} >here</Link> 👈</Text> :
-                    <Text align={'center'}>Haven't joined yet? Click <Link color={'orange.400'} onClick={(e) => setLogOrReg(true)} >here</Link> 👈</Text>
+                    <Text align={'center'}>Haven't joined yet? Click <Link color={'orange.400'} onClick={(e) => setLogOrReg(false)} >here</Link> 👈</Text> :
+                    <Text align={'center'}>Already have an account? Click <Link color={'orange.400'} onClick={(e) => setLogOrReg(true)} >here</Link> 👈</Text>
                     }
                 </Stack>
             </Stack>

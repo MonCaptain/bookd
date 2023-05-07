@@ -3,9 +3,7 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Checkbox,
   Stack,
-  Link,
   Button,
   useColorModeValue,
 } from "@chakra-ui/react";
