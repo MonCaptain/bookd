@@ -6,8 +6,8 @@ env
 .vscode
 
 # Database migrations
-server/*/migrations/*
-!server/*/migrations/__init__.py
+*/migrations/*
+!*/migrations/__init__.py
 
 # Pycache
 */**__pycache__
