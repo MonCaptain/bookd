@@ -64,7 +64,7 @@ export function SearchedBookCard({cover, author, pagecount, title}) {
                   Track
               </Button>
               <Button variant='ghost' colorScheme='blue'>
-                  Add to cart
+                  More Info
               </Button>
               </ButtonGroup>
           </CardFooter>
