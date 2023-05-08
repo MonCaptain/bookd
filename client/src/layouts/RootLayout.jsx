@@ -1,7 +1,6 @@
 import { Outlet } from "react-router-dom";
 import SidebarWithHeader from "../components/SidebarWithHeader";
 import { useAuthContext } from "../contexts/AuthContext";
-import NavBar from "../components/NavBar";
 
 export default function RootLayout() {
   const authVariables = useAuthContext();
@@ -13,7 +12,6 @@ export default function RootLayout() {
     </SidebarWithHeader>
   ) : (
     <>
-    <NavBar/>
       <Outlet />
     </>
   );
