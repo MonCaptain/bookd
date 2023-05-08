@@ -9,10 +9,10 @@ export function bookSearch(bookName) {
 export function searchQuery(bookName) {
     let parsed = Promise.resolve(bookSearch(bookName)).then((searchResults) => {
         let obtainedBooks = []
-        searchResults.docs.slice(0,5).forEach((element) => {
+        searchResults.docs.slice(0,10).forEach((element) => {
             obtainedBooks.push({
                 title: element.title ? element.title : "Untitled",
-                author: element.author_name ? element.author_name[0] : "Unknown",
+                author: element.author_name ? element.author_name[0] : "",
                 cover: element.cover_i ? `https://covers.openlibrary.org/b/id/${element.cover_i}-L.jpg` : unavailable,
                 pages: element.number_of_pages_median,
                 publish_date: element.publish_date ? element.publish_date[0] : "Unknown"

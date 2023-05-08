@@ -14,14 +14,14 @@ export default function SearchBar({handleChange}) {
         'At The Mountains Of Madness'
     ]
     return (
-        <InputGroup maxW={"50%"} mx={"9"}>
+        <InputGroup mx={"9"}>
             <InputLeftElement
                 pointerEvents='none'
                 children={<SearchIcon color='gray.300' />}
             />
             <Input type='tel' 
             placeholder={possibleBookPrompts[Math.floor(Math.random()*possibleBookPrompts.length)]}
-            onChange={handleChange}/>
+            onInput={handleChange}/>
         </InputGroup>
     )
 }

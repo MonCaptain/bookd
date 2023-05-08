@@ -31,7 +31,6 @@ import {
 import { Link } from "react-router-dom";
 import { useColorMode } from "@chakra-ui/react";
 import { HamburgerIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
-import SearchBar from "./search";
 
 const LinkItems = [
   { name: "Home", icon: FiHome, path: "/" },
@@ -42,7 +41,7 @@ const LinkItems = [
   { name: "Settings", icon: FiSettings },
 ];
 
-export default function SidebarWithHeader({ children, withSearch }) {
+export default function SidebarWithHeader({ children }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
@@ -64,7 +63,7 @@ export default function SidebarWithHeader({ children, withSearch }) {
         </DrawerContent>
       </Drawer>
       {/* mobilenav */}
-      <MobileNav onOpen={onOpen} withSearch={withSearch} />
+      <MobileNav onOpen={onOpen} />
       <Box ml={{ base: 0, md: 60 }} p="4">
         {children}
       </Box>
@@ -132,7 +131,7 @@ const NavItem = ({ icon, children, href, ...rest }) => {
   );
 };
 
-const MobileNav = ({ withSearch, onOpen, ...rest }) => {
+const MobileNav = ({ onOpen, ...rest }) => {
   const { colorMode, toggleColorMode } = useColorMode();
 
   return (
@@ -163,8 +162,6 @@ const MobileNav = ({ withSearch, onOpen, ...rest }) => {
       >
         Logo
       </Text>
-
-      {withSearch ? <SearchBar/> : null}
 
       <HStack spacing={{ base: "0", md: "6" }}>
         <IconButton

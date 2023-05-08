@@ -10,6 +10,7 @@ import RootLayout from "./layouts/RootLayout";
 import { useAuthContext } from "./contexts/AuthContext";
 import LoginPage from "./pages/LoginPage";
 import LandingPage from "./pages/LandingPage";
+import ExplorePage from "./pages/explorePage";
 
 const authedRouter = createBrowserRouter(
   createRoutesFromElements(
@@ -19,23 +20,18 @@ const authedRouter = createBrowserRouter(
       <Route path="/reading" element={<BookList listType={"reading"} />} />
       <Route path="/completed" element={<BookList listType={"completed"} />} />
       <Route path="/dropped" element={<BookList listType={"dropped"} />} />
+      <Route path="/explore" element={<ExplorePage/>}/>
     </Route>
   )
 );
-import Dashboard from './pages/explorePage';
 
 const notAuthedRouter = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="">
-      <Route path="/" element={<RootLayout />}>
-        <Route index element={<LandingPage />} />
-        <Route path="/login" element={<LoginPage logOrRegValue={true} />} />
-        <Route path="/register" element={<LoginPage logOrRegValue={false} />} />
-        
-      </Route>
-      <Route path="/explorer" element={<Dashboard/>}/>
+    <Route path="/" element={<RootLayout />}>
+      <Route index element={<LandingPage />} />
+      <Route path="/login" element={<LoginPage logOrRegValue={true} />} />
+      <Route path="/register" element={<LoginPage logOrRegValue={false} />} />
     </Route>
-      
   )
 );
 
