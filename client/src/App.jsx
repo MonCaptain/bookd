@@ -36,7 +36,13 @@ const notAuthedRouter = createBrowserRouter(
 function App() {
   const authVariables = useAuthContext();
   const isUserAuthed = authVariables.isUserAuthed;
-  return <RouterProvider router={ isUserAuthed ? authedRouter : notAuthedRouter}/>;
+  return authVariables.isLoading ? (
+    <></>
+  ) : (
+    <>
+      <RouterProvider router={isUserAuthed ? authedRouter : notAuthedRouter} />;
+    </>
+  );
 }
 
 export default App;
