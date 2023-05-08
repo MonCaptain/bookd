@@ -9,7 +9,7 @@ import BookList from "./pages/BookList";
 import RootLayout from "./layouts/RootLayout";
 import { useAuthContext } from "./contexts/AuthContext";
 import LandingPage from "./pages/LandingPage";
-import LoginPage from "./pages/loginPage";
+import LoginPage from "./pages/LoginPage";
 
 const authedRouter = createBrowserRouter(
   createRoutesFromElements(
