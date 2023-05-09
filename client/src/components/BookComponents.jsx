@@ -12,7 +12,7 @@ export default function BookCard ({cover, author, pagecount, title}) {
                 objectFit='cover'
                 maxW={{ base: '100%', sm: '200px' }}
                 src={cover}
-                alt='Caffe Latte'
+                alt={title}
             />
             <Stack>
                 <CardHeader>
