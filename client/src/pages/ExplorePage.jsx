@@ -49,7 +49,7 @@ export default function ExplorePage() {
           bg={useColorModeValue("whiteAlpha.900", "gray.800")}
           alignItems={"center"}
           justifyContent={"center"}
-          columns={[1, null, 2,3, 4, 5]}
+          columns={[1, null, 2,3, 4, null]}
           p={5}
         >
           {fetchedBooks}

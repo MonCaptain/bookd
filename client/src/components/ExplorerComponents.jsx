@@ -15,7 +15,7 @@ import {
   Button,
   ButtonGroup,
 } from "@chakra-ui/react";
-import SearchBar from "./search";
+import SearchBar from "./Search";
 
 // BookSearch Navigation
 export function BookSearch({ handleChange }) {
