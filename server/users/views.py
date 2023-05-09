@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.apps import apps
 from rest_framework.views import APIView
 from rest_framework import permissions, status
 from rest_framework.response import Response
@@ -8,6 +9,10 @@ from .serializers import UserSerializer
 
 
 User = get_user_model()
+Profile = apps.get_model('books', 'Profile')
+BookEntry = apps.get_model('books', 'BookEntry')
+Book = apps.get_model('books', 'Book')
+Collection = apps.get_model('books', 'Collection')
 
 
 class RegisterUser(APIView):
@@ -58,12 +63,14 @@ class RegisterUser(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        User.objects.create_user(
+        user = User.objects.create_user(
             username=username,
             first_name=first_name,
             last_name=last_name,
             password=password
         )
+
+        Profile.objects.create(user=user)
 
         return Response(
             {'success': 'User account created successfully'},
