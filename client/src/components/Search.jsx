@@ -19,7 +19,7 @@ export default function SearchBar({handleChange}) {
                 pointerEvents='none'
                 children={<SearchIcon color='gray.300' />}
             />
-            <Input type='tel' 
+            <Input type='text' 
             placeholder={possibleBookPrompts[Math.floor(Math.random()*possibleBookPrompts.length)]}
             onInput={handleChange}/>
         </InputGroup>
