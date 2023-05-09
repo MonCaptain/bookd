@@ -9,7 +9,7 @@ export function bookSearch(bookName) {
 export function searchQuery(bookName) {
     let parsed = Promise.resolve(bookSearch(bookName)).then((searchResults) => {
         let obtainedBooks = []
-        searchResults.docs.slice(0,10).forEach((element) => {
+        searchResults.docs.forEach((element) => {
             obtainedBooks.push({
                 title: element.title ? element.title : "Untitled",
                 author: element.author_name ? element.author_name[0] : "",
