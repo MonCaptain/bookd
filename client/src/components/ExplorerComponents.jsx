@@ -1,13 +1,11 @@
 import { ReactNode } from "react";
 import {
   Box,
-  Divider,
   Heading,
   useColorModeValue,
   Text,
   Flex,
   Stack,
-  HStack,
   VStack,
   Link,
   Card,
@@ -16,7 +14,6 @@ import {
   Image,
   Button,
   ButtonGroup,
-  Spacer,
 } from "@chakra-ui/react";
 import SearchBar from "./search";
 
@@ -49,7 +46,6 @@ export function SearchedBookCard({ cover, author, pagecount, title }) {
   return (
     <>
       <Card
-        display={'flex'}
         direction={{ base: "row", md: "column" }}
         rounded={"xl"}
         minH={{base: "230px", sm: "100%"}}
