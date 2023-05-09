@@ -10,7 +10,7 @@ import RootLayout from "./layouts/RootLayout";
 import { useAuthContext } from "./contexts/AuthContext";
 import LoginPage from "./pages/LoginPage";
 import LandingPage from "./pages/LandingPage";
-import ExplorePage from "./pages/explorePage";
+import ExplorePage from "./pages/ExplorePage";
 
 const authedRouter = createBrowserRouter(
   createRoutesFromElements(
