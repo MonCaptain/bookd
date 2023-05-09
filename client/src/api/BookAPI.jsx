@@ -1,7 +1,7 @@
 import unavailable from '../assets/book-cover-unavailable.jpg'
 
 export function bookSearch(bookName) {
-    let fetchPromise = Promise.resolve(fetch(`https://openlibrary.org/search.json?title=${bookName}`))
+    let fetchPromise = Promise.resolve(fetch(`https://openlibrary.org/search.json?q=${bookName}`))
     .then((response) => Promise.resolve(response.json()))
     return fetchPromise
 }
