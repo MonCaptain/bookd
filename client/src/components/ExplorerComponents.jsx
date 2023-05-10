@@ -42,7 +42,13 @@ export function BookSearch({ handleChange }) {
 }
 
 // Book card
-export function SearchedBookCard({ cover, author, pagecount, title }) {
+export function SearchedBookCard({
+  cover,
+  author,
+  pagecount,
+  title,
+  infopage,
+}) {
   return (
     <>
       <Card
@@ -84,7 +90,9 @@ export function SearchedBookCard({ cover, author, pagecount, title }) {
                 Track
               </Button>
               <Button variant="ghost" colorScheme="blue">
+                <Link href={infopage} isExternal>
                 More Info
+                </Link>
               </Button>
             </ButtonGroup>
           </CardFooter>

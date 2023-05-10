@@ -20,6 +20,7 @@ export default function ExplorePage() {
                 title={element.title}
                 author={element.author}
                 pagecount={element.pages}
+                infopage={element.infopage}
               />
             );
           });
