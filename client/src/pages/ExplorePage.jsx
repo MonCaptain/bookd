@@ -1,4 +1,12 @@
-import { Box, Flex, SimpleGrid, Text, useColorModeValue } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  SimpleGrid,
+  Text,
+  useColorModeValue,
+  Spinner,
+  SlideFade,
+} from "@chakra-ui/react";
 import { searchQuery } from "../api/BookAPI";
 import { useState, useEffect } from "react";
 import { BookSearch, SearchedBookCard } from "../components/ExplorerComponents";
@@ -6,6 +14,7 @@ import { BookSearch, SearchedBookCard } from "../components/ExplorerComponents";
 export default function ExplorePage() {
   let [fetchedBooks, setFetchedBooks] = useState([]);
   let [query, setQuery] = useState("");
+  let [searching, setSearching] = useState(<Spinner size={"xl"} />);
   const fetchBooks = () => {
     if (query.length > 0) {
       searchQuery(query)
@@ -32,33 +41,60 @@ export default function ExplorePage() {
   };
 
   useEffect(() => {
+    setSearching(<Spinner color="orange.500" size={"xl"} />);
+    setFetchedBooks([]);
+    const fetchingTimer = setTimeout(() => {
+      setSearching(
+        <Text fontSize={"xl"} align={"center"}>
+          No books found 🥺
+        </Text>
+      );
+    }, 5000);
     const timeOutTrack = setTimeout(() => {
       fetchBooks(query);
     }, 500);
-    return () => clearTimeout(timeOutTrack);
+
+    return () => {
+      clearTimeout(timeOutTrack);
+      clearTimeout(fetchingTimer);
+    };
   }, [query]);
 
   return (
     <Box>
       <BookSearch handleChange={(e) => setQuery(e.target.value)} />
-      <Flex bg={useColorModeValue("whiteAlpha.900", "gray.800")} minH={"80vh"} alignItems={'center'} justifyContent={'center'}>
-      { query.length > 0 ? (
+      <Flex
+        bg={useColorModeValue("whiteAlpha.900", "gray.800")}
+        minH={"80vh"}
+        alignItems={"center"}
+        justifyContent={"center"}
+      >
+        {query.length > 0 ? (
           fetchedBooks.length > 0 ? (
-        <SimpleGrid
-          spacing={10}
-          minH={"80vh"}
-          bg={useColorModeValue("whiteAlpha.900", "gray.800")}
-          alignItems={"center"}
-          justifyContent={"center"}
-          columns={[1, null, 2,3, 4, null]}
-          p={5}
-        >
-          {fetchedBooks}
-        </SimpleGrid>
+            <SlideFade
+              in={fetchedBooks.length > 0}
+              out={fetchedBooks.length === 0}
+            >
+              <SimpleGrid
+                spacing={10}
+                minH={"80vh"}
+                alignItems={"center"}
+                justifyContent={"center"}
+                columns={[1, null, 2, 3, 4, null]}
+                p={5}
+              >
+                {fetchedBooks}
+              </SimpleGrid>
+            </SlideFade>
           ) : (
-            <Text fontSize={"xl"} align={'center'}>No books found 🥺</Text>
-          )) : (<Text fontSize={"xl"} align={'center'}> Wanna find your next read? 😊</Text>)
-      }
+            searching
+          )
+        ) : (
+          <Text fontSize={"xl"} align={"center"}>
+            {" "}
+            Wanna find your next read? 😊
+          </Text>
+        )}
       </Flex>
     </Box>
   );

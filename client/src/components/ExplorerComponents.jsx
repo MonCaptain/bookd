@@ -1,4 +1,3 @@
-import { ReactNode } from "react";
 import {
   Box,
   Heading,
@@ -54,22 +53,21 @@ export function SearchedBookCard({
       <Card
         direction={{ base: "row", md: "column" }}
         rounded={"xl"}
-        minH={{base: "230px", sm: "100%"}}
-        alignItems={'center'}
-        justifyContent={{base: 'center', md: 'space-between'}}
+        minH={{ base: "230px", sm: "100%" }}
+        alignItems={"center"}
+        justifyContent={{ base: "center", md: "space-between" }}
       >
-        <Flex justifyContent={'center'} h={"100%"} bg={useColorModeValue("gray.100", "gray.500")}>
+        <Flex justifyContent={"center"} h={"100%"}>
           <Image
             src={cover}
             alt={author}
-            borderRadius="lg"
-            w={{ base: "200px", md: "350px" }}
+            borderRadius="xl"
             h={{ base: "100%", md: "350px" }}
             objectFit={"cover"}
             objectPosition={"center"}
           />
         </Flex>
-        <Flex direction={"column"} alignContent={'end'} w={"100%"}>
+        <Flex direction={"column"} alignContent={"end"} w={"100%"}>
           <CardBody>
             <Stack>
               <Heading size="md" m={0} overflowWrap={"normal"}>
@@ -91,7 +89,7 @@ export function SearchedBookCard({
               </Button>
               <Button variant="ghost" colorScheme="blue">
                 <Link href={infopage} isExternal>
-                More Info
+                  More Info
                 </Link>
               </Button>
             </ButtonGroup>
