@@ -84,14 +84,17 @@ export function SearchedBookCard({
         alignItems={"center"}
         justifyContent={{ base: "center", md: "space-between" }}
       >
-        <Flex justifyContent={"center"} h={"100%"}>
+        <Flex justifyContent={"center"} h={{base: "100%", md: ""}} w={{base: "200px", md: "100%"}}>
           <Image
             src={cover}
             alt={author}
-            borderRadius="xl"
+            roundedTopLeft={"xl"}
+            roundedBottomLeft={{base: "xl", md: "0"}}
+            roundedTopRight={{base: "0", md: "xl"}}
             h={{ base: "100%", md: "350px" }}
             objectFit={"cover"}
             objectPosition={"center"}
+            w={{base: "200px", md: "100%"}}
           />
         </Flex>
         <Flex direction={"column"} alignContent={"end"} w={"100%"}>
