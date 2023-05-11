@@ -6,15 +6,19 @@ import {
   useColorModeValue,
   Spinner,
   SlideFade,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { searchQuery } from "../api/BookAPI";
 import { useState, useEffect } from "react";
-import { BookSearch, SearchedBookCard } from "../components/ExplorerComponents";
+import { BookForm, BookSearch, SearchedBookCard } from "../components/ExplorerComponents";
 
 export default function ExplorePage() {
   let [fetchedBooks, setFetchedBooks] = useState([]);
+  let [currentBook, setCurrentBook] = useState({});
   let [query, setQuery] = useState("");
   let [searching, setSearching] = useState(<Spinner size={"xl"} />);
+  const {isOpen, onOpen, onClose} = useDisclosure();
+
   const fetchBooks = () => {
     if (query.length > 0) {
       searchQuery(query)
@@ -30,6 +34,10 @@ export default function ExplorePage() {
                 author={element.author}
                 pagecount={element.pages}
                 infopage={element.infopage}
+                clickHandle={(e) => {
+                  setCurrentBook(element)
+                  onOpen()
+                }}
               />
             );
           });
@@ -69,6 +77,7 @@ export default function ExplorePage() {
         alignItems={"center"}
         justifyContent={"center"}
       >
+        <BookForm title={currentBook.title} author={currentBook.author} pages={currentBook.pages} cover={currentBook.cover} isOpen={isOpen} onOpen={onOpen} onClose={onClose}/>
         {query.length > 0 ? (
           fetchedBooks.length > 0 ? (
             <SlideFade
