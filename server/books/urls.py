@@ -15,7 +15,7 @@ urlpattens = [
 
     # Book Entry URLs
     path('<str:username>/entries', ManageUserBookEntries.as_view()),
-    path('<str:username>/entries/<int:entry:id>',
+    path('<str:username>/entries/<int:entry_id>',
          ManageBookEntryDetail.as_view()),
 
     # Collection URLs
