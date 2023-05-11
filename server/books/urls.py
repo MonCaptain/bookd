@@ -5,7 +5,7 @@ from .views import ManageUserProfiles
 from .views import ManageUserBookEntries, ManageBookEntryDetail
 from .views import ManageUserCollections, ManageUserCollectionDetail
 
-urlpattens = [
+urlpatterns = [
     # Book URLs
     path('', CreateBook.as_view()),
     path('<int:book_id', BookDetail.as_view()),
@@ -15,7 +15,7 @@ urlpattens = [
 
     # Book Entry URLs
     path('<str:username>/entries', ManageUserBookEntries.as_view()),
-    path('<str:username>/entries/<int:entry:id>',
+    path('<str:username>/entries/<int:entry_id>',
          ManageBookEntryDetail.as_view()),
 
     # Collection URLs
