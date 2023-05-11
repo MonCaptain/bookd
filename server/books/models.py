@@ -139,7 +139,7 @@ class Collection(models.Model):
         Books in the collection
     """
     profile = models.ForeignKey(
-        Profile, on_delete=models.CASCADE, related_name="categories")
+        Profile, on_delete=models.CASCADE, related_name="collections")
     title = models.CharField(max_length=50, null=False)
     description = models.CharField(max_length=255, null=True)
 
