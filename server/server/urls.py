@@ -22,5 +22,7 @@ urlpatterns = [
 
     path('users/', include('users.urls')),
 
-    path('token/verify', TokenVerifyView.as_view())
+    path('token/verify', TokenVerifyView.as_view()),
+
+    path('books/', include('books.urls')),
 ]
