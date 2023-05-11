@@ -32,17 +32,18 @@ class ManageUserProfiles(APIView):
         """
         Handles a GET request to retrieve a user profile
         """
+        requester = request.user
         user = get_object_or_404(User, username=username)
         user_profile = get_object_or_404(Profile, user=user)
 
-        if user_profile.private:
-            serializer = PrivateProfileSerializer(user_profile)
+        if requester.username == username or not user_profile.private:
+            serializer = PublicProfileSerializer(user_profile)
             return Response(
                 serializer.data,
                 status=status.HTTP_200_OK
             )
 
-        serializer = PublicProfileSerializer(user_profile)
+        serializer = PrivateProfileSerializer(user_profile)
         return Response(
             serializer.data,
             status=status.HTTP_200_OK
@@ -101,14 +102,20 @@ class ManageUserBookEntries(APIView):
         """
         Handles a GET request to retrieve a book entry
         """
+        requester = request.user
         user = get_object_or_404(User, username=username)
         user_profile = get_object_or_404(Profile, user=user)
 
-        book_list = user_profile.book_list.all()
-        serializer = BookEntrySerializer(book_list, many=True)
+        if not user_profile.private or requester.username == username:
+            book_list = user_profile.book_list.all()
+            serializer = BookEntrySerializer(book_list, many=True)
+            return Response(
+                serializer.data,
+                status=status.HTTP_200_OK
+            )
         return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
+            {'Detail': 'This profile is private'},
+            status=status.HTTP_403_FORBIDDEN
         )
 
     def post(self, request, username):
@@ -164,15 +171,21 @@ class ManageUserCollections(APIView):
         """
         Handles a GET request for getting all user collections
         """
+        requester = request.user
         user = get_object_or_404(User, username=username)
         user_profile = get_object_or_404(Profile, user=user)
 
-        collections = user_profile.collections.all()
-        serializer = CollectionSerializer(collections, many=True)
+        if not user_profile.private or requester.username == username:
+            collections = user_profile.collections.all()
+            serializer = CollectionSerializer(collections, many=True)
 
+            return Response(
+                serializer.data,
+                status=status.HTTP_200_OK
+            )
         return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
+            {'Detail': 'This profile is private'},
+            status=status.HTTP_403_FORBIDDEN
         )
 
     def post(self, request, username):
@@ -227,7 +240,7 @@ class ManageBookEntryDetail(APIView):
     get
         Retrieve a user entry detail
     patch
-        Edit a user's entry detail
+        Edit a user entry detail
     delete
         Deletes a user entry detail
     """
@@ -236,15 +249,21 @@ class ManageBookEntryDetail(APIView):
         """
         Handles a GET request to retrieve a user entry detail
         """
+        requester = request.user
         user = get_object_or_404(User, username=username)
         user_profile = get_object_or_404(Profile, user=user)
-        book_entry = get_object_or_404(
-            BookEntry, id=entry_id, profile=user_profile)
 
-        serializer = BookEntrySerializer(book_entry)
+        if not user_profile.private or requester.username == username:
+            book_entry = get_object_or_404(
+                BookEntry, id=entry_id, profile=user_profile)
+            serializer = BookEntrySerializer(book_entry)
+            return Response(
+                serializer.data,
+                status=status.HTTP_200_OK
+            )
         return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
+            {'Detail': 'This profile is private'},
+            status=status.HTTP_403_FORBIDDEN
         )
 
     def patch(self, request, username, entry_id):
@@ -307,26 +326,33 @@ class ManageUserCollectionDetail(APIView):
     Methods
     -------
     get
-        Retrieve a user collection
+        Retrieve a user collection detail
     patch
-        Edit a user collection
+        Edit a user collection detail
     delete
-        Delete a user collection
+        Delete a user collection detail
     """
 
     def get(self, request, username, collection_id):
         """
         Handles a GET request for retrieving a user collection
         """
+        requester = request.user
         user = get_object_or_404(User, username=username)
         user_profile = get_object_or_404(Profile, user=user)
-        collection = get_object_or_404(
-            Collection, id=collection_id, profile=user_profile)
 
-        serializer = CollectionSerializer(collection)
+        if not user_profile.private or requester.username == username:
+            collection = get_object_or_404(
+                Collection, id=collection_id, profile=user_profile)
+
+            serializer = CollectionSerializer(collection)
+            return Response(
+                serializer.data,
+                status=status.HTTP_200_OK
+            )
         return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
+            {'Detail': 'This profile is private'},
+            status=status.HTTP_403_FORBIDDEN
         )
 
     def patch(self, request, username, collection_id):
