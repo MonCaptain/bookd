@@ -10,9 +10,6 @@ from .serializers import UserSerializer
 
 User = get_user_model()
 Profile = apps.get_model('books', 'Profile')
-BookEntry = apps.get_model('books', 'BookEntry')
-Book = apps.get_model('books', 'Book')
-Collection = apps.get_model('books', 'Collection')
 
 
 class RegisterUser(APIView):

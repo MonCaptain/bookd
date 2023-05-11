@@ -42,8 +42,8 @@ class Profile(models.Model):
     ----------
     user : OneToOneField
         User the profile is connected to
-    visible : BooleanField
-        Visibility of profile to other people
+    private : BooleanField
+        Privacy of the profile
     favorite_book : ForeignKey
         Favorite Book
     book_list : ManyToManyField
@@ -52,7 +52,7 @@ class Profile(models.Model):
         Length of book list
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=False)
-    visible = models.BooleanField(default=True)
+    private = models.BooleanField(default=False)
     favorite_book = models.ForeignKey(
         Book, on_delete=models.SET_NULL, null=True, related_name="favorite_book")
 
@@ -63,6 +63,9 @@ class Profile(models.Model):
 
     @property
     def book_list_length(self):
+        """
+        Returns the length of the book list
+        """
         return len(self.book_list.all())
 
     def __str__(self) -> str:
@@ -108,6 +111,14 @@ class BookEntry(models.Model):
 
     objects = models.Manager()
 
+    class Meta:
+        """
+        Metadata class
+        """
+        ordering = (
+            '-datetime_added',
+        )
+
     def __str__(self) -> str:
         return f"{self.user.username} - {self.book.title}"
 
@@ -128,7 +139,7 @@ class Collection(models.Model):
         Books in the collection
     """
     profile = models.ForeignKey(
-        Profile, on_delete=models.CASCADE, related_name="categories")
+        Profile, on_delete=models.CASCADE, related_name="collections")
     title = models.CharField(max_length=50, null=False)
     description = models.CharField(max_length=255, null=True)
 
