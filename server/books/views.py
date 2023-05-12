@@ -284,6 +284,7 @@ class ManageBookEntryDetail(APIView):
 
         current_page = data.get('current_page')
         book_status = data.get('status')
+        book_rating = data.get('rating')
 
         if current_page:
             BookEntry.objects.filter(id=entry_id, profile=user_profile).update(
@@ -291,6 +292,9 @@ class ManageBookEntryDetail(APIView):
         if book_status:
             BookEntry.objects.filter(
                 id=entry_id, profile=user_profile).update(status=book_status)
+        if book_rating:
+            BookEntry.objects.filter(
+                id=entry_id, profile=user_profile).update(rating=book_rating)
 
         book_entry = BookEntry.objects.get(id=entry_id, profile=user_profile)
         serializer = BookEntrySerializer(book_entry)

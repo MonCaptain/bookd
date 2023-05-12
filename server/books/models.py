@@ -104,8 +104,19 @@ class BookEntry(models.Model):
         COMPLETED = "Completed", "Completed"
         DROPPED = "Dropped", "Dropped"
 
+    class Rating(models.IntegerChoices):
+        """
+        Book Ratings
+        """
+        ONE = 1, '1'
+        TWO = 2, '2'
+        THREE = 3, '3'
+        FOUR = 4, '4'
+        FIVE = 5, '5'
+
     status = models.CharField(
         max_length=12, choices=Progress.choices, default=Progress.NOT_STARTED)
+    rating = models.IntegerField(null=True, choices=Rating.choices)
     last_updated = models.DateTimeField(auto_now=True)
     datetime_added = models.DateTimeField(auto_now_add=True)
 
