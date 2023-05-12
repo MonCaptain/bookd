@@ -128,7 +128,7 @@ class RetrieveUserProfiles(APIView):
         """
         Retrieves all user profiles
         """
-        profiles = Profile.objects.all()
+        profiles = Profile.objects.filter(private=False)
         serializer = PublicProfileSerializer(profiles, many=True)
         return Response(
             serializer.data,
