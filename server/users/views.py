@@ -1,10 +1,12 @@
 from django.contrib.auth import get_user_model
 from django.apps import apps
+from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from books.serializers import PublicProfileSerializer
 from .serializers import UserSerializer
 
 
@@ -115,3 +117,58 @@ class RetrieveCurrentUser(APIView):
 
         user = UserSerializer(user)
         return Response(user.data, status=status.HTTP_200_OK)
+
+
+class RetrieveUserProfiles(APIView):
+    """
+    Retrieves all user profiles
+    """
+
+    def get(self, request):
+        """
+        Retrieves all user profiles
+        """
+        profiles = Profile.objects.all()
+        serializer = PublicProfileSerializer(profiles, many=True)
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK
+        )
+
+
+class EditPrivacy(APIView):
+    """
+    Edits the privacy of a user profile
+    """
+
+    def post(self, request, username):
+        """
+        Handles a POST request for editing the privacy of a user profile
+        """
+        requester = request.user
+        if requester.username != username:
+            return Response(
+                {'error': 'Only users who owns this profile can edit it'},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+
+        user = get_object_or_404(User, username=username)
+
+        privacy = request.data['privacy']
+        if privacy is None:
+            return Response(
+                {'error': 'Please provide a privacy setting'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if not isinstance(privacy, bool):
+            return Response(
+                {'error': 'Privacy value should be a boolean'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        Profile.objects.filter(user=user).update(privacy=privacy)
+        return Response(
+            {'success': 'User profile privacy has been updated'},
+            status=status.HTTP_200_OK
+        )
