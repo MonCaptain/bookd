@@ -434,6 +434,7 @@ class CreateBook(APIView):
         page_count = data.get('page_count')
         publication_date = data.get('publication_date')
         cover_image = data.get('cover_image')
+        isbn = data.get('ISBN')
 
         if not (title and author and page_count and publication_date and cover_image):
             return Response(
@@ -446,7 +447,8 @@ class CreateBook(APIView):
             author=author,
             page_count=page_count,
             publication_date=publication_date,
-            cover_image=cover_image
+            cover_image=cover_image,
+            isbn=isbn
         )
 
         serializer = BookSerializer(book)

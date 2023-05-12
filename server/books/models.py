@@ -24,6 +24,7 @@ class Book(models.Model):
     """
     title = models.CharField(max_length=200, null=False)
     author = models.CharField(max_length=100, null=False)
+    isbn = models.CharField(max_length=21)
     page_count = models.PositiveSmallIntegerField()
     publication_date = models.DateField()
     cover_image = models.URLField()
