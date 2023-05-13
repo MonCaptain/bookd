@@ -200,7 +200,7 @@ class ManageUserCollections(APIView):
         if requester.username != username:
             return Response(
                 {'error': 'Only users who owns this profile can edit it'},
-                status=status.HTTP_401_UNAUTHORIZED
+                status=status.HTTP_403_FORBIDDEN
             )
 
         user = get_object_or_404(User, username=username)
@@ -211,9 +211,9 @@ class ManageUserCollections(APIView):
         title = data.get('title')
         description = data.get('description')
 
-        if not (title and description):
+        if not title:
             return Response(
-                {'error': 'At least one of the fields is missing'},
+                {'error': 'Must provide a collection title'},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -278,7 +278,7 @@ class ManageBookEntryDetail(APIView):
         if requester.username != username:
             return Response(
                 {'error': 'Only users who owns this profile can edit it'},
-                status=status.HTTP_401_UNAUTHORIZED
+                status=status.HTTP_403_FORBIDDEN
             )
 
         user = get_object_or_404(User, username=username)
@@ -286,6 +286,7 @@ class ManageBookEntryDetail(APIView):
 
         data = request.data
 
+        # TODO : Validate current page
         current_page = data.get('current_page')
         book_status = data.get('status')
         book_rating = data.get('rating')
@@ -315,7 +316,7 @@ class ManageBookEntryDetail(APIView):
         if requester.username != username:
             return Response(
                 {'error': 'Only users who owns this profile can edit it'},
-                status=status.HTTP_401_UNAUTHORIZED
+                status=status.HTTP_403_FORBIDDEN
             )
 
         user = get_object_or_404(User, username=username)
@@ -341,7 +342,7 @@ class ManageUserCollectionDetail(APIView):
         Delete a user collection detail
     """
 
-    def get(self, request, username, collection_id):
+    def get(self, request, username, collection_uuid):
         """
         Handles a GET request for retrieving a user collection
         """
@@ -351,7 +352,7 @@ class ManageUserCollectionDetail(APIView):
 
         if not user_profile.private or requester.username == username:
             collection = get_object_or_404(
-                Collection, id=collection_id, profile=user_profile)
+                Collection, uuid=collection_uuid, profile=user_profile)
 
             serializer = CollectionSerializer(collection)
             return Response(
@@ -363,7 +364,7 @@ class ManageUserCollectionDetail(APIView):
             status=status.HTTP_403_FORBIDDEN
         )
 
-    def patch(self, request, username, collection_id):
+    def patch(self, request, username, collection_uuid):
         """
         Handles a PATCH request for editing a user collection
         """
@@ -371,7 +372,7 @@ class ManageUserCollectionDetail(APIView):
         if requester.username != username:
             return Response(
                 {'error': 'Only users who owns this profile can edit it'},
-                status=status.HTTP_401_UNAUTHORIZED
+                status=status.HTTP_403_FORBIDDEN
             )
 
         user = get_object_or_404(User, username=username)
@@ -381,23 +382,33 @@ class ManageUserCollectionDetail(APIView):
 
         title = data.get('title')
         description = data.get('description')
+        books_to_add = data.get('books_to_add')
+        books_to_remove = data.get('books_to_remove')
 
         if title:
             Collection.objects.filter(
-                id=collection_id, profile=user_profile).update(title=title)
+                uuid=collection_uuid, profile=user_profile).update(title=title)
         if description:
-            Collection.objects.filter(id=collection_id, profile=user_profile).update(
+            Collection.objects.filter(uuid=collection_uuid, profile=user_profile).update(
                 description=description)
+        if books_to_add:
+            book_objects = Book.objects.filter(pk__in=books_to_add)
+            collection = Collection.objects.get(uuid=collection_uuid)
+            collection.books.add(*book_objects)
+        if books_to_remove:
+            book_objects = Book.objects.filter(pk__in=books_to_remove)
+            collection = Collection.objects.get(uuid=collection_uuid)
+            collection.books.remove(*book_objects)
 
         collection = Collection.objects.get(
-            id=collection_id, profile=user_profile)
+            uuid=collection_uuid, profile=user_profile)
         serializer = BookEntrySerializer(collection)
         return Response(
             serializer.data,
             status=status.HTTP_200_OK
         )
 
-    def delete(self, request, username, collection_id):
+    def delete(self, request, username, collection_uuid):
         """
         Handles a DELETE request for deleting a user collection
         """
@@ -405,13 +416,13 @@ class ManageUserCollectionDetail(APIView):
         if requester.username != username:
             return Response(
                 {'error': 'Only users who owns this profile can edit it'},
-                status=status.HTTP_401_UNAUTHORIZED
+                status=status.HTTP_403_FORBIDDEN
             )
 
         user = get_object_or_404(User, username=username)
         user_profile = get_object_or_404(Profile, user=user)
         collection = get_object_or_404(
-            BookEntry, id=collection_id, profile=user_profile)
+            BookEntry, uuid=collection_uuid, profile=user_profile)
 
         collection.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
