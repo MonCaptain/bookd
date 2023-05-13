@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.contrib.auth import get_user_model
 
@@ -117,7 +118,7 @@ class BookEntry(models.Model):
 
     status = models.CharField(
         max_length=12, choices=Progress.choices, default=Progress.NOT_STARTED)
-    rating = models.IntegerField(null=True, choices=Rating.choices)
+    rating = models.IntegerField(null=True, choices=Rating.choices, default=None)
     last_updated = models.DateTimeField(auto_now=True)
     datetime_added = models.DateTimeField(auto_now_add=True)
 
@@ -150,6 +151,7 @@ class Collection(models.Model):
     books : ManyToManyField
         Books in the collection
     """
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     profile = models.ForeignKey(
         Profile, on_delete=models.CASCADE, related_name="collections")
     title = models.CharField(max_length=50, null=False)
