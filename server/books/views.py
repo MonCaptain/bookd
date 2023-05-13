@@ -57,7 +57,7 @@ class ManageUserProfiles(APIView):
         if requester.username != username:
             return Response(
                 {'error': 'Only users who owns this profile can edit it'},
-                status=status.HTTP_401_UNAUTHORIZED
+                status=status.HTTP_403_FORBIDDEN
             )
 
         user = get_object_or_404(User, username=username)
@@ -68,18 +68,22 @@ class ManageUserProfiles(APIView):
         private = data.get('private')
         favorite_book_id = data.get('favorite_book_id')
 
-        if not (isinstance(private, bool) and isinstance(private, int)):
-            return Response(
-                {'error': 'There is an error parsing the private and favorite_book_id fields'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        favorite_book = Book.objects.get(id=favorite_book_id)
-
         if private is not None:
+            if not isinstance(private, bool):
+                return Response(
+                    {'error': 'There is an error parsing the private field'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
             user_profile.private = private
             user_profile.save()
-        if favorite_book is not None:
+
+        if favorite_book_id is not None:
+            favorite_book = Book.objects.get(id=favorite_book_id)
+            if not isinstance(favorite_book_id, int):
+                return Response(
+                    {'error': 'There is an error parsing the favorite_book_id field'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
             user_profile.favorite_book = favorite_book
             user_profile.save()
 
