@@ -38,6 +38,7 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
+import apiClient from "../services/apiClient";
 
 // Book Dialog
 export default function BookForm({
@@ -54,8 +55,8 @@ export default function BookForm({
   const [status, setStatus] = useState(0);
   const [compRating, setCompRating] = useState(5);
   const [currentPage, setCurrentPage] = useState(0);
-  const [normPages, setNormPages] = useState(pages)
-  const toast = useToast()
+  const [normPages, setNormPages] = useState(pages);
+  const toast = useToast();
   
   // For bookPages state (Might remove later)
   useEffect(() => setNormPages(pages), [pages])
@@ -279,6 +280,23 @@ export default function BookForm({
     );
   };
 
+  // For bookEntry Submission:
+  const posStatus = ['Not Started', 'In Progress', 'Completed', 'Dropped']
+  const submitEntry = (result) => {
+    Promise.resolve(apiClient.postEntry({book_id: result.id})).then(
+      result => {
+        let entryBody = Object.assign(result, {
+          current_page: currentPage,
+          rating: compRating,
+          status: posStatus[status]
+        })
+        Promise.resolve(apiClient.editEntry(result.id, entryBody)).then(
+          response => console.log(response)
+        )
+      }
+    )
+  }
+
   return (
     <Modal isOpen={isOpen} p={10} size={{ base: "sm", md: "xl" }} isCentered>
       <ModalOverlay backdropFilter="blur(10px) hue-rotate(90deg)" />
@@ -314,7 +332,7 @@ export default function BookForm({
             <Button
               variant={"solid"}
               colorScheme={"orange"}
-              onClick={submitBook}
+              onClick={(e) => submitBook(submitEntry)}
             >
               Submit
             </Button>

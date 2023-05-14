@@ -18,16 +18,15 @@ import BookForm from "../components/BookForm";
 import apiClient from "../services/apiClient";
 
 export default function ExplorePage() {
-  let [fetchedBooks, setFetchedBooks] = useState([]);
-  let [currentBook, setCurrentBook] = useState({});
-  let [query, setQuery] = useState("");
-  let [searching, setSearching] = useState(<Spinner size={"xl"} />);
+  const [fetchedBooks, setFetchedBooks] = useState([]);
+  const [currentBook, setCurrentBook] = useState({});
+  const [query, setQuery] = useState("");
+  const [searching, setSearching] = useState(<Spinner size={"xl"} />);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const modifyBook = (props) => {
     let newBook = Object.assign(currentBook, props)
     setCurrentBook(newBook)
-    console.log(currentBook)
   }
 
   const fetchBooks = () => {
@@ -96,16 +95,19 @@ export default function ExplorePage() {
           isOpen={isOpen}
           onOpen={onOpen}
           onClose={onClose}
-          submitBook={(e) => {
-            apiClient.postBook({
+          submitBook={(postEntry) => {
+            Promise.resolve(apiClient.postBook({
               title: currentBook.title,
               author: currentBook.author,
               page_count: currentBook.pages,
               publication_date: currentBook.publish_date,
               cover_image: currentBook.cover,
               isbn: currentBook.isbn,
+            })).then(result => {
+              onClose();
+              postEntry(result)
+              return result;
             });
-            onClose();
           }}
           modifier={modifyBook}
         />

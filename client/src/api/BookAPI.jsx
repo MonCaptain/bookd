@@ -19,7 +19,7 @@ export function searchQuery(bookName) {
             ? `https://covers.openlibrary.org/b/id/${element.cover_i}-L.jpg`
             : unavailable,
           pages: element.number_of_pages_median,
-          publish_date: element.publish_date ? formatDate(element.publish_date[0]) : formatDate("Jan 1, 0001"),
+          publish_date: element.publish_date !== undefined ? formatDate(element.publish_date[0]) : formatDate("Jan 1, 0001"),
           infopage: `https://openlibrary.org/${element.key}`,
           isbn: element.isbn ? element.isbn[0] : "Unknown",
         });
@@ -31,6 +31,6 @@ export function searchQuery(bookName) {
 }
 
 function formatDate(date) {
-  let newDate = new Date(date == null ? date : "Jan 1, 0001");
-  return newDate.toJSON().split("T")[0];
+  let newDate = new Date(isNaN(date == undefined ?  "Jan 1, 0001" : Date.parse(date)) ? "Jan 1, 0001" : date);
+  return newDate.toISOString().split("T")[0];
 }

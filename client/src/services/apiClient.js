@@ -81,6 +81,32 @@ class ApiClient {
         requestBody: bookObject
       });
   }
+
+  async retrieveUsername() {
+    let response = await this.apiRequest({
+      endpoint: "/users/me",
+      method: "GET",
+    });
+    return response.username;
+  }
+
+  async postEntry(bookID) {
+    let username = await this.retrieveUsername();
+    return await this.apiRequest({
+      endpoint: `/books/${username}/entries`,
+      method: "POST",
+      requestBody: bookID,
+    });
+  }
+
+  async editEntry(entryID, entryObject) {
+    let username = await this.retrieveUsername();
+    return await this.apiRequest({
+      endpoint: `/books/${username}/entries/${entryID}`,
+      method: "PATCH",
+      requestBody: entryObject,
+    });
+  }
 }
 
 export default new ApiClient("http://localhost:8000");
