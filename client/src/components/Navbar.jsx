@@ -9,9 +9,8 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-const Links = ["Dashboard", "Projects", "Team"];
 
-export default function LandingPageNavBar() {
+export default function Navbar() {
   return (
     <nav>
       <Box bg={useColorModeValue("gray.50", "gray.900")} px={4}>
