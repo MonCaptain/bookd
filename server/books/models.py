@@ -16,6 +16,8 @@ class Book(models.Model):
         Title of book
     author : CharField
         Book author
+    isbn: Charfield
+        ISBN code for book
     page_count : PositiveSmallIntegerField
         Total number of pages in the book
     publication_date : DateField
