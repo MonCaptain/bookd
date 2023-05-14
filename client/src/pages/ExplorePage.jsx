@@ -10,14 +10,19 @@ import {
 } from "@chakra-ui/react";
 import { searchQuery } from "../api/BookAPI";
 import { useState, useEffect } from "react";
-import { BookForm, BookSearch, SearchedBookCard } from "../components/ExplorerComponents";
+import {
+  BookForm,
+  BookSearch,
+  SearchedBookCard,
+} from "../components/ExplorerComponents";
+import apiClient from "../services/apiClient";
 
 export default function ExplorePage() {
   let [fetchedBooks, setFetchedBooks] = useState([]);
   let [currentBook, setCurrentBook] = useState({});
   let [query, setQuery] = useState("");
   let [searching, setSearching] = useState(<Spinner size={"xl"} />);
-  const {isOpen, onOpen, onClose} = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const fetchBooks = () => {
     if (query.length > 0) {
@@ -35,8 +40,8 @@ export default function ExplorePage() {
                 pagecount={element.pages}
                 infopage={element.infopage}
                 clickHandle={(e) => {
-                  setCurrentBook(element)
-                  onOpen()
+                  setCurrentBook(element);
+                  onOpen();
                 }}
               />
             );
@@ -77,7 +82,26 @@ export default function ExplorePage() {
         alignItems={"center"}
         justifyContent={"center"}
       >
-        <BookForm title={currentBook.title} author={currentBook.author} pages={currentBook.pages} cover={currentBook.cover} isOpen={isOpen} onOpen={onOpen} onClose={onClose}/>
+        <BookForm
+          title={currentBook.title}
+          author={currentBook.author}
+          pages={currentBook.pages}
+          cover={currentBook.cover}
+          isOpen={isOpen}
+          onOpen={onOpen}
+          onClose={onClose}
+          submitBook={(e) => {
+            apiClient.postBook({
+              title: currentBook.title,
+              author: currentBook.author,
+              page_count: currentBook.pages,
+              publication_date: currentBook.publish_date,
+              cover_image: currentBook.cover,
+              isbn: currentBook.isbn,
+            });
+            onClose();
+          }}
+        />
         {query.length > 0 ? (
           fetchedBooks.length > 0 ? (
             <SlideFade

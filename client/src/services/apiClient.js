@@ -73,6 +73,14 @@ class ApiClient {
       method:"POST",
     })
   }
+
+  async postBook(bookObject) {
+    return await this.apiRequest({
+        endpoint: "/books/",
+        method: "POST",
+        requestBody: bookObject
+      });
+  }
 }
 
 export default new ApiClient("http://localhost:8000");
