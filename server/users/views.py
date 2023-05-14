@@ -115,7 +115,7 @@ class RetrieveCurrentUser(APIView):
         """
         user = request.user
 
-        user = UserSerializer(user)
+        user = UserSerializer(user, many=False)
         return Response(user.data, status=status.HTTP_200_OK)
 
 

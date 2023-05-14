@@ -37,13 +37,13 @@ class ManageUserProfiles(APIView):
         user_profile = get_object_or_404(Profile, user=user)
 
         if requester.username == username or not user_profile.private:
-            serializer = PublicProfileSerializer(user_profile)
+            serializer = PublicProfileSerializer(user_profile, many=False)
             return Response(
                 serializer.data,
                 status=status.HTTP_200_OK
             )
 
-        serializer = PrivateProfileSerializer(user_profile)
+        serializer = PrivateProfileSerializer(user_profile, many=False)
         return Response(
             serializer.data,
             status=status.HTTP_200_OK
@@ -152,7 +152,7 @@ class ManageUserBookEntries(APIView):
             profile=user_profile
         )
 
-        serializer = BookEntrySerializer(book_entry)
+        serializer = BookEntrySerializer(book_entry, many=False)
         return Response(
             serializer.data,
             status=status.HTTP_201_CREATED
@@ -228,7 +228,7 @@ class ManageUserCollections(APIView):
         )
 
         user_profile.collections.add(collection)
-        serializer = CollectionSerializer(collection)
+        serializer = CollectionSerializer(collection, many=False)
         return Response(
             serializer.data,
             status=status.HTTP_201_CREATED
@@ -260,7 +260,7 @@ class ManageBookEntryDetail(APIView):
         if not user_profile.private or requester.username == username:
             book_entry = get_object_or_404(
                 BookEntry, id=entry_id, profile=user_profile)
-            serializer = BookEntrySerializer(book_entry)
+            serializer = BookEntrySerializer(book_entry, many=False)
             return Response(
                 serializer.data,
                 status=status.HTTP_200_OK
@@ -302,7 +302,7 @@ class ManageBookEntryDetail(APIView):
                 id=entry_id, profile=user_profile).update(rating=book_rating)
 
         book_entry = BookEntry.objects.get(id=entry_id, profile=user_profile)
-        serializer = BookEntrySerializer(book_entry)
+        serializer = BookEntrySerializer(book_entry, many=False)
         return Response(
             serializer.data,
             status=status.HTTP_200_OK
@@ -354,7 +354,7 @@ class ManageUserCollectionDetail(APIView):
             collection = get_object_or_404(
                 Collection, uuid=collection_uuid, profile=user_profile)
 
-            serializer = CollectionSerializer(collection)
+            serializer = CollectionSerializer(collection, many=True)
             return Response(
                 serializer.data,
                 status=status.HTTP_200_OK
@@ -402,7 +402,7 @@ class ManageUserCollectionDetail(APIView):
 
         collection = Collection.objects.get(
             uuid=collection_uuid, profile=user_profile)
-        serializer = BookEntrySerializer(collection)
+        serializer = BookEntrySerializer(collection, many=False)
         return Response(
             serializer.data,
             status=status.HTTP_200_OK
@@ -443,30 +443,24 @@ class CreateBook(APIView):
         Handles a POST request for creating/getting a new book object
         """
         data = request.data
+        serializer = BookSerializer(data=data)
 
-        title = data.get('title')
-        author = data.get('author')
-        page_count = data.get('page_count')
-        publication_date = data.get('publication_date')
-        cover_image = data.get('cover_image')
-        isbn = data.get('ISBN')
-
-        if not (title and author and page_count and publication_date and cover_image):
+        if not serializer.is_valid():
             return Response(
-                {'error': 'At least one of the fields is missing'},
+                serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        book = Book.objects.get_or_create(
-            title=title,
-            author=author,
-            page_count=page_count,
-            publication_date=publication_date,
-            cover_image=cover_image,
-            isbn=isbn
+        book, _ = Book.objects.get_or_create(
+            title=data["title"],
+            author=data["author"],
+            page_count=data["page_count"],
+            publication_date=data["publication_date"],
+            cover_image=data["cover_image"],
+            isbn=data["isbn"]
         )
 
-        serializer = BookSerializer(book)
+        serializer = BookSerializer(book, many=False)
         return Response(
             serializer.data,
             status=status.HTTP_201_CREATED
@@ -488,7 +482,7 @@ class BookDetail(APIView):
         Handles a POST request for retrieving a book detail
         """
         book = get_object_or_404(Book, id=book_id)
-        serializer = BookSerializer(book)
+        serializer = BookSerializer(book, many=False)
         return Response(
             serializer.data,
             status=status.HTTP_200_OK
