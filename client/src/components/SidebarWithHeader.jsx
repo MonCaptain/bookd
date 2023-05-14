@@ -30,6 +30,8 @@ import {
 import { Link } from "react-router-dom";
 import { useColorMode } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
+import { useAuthContext } from "../contexts/AuthContext";
+import { useNavigate } from "react-router-dom"; 
 
 const LinkItems = [
   { name: "Home", icon: FiHome, path: "/" },
@@ -41,6 +43,7 @@ const LinkItems = [
 
 export default function SidebarWithHeader({ children }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
       <SidebarContent
@@ -57,7 +60,7 @@ export default function SidebarWithHeader({ children }) {
         size="full"
       >
         <DrawerContent>
-          <SidebarContent onClose={onClose} />
+          <SidebarContent onClose={onClose}/>
         </DrawerContent>
       </Drawer>
       {/* mobilenav */}
@@ -131,6 +134,14 @@ const NavItem = ({ icon, children, href, ...rest }) => {
 
 const MobileNav = ({ onOpen, ...rest }) => {
   const { colorMode, toggleColorMode } = useColorMode();
+
+  const authVariables = useAuthContext()
+  const navigate = useNavigate()
+
+  async function handleSignOut(){
+    await authVariables.logoutUser()
+    navigate("/")
+  }
 
   return (
     <Flex
@@ -207,7 +218,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
               <MenuItem>Settings</MenuItem>
               <MenuItem>Billing</MenuItem>
               <MenuDivider />
-              <MenuItem>Sign out</MenuItem>
+              <MenuItem onClick={handleSignOut}>Sign out</MenuItem>
             </MenuList>
           </Menu>
         </Flex>

@@ -8,8 +8,8 @@ import {
 import BookList from "./pages/BookList";
 import RootLayout from "./layouts/RootLayout";
 import { useAuthContext } from "./contexts/AuthContext";
-import LoginPage from "./pages/LoginPage";
 import LandingPage from "./pages/LandingPage";
+import LoginPage from "./pages/LoginPage";
 
 const authedRouter = createBrowserRouter(
   createRoutesFromElements(
@@ -36,7 +36,13 @@ const notAuthedRouter = createBrowserRouter(
 function App() {
   const authVariables = useAuthContext();
   const isUserAuthed = authVariables.isUserAuthed;
-  return <RouterProvider router={ isUserAuthed ? authedRouter : notAuthedRouter}/>;
+  return authVariables.isLoading ? (
+    <></>
+  ) : (
+    <>
+      <RouterProvider router={isUserAuthed ? authedRouter : notAuthedRouter} />;
+    </>
+  );
 }
 
 export default App;
