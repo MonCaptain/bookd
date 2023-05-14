@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.contrib.auth import get_user_model
 
@@ -15,6 +16,8 @@ class Book(models.Model):
         Title of book
     author : CharField
         Book author
+    isbn: Charfield
+        ISBN code for book
     page_count : PositiveSmallIntegerField
         Total number of pages in the book
     publication_date : DateField
@@ -24,6 +27,7 @@ class Book(models.Model):
     """
     title = models.CharField(max_length=200, null=False)
     author = models.CharField(max_length=100, null=False)
+    isbn = models.CharField(max_length=21)
     page_count = models.PositiveSmallIntegerField()
     publication_date = models.DateField()
     cover_image = models.URLField()
@@ -104,8 +108,19 @@ class BookEntry(models.Model):
         COMPLETED = "Completed", "Completed"
         DROPPED = "Dropped", "Dropped"
 
+    class Rating(models.IntegerChoices):
+        """
+        Book Ratings
+        """
+        ONE = 1, '1'
+        TWO = 2, '2'
+        THREE = 3, '3'
+        FOUR = 4, '4'
+        FIVE = 5, '5'
+
     status = models.CharField(
         max_length=12, choices=Progress.choices, default=Progress.NOT_STARTED)
+    rating = models.IntegerField(null=True, choices=Rating.choices, default=None)
     last_updated = models.DateTimeField(auto_now=True)
     datetime_added = models.DateTimeField(auto_now_add=True)
 
@@ -138,6 +153,7 @@ class Collection(models.Model):
     books : ManyToManyField
         Books in the collection
     """
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     profile = models.ForeignKey(
         Profile, on_delete=models.CASCADE, related_name="collections")
     title = models.CharField(max_length=50, null=False)
