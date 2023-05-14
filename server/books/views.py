@@ -37,13 +37,13 @@ class ManageUserProfiles(APIView):
         user_profile = get_object_or_404(Profile, user=user)
 
         if requester.username == username or not user_profile.private:
-            serializer = PublicProfileSerializer(user_profile)
+            serializer = PublicProfileSerializer(user_profile, many=False)
             return Response(
                 serializer.data,
                 status=status.HTTP_200_OK
             )
 
-        serializer = PrivateProfileSerializer(user_profile)
+        serializer = PrivateProfileSerializer(user_profile, many=False)
         return Response(
             serializer.data,
             status=status.HTTP_200_OK
@@ -57,7 +57,7 @@ class ManageUserProfiles(APIView):
         if requester.username != username:
             return Response(
                 {'error': 'Only users who owns this profile can edit it'},
-                status=status.HTTP_401_UNAUTHORIZED
+                status=status.HTTP_403_FORBIDDEN
             )
 
         user = get_object_or_404(User, username=username)
@@ -68,18 +68,22 @@ class ManageUserProfiles(APIView):
         private = data.get('private')
         favorite_book_id = data.get('favorite_book_id')
 
-        if not (isinstance(private, bool) and isinstance(private, int)):
-            return Response(
-                {'error': 'There is an error parsing the private and favorite_book_id fields'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        favorite_book = Book.objects.get(id=favorite_book_id)
-
         if private is not None:
+            if not isinstance(private, bool):
+                return Response(
+                    {'error': 'There is an error parsing the private field'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
             user_profile.private = private
             user_profile.save()
-        if favorite_book is not None:
+
+        if favorite_book_id is not None:
+            favorite_book = Book.objects.get(id=favorite_book_id)
+            if not isinstance(favorite_book_id, int):
+                return Response(
+                    {'error': 'There is an error parsing the favorite_book_id field'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
             user_profile.favorite_book = favorite_book
             user_profile.save()
 
@@ -148,7 +152,7 @@ class ManageUserBookEntries(APIView):
             profile=user_profile
         )
 
-        serializer = BookEntrySerializer(book_entry)
+        serializer = BookEntrySerializer(book_entry, many=False)
         return Response(
             serializer.data,
             status=status.HTTP_201_CREATED
@@ -196,7 +200,7 @@ class ManageUserCollections(APIView):
         if requester.username != username:
             return Response(
                 {'error': 'Only users who owns this profile can edit it'},
-                status=status.HTTP_401_UNAUTHORIZED
+                status=status.HTTP_403_FORBIDDEN
             )
 
         user = get_object_or_404(User, username=username)
@@ -207,9 +211,9 @@ class ManageUserCollections(APIView):
         title = data.get('title')
         description = data.get('description')
 
-        if not (title and description):
+        if not title:
             return Response(
-                {'error': 'At least one of the fields is missing'},
+                {'error': 'Must provide a collection title'},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -224,7 +228,7 @@ class ManageUserCollections(APIView):
         )
 
         user_profile.collections.add(collection)
-        serializer = CollectionSerializer(collection)
+        serializer = CollectionSerializer(collection, many=False)
         return Response(
             serializer.data,
             status=status.HTTP_201_CREATED
@@ -256,7 +260,7 @@ class ManageBookEntryDetail(APIView):
         if not user_profile.private or requester.username == username:
             book_entry = get_object_or_404(
                 BookEntry, id=entry_id, profile=user_profile)
-            serializer = BookEntrySerializer(book_entry)
+            serializer = BookEntrySerializer(book_entry, many=False)
             return Response(
                 serializer.data,
                 status=status.HTTP_200_OK
@@ -274,7 +278,7 @@ class ManageBookEntryDetail(APIView):
         if requester.username != username:
             return Response(
                 {'error': 'Only users who owns this profile can edit it'},
-                status=status.HTTP_401_UNAUTHORIZED
+                status=status.HTTP_403_FORBIDDEN
             )
 
         user = get_object_or_404(User, username=username)
@@ -282,8 +286,10 @@ class ManageBookEntryDetail(APIView):
 
         data = request.data
 
+        # TODO : Validate current page
         current_page = data.get('current_page')
         book_status = data.get('status')
+        book_rating = data.get('rating')
 
         if current_page:
             BookEntry.objects.filter(id=entry_id, profile=user_profile).update(
@@ -291,9 +297,12 @@ class ManageBookEntryDetail(APIView):
         if book_status:
             BookEntry.objects.filter(
                 id=entry_id, profile=user_profile).update(status=book_status)
+        if book_rating:
+            BookEntry.objects.filter(
+                id=entry_id, profile=user_profile).update(rating=book_rating)
 
         book_entry = BookEntry.objects.get(id=entry_id, profile=user_profile)
-        serializer = BookEntrySerializer(book_entry)
+        serializer = BookEntrySerializer(book_entry, many=False)
         return Response(
             serializer.data,
             status=status.HTTP_200_OK
@@ -307,7 +316,7 @@ class ManageBookEntryDetail(APIView):
         if requester.username != username:
             return Response(
                 {'error': 'Only users who owns this profile can edit it'},
-                status=status.HTTP_401_UNAUTHORIZED
+                status=status.HTTP_403_FORBIDDEN
             )
 
         user = get_object_or_404(User, username=username)
@@ -333,7 +342,7 @@ class ManageUserCollectionDetail(APIView):
         Delete a user collection detail
     """
 
-    def get(self, request, username, collection_id):
+    def get(self, request, username, collection_uuid):
         """
         Handles a GET request for retrieving a user collection
         """
@@ -343,9 +352,9 @@ class ManageUserCollectionDetail(APIView):
 
         if not user_profile.private or requester.username == username:
             collection = get_object_or_404(
-                Collection, id=collection_id, profile=user_profile)
+                Collection, uuid=collection_uuid, profile=user_profile)
 
-            serializer = CollectionSerializer(collection)
+            serializer = CollectionSerializer(collection, many=True)
             return Response(
                 serializer.data,
                 status=status.HTTP_200_OK
@@ -355,7 +364,7 @@ class ManageUserCollectionDetail(APIView):
             status=status.HTTP_403_FORBIDDEN
         )
 
-    def patch(self, request, username, collection_id):
+    def patch(self, request, username, collection_uuid):
         """
         Handles a PATCH request for editing a user collection
         """
@@ -363,7 +372,7 @@ class ManageUserCollectionDetail(APIView):
         if requester.username != username:
             return Response(
                 {'error': 'Only users who owns this profile can edit it'},
-                status=status.HTTP_401_UNAUTHORIZED
+                status=status.HTTP_403_FORBIDDEN
             )
 
         user = get_object_or_404(User, username=username)
@@ -373,23 +382,33 @@ class ManageUserCollectionDetail(APIView):
 
         title = data.get('title')
         description = data.get('description')
+        books_to_add = data.get('books_to_add')
+        books_to_remove = data.get('books_to_remove')
 
         if title:
             Collection.objects.filter(
-                id=collection_id, profile=user_profile).update(title=title)
+                uuid=collection_uuid, profile=user_profile).update(title=title)
         if description:
-            Collection.objects.filter(id=collection_id, profile=user_profile).update(
+            Collection.objects.filter(uuid=collection_uuid, profile=user_profile).update(
                 description=description)
+        if books_to_add:
+            book_objects = Book.objects.filter(pk__in=books_to_add)
+            collection = Collection.objects.get(uuid=collection_uuid)
+            collection.books.add(*book_objects)
+        if books_to_remove:
+            book_objects = Book.objects.filter(pk__in=books_to_remove)
+            collection = Collection.objects.get(uuid=collection_uuid)
+            collection.books.remove(*book_objects)
 
         collection = Collection.objects.get(
-            id=collection_id, profile=user_profile)
-        serializer = BookEntrySerializer(collection)
+            uuid=collection_uuid, profile=user_profile)
+        serializer = BookEntrySerializer(collection, many=False)
         return Response(
             serializer.data,
             status=status.HTTP_200_OK
         )
 
-    def delete(self, request, username, collection_id):
+    def delete(self, request, username, collection_uuid):
         """
         Handles a DELETE request for deleting a user collection
         """
@@ -397,13 +416,13 @@ class ManageUserCollectionDetail(APIView):
         if requester.username != username:
             return Response(
                 {'error': 'Only users who owns this profile can edit it'},
-                status=status.HTTP_401_UNAUTHORIZED
+                status=status.HTTP_403_FORBIDDEN
             )
 
         user = get_object_or_404(User, username=username)
         user_profile = get_object_or_404(Profile, user=user)
         collection = get_object_or_404(
-            BookEntry, id=collection_id, profile=user_profile)
+            BookEntry, uuid=collection_uuid, profile=user_profile)
 
         collection.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -424,28 +443,24 @@ class CreateBook(APIView):
         Handles a POST request for creating/getting a new book object
         """
         data = request.data
+        serializer = BookSerializer(data=data)
 
-        title = data.get('title')
-        author = data.get('author')
-        page_count = data.get('page_count')
-        publication_date = data.get('publication_date')
-        cover_image = data.get('cover_image')
-
-        if not (title and author and page_count and publication_date and cover_image):
+        if not serializer.is_valid():
             return Response(
-                {'error': 'At least one of the fields is missing'},
+                serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        book = Book.objects.get_or_create(
-            title=title,
-            author=author,
-            page_count=page_count,
-            publication_date=publication_date,
-            cover_image=cover_image
+        book, _ = Book.objects.get_or_create(
+            title=data["title"],
+            author=data["author"],
+            page_count=data["page_count"],
+            publication_date=data["publication_date"],
+            cover_image=data["cover_image"],
+            isbn=data["isbn"]
         )
 
-        serializer = BookSerializer(book)
+        serializer = BookSerializer(book, many=False)
         return Response(
             serializer.data,
             status=status.HTTP_201_CREATED
@@ -467,7 +482,7 @@ class BookDetail(APIView):
         Handles a POST request for retrieving a book detail
         """
         book = get_object_or_404(Book, id=book_id)
-        serializer = BookSerializer(book)
+        serializer = BookSerializer(book, many=False)
         return Response(
             serializer.data,
             status=status.HTTP_200_OK

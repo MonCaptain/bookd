@@ -8,7 +8,7 @@ from .views import ManageUserCollections, ManageUserCollectionDetail
 urlpatterns = [
     # Book URLs
     path('', CreateBook.as_view()),
-    path('<int:book_id', BookDetail.as_view()),
+    path('<int:book_id>', BookDetail.as_view()),
 
     # Profile URLs
     path('<str:username>', ManageUserProfiles.as_view()),
