@@ -11,31 +11,9 @@ import {
   CardBody,
   CardFooter,
   Image,
-  IconButton,
   Button,
   ButtonGroup,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  Editable,
-  EditableInput,
-  EditablePreview,
-  FormControl,
-  FormLabel,
-  Tooltip,
-  Input,
-  useEditableControls,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
 } from "@chakra-ui/react";
-import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
 import SearchBar from "./Search";
 
 // BookSearch Navigation
@@ -128,108 +106,5 @@ export function SearchedBookCard({
         </Flex>
       </Card>
     </>
-  );
-}
-
-// Book Dialog
-export function BookForm({
-  title,
-  author,
-  pages,
-  cover,
-  isOpen,
-  onOpen,
-  onClose,
-  submitBook,
-}) {
-  const EditableControls = () => {
-    const {
-      isEditing,
-      getSubmitButtonProps,
-      getCancelButtonProps,
-      getEditButtonProps,
-    } = useEditableControls();
-
-    return isEditing ? (
-      <ButtonGroup justifyContent="end" size="sm" w="full" spacing={2} mt={2}>
-        <IconButton icon={<CheckIcon />} {...getSubmitButtonProps()} />
-        <IconButton
-          icon={<CloseIcon boxSize={3} />}
-          {...getCancelButtonProps()}
-        />
-      </ButtonGroup>
-    ) : null;
-  };
-  const BookInput = ({ label, input, size }) => {
-    return (
-      <FormControl pb={6}>
-        <FormLabel>{label}</FormLabel>
-        <Editable defaultValue={input} isPreviewFocusable>
-          <Tooltip label={"Click to edit"} shouldWrapChildren>
-            <EditablePreview fontSize={size} />
-          </Tooltip>
-          <Input as={EditableInput} fontSize={size} />
-          <EditableControls />
-        </Editable>
-      </FormControl>
-    );
-  };
-
-  const PageCount = ({ pages }) => {
-    return (
-      <FormControl>
-        <FormLabel>Page Count</FormLabel>
-        <NumberInput defaultValue={pages} min={0} size={"md"}>
-          <NumberInputField />
-          <NumberInputStepper>
-            <NumberIncrementStepper />
-            <NumberDecrementStepper />
-          </NumberInputStepper>
-        </NumberInput>
-      </FormControl>
-    );
-  };
-  return (
-    <Modal isOpen={isOpen} p={10} size={{ base: "sm", md: "xl" }} isCentered>
-      <ModalOverlay backdropFilter="blur(10px) hue-rotate(90deg)" />
-      <ModalContent>
-        <ModalHeader>Add book</ModalHeader>
-        <ModalCloseButton onClick={onClose} />
-        <ModalBody pb={6} alignItems={"center"}>
-          <Stack
-            direction={{ base: "column", md: "row" }}
-            alignItems={"center"}
-            justifyContent={"space-around"}
-          >
-            <Image
-              src={cover}
-              width={"200px"}
-              rounded={"md"}
-              alignSelf={"center"}
-              mb={6}
-            />
-            <Flex direction={"column"} px={5} w={"100%"} h={"100%"}>
-              <BookInput label={"Title"} input={title} size={"xl"} />
-              <BookInput label={"Author"} input={author} size={"lg"} />
-              <PageCount pages={pages} />
-            </Flex>
-          </Stack>
-        </ModalBody>
-        <ModalFooter>
-          <ButtonGroup>
-            <Button
-              variant={"solid"}
-              colorScheme={"orange"}
-              onClick={submitBook}
-            >
-              Submit
-            </Button>
-            <Button variant={"outline"} colorScheme="red" onClick={onClose}>
-              Cancel
-            </Button>
-          </ButtonGroup>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
   );
 }

@@ -11,10 +11,10 @@ import {
 import { searchQuery } from "../api/BookAPI";
 import { useState, useEffect } from "react";
 import {
-  BookForm,
   BookSearch,
   SearchedBookCard,
 } from "../components/ExplorerComponents";
+import BookForm from "../components/BookForm";
 import apiClient from "../services/apiClient";
 
 export default function ExplorePage() {
@@ -23,6 +23,12 @@ export default function ExplorePage() {
   let [query, setQuery] = useState("");
   let [searching, setSearching] = useState(<Spinner size={"xl"} />);
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const modifyBook = (props) => {
+    let newBook = Object.assign(currentBook, props)
+    setCurrentBook(newBook)
+    console.log(currentBook)
+  }
 
   const fetchBooks = () => {
     if (query.length > 0) {
@@ -101,6 +107,7 @@ export default function ExplorePage() {
             });
             onClose();
           }}
+          modifier={modifyBook}
         />
         {query.length > 0 ? (
           fetchedBooks.length > 0 ? (
