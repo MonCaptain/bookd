@@ -6,8 +6,6 @@ import {
   InputGroup,
   InputRightElement,
   Stack,
-  Checkbox,
-  Stack,
   Button,
   useColorModeValue,
   ScaleFade,
