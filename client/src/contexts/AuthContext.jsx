@@ -39,7 +39,7 @@ export function AuthContextProvider({ children }) {
       apiClient.setTokens(tokensData);
       // finally, login the user using the tokens
       apiClient.loginWithToken();
-      if (Object.keys(tokensData).length==2) setIsUserAuthed(true)
+      if (tokensData.access != undefined) setIsUserAuthed(true)
     } catch (error) {
       console.log(error);
     }
