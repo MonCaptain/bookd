@@ -39,12 +39,11 @@ export function AuthContextProvider({ children }) {
       apiClient.setTokens(tokensData);
       // finally, login the user using the tokens
       apiClient.loginWithToken();
-      setIsUserAuthed(true)
+      if (tokensData.access != undefined) setIsUserAuthed(true)
     } catch (error) {
       console.log(error);
     }
   }
-
   async function registerUser(registerForm) {
     try {
       await apiClient.register(registerForm);
@@ -53,7 +52,6 @@ export function AuthContextProvider({ children }) {
       console.log(error);
     }
   }
-
   async function logoutUser() {
     try {
       await apiClient.logout();
@@ -65,7 +63,6 @@ export function AuthContextProvider({ children }) {
       console.log(error);
     }
   }
-
   /* automatically login user upon refresh if refresh and access tokens
     are available in local storage */
   useEffect(() => {
@@ -93,7 +90,6 @@ export function AuthContextProvider({ children }) {
     registerUser,
     logoutUser,
   };
-
   return (
     <AuthContext.Provider value={authVariables}>
       {children}
