@@ -26,9 +26,8 @@ export default function LoginDiag() {
 
   async function handleOnSubmit() {
     await authVariables.loginUser(loginForm);
-    navigate("/");
+    if (authVariables.isUserAuthed) navigate("/");
   }
-
   function handleInputChange(event) {
     const fieldName = event.target.name;
     const fieldValue = event.target.value;
@@ -37,7 +36,6 @@ export default function LoginDiag() {
       [fieldName]: fieldValue,
     });
   }
-
   return (
     <ScaleFade initialScale={0.9} in={true}>
       <Box
