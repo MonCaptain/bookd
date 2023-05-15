@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { CheckIcon, ChevronDownIcon, CloseIcon } from "@chakra-ui/icons";
 import {
   Box,
@@ -47,7 +48,6 @@ export default function BookForm({
   pages,
   cover,
   isOpen,
-  onOpen,
   onClose,
   submitBook,
   modifier,
@@ -57,32 +57,26 @@ export default function BookForm({
   const [currentPage, setCurrentPage] = useState(0);
   const [normPages, setNormPages] = useState(pages);
   const toast = useToast();
-  
+
   // For bookPages state (Might remove later)
-  useEffect(() => setNormPages(pages), [pages])
-  
-   // Change book status dinamically
+  useEffect(() => setNormPages(pages), [pages]);
+
+  // Change book status dinamically
   useEffect(() => {
     if (status !== 3) {
       if (currentPage == 0) {
-        setStatus(currentPage)
+        setStatus(currentPage);
       } else if (currentPage == normPages) {
-        setStatus(2)
+        setStatus(2);
       } else {
-        setStatus(currentPage > 0 ? 1 : status)
+        setStatus(currentPage > 0 ? 1 : status);
       }
-    } else {
-      console.log("No change")
     }
-  }, [currentPage])
+  }, [currentPage]);
   // Controls for editable fields
   const EditableControls = () => {
-    const {
-      isEditing,
-      getSubmitButtonProps,
-      getCancelButtonProps,
-      getEditButtonProps,
-    } = useEditableControls();
+    const { isEditing, getSubmitButtonProps, getCancelButtonProps } =
+      useEditableControls();
 
     return isEditing ? (
       <ButtonGroup justifyContent="end" size="sm" w="full" spacing={2} mt={2}>
@@ -100,7 +94,7 @@ export default function BookForm({
     let propObject = {};
     propObject[propName] = propValue;
     modifier(propObject);
-  }
+  };
 
   // Input fields for title and author
   const BookInput = ({ label, input, size, propName }) => {
@@ -111,19 +105,28 @@ export default function BookForm({
           <Tooltip label={"Click to edit"} shouldWrapChildren>
             <EditablePreview fontSize={size} />
           </Tooltip>
-          <Input as={EditableInput} fontSize={size} onBlur={e => modifierHandler(propName, e.target.value)}/>
-          <EditableControls/>
+          <Input
+            as={EditableInput}
+            fontSize={size}
+            onBlur={(e) => modifierHandler(propName, e.target.value)}
+          />
+          <EditableControls />
         </Editable>
       </FormControl>
     );
   };
 
   // Input fields for page counts
-  const BasePageCount = ({ label, pagesPass, handler }) => {    
+  const BasePageCount = ({ label, handler }) => {
     return (
       <FormControl pb={3}>
         <FormLabel>{label}</FormLabel>
-        <NumberInput defaultValue={normPages} min={1} size={"md"} onBlur={handler}>
+        <NumberInput
+          defaultValue={normPages}
+          min={1}
+          size={"md"}
+          onBlur={handler}
+        >
           <NumberInputField />
           <NumberInputStepper>
             <NumberIncrementStepper />
@@ -138,7 +141,13 @@ export default function BookForm({
     return (
       <FormControl pb={3}>
         <FormLabel>{label}</FormLabel>
-        <NumberInput defaultValue={currentPage} min={0} max={normPages} size={"md"} onBlur={e => handler(e)}>
+        <NumberInput
+          defaultValue={currentPage}
+          min={0}
+          max={normPages}
+          size={"md"}
+          onBlur={(e) => handler(e)}
+        >
           <NumberInputField />
           <NumberInputStepper>
             <NumberIncrementStepper />
@@ -152,29 +161,29 @@ export default function BookForm({
   // Handler for currentPage picker
   const currentPageHandler = (e) => {
     let curr = e.target.value;
-  
+
     if (curr > normPages) {
       toast({
-        title: 'Page Limit Exceeded',
+        title: "Page Limit Exceeded",
         description: `Maximum value is ${normPages}.`,
-        status: 'error',
-        duration: '5000',
+        status: "error",
+        duration: "5000",
         isClosable: true,
-      })
+      });
     }
     setCurrentPage(curr <= normPages ? curr : normPages);
-  }
+  };
 
   // When book total pages are modified
   const BookPageModifier = (e) => {
     let curr = e.target.value;
-    modifierHandler("pages", curr)
+    modifierHandler("pages", curr);
     if (currentPage > curr) {
-      setCurrentPage(curr)
+      setCurrentPage(curr);
     }
-    setNormPages(curr)
-  }
-  
+    setNormPages(curr);
+  };
+
   // To pick Book status
   const StatusPicker = ({ title }) => {
     return (
@@ -188,16 +197,16 @@ export default function BookForm({
           }}
           defaultValue={status}
         >
-          <option value={0} color={"yellow.900"} bg={"yellow.100"}>
+          <option value={0} color={"yellow.900"}>
             Not Started
           </option>
-          <option value={1} color={"cyan.900"} bg={"cyan.100"}>
+          <option value={1} color={"cyan.900"}>
             In Progress
           </option>
-          <option value={2} color={"green.900"} bg={"green.100"}>
+          <option value={2} color={"green.900"}>
             Completed
           </option>
-          <option value={3} color={"red.900"} bg={"red.100"}>
+          <option value={3} color={"red.900"}>
             Dropped
           </option>
         </Select>
@@ -226,8 +235,8 @@ export default function BookForm({
           onChange={(val) => {
             setRating(val);
           }}
-          onChangeEnd={(e) => {
-            setCompRating(rating)
+          onChangeEnd={() => {
+            setCompRating(rating);
           }}
           onMouseEnter={() => setTooltip(true)}
           onMouseLeave={() => setTooltip(false)}
@@ -281,21 +290,19 @@ export default function BookForm({
   };
 
   // For bookEntry Submission:
-  const posStatus = ['Not Started', 'In Progress', 'Completed', 'Dropped']
+  const posStatus = ["Not Started", "In Progress", "Completed", "Dropped"];
   const submitEntry = (result) => {
-    Promise.resolve(apiClient.postEntry({book_id: result.id})).then(
-      result => {
+    Promise.resolve(apiClient.postEntry({ book_id: result.id })).then(
+      (result) => {
         let entryBody = Object.assign(result, {
           current_page: currentPage,
           rating: compRating,
-          status: posStatus[status]
-        })
-        Promise.resolve(apiClient.editEntry(result.id, entryBody)).then(
-          response => console.log(response)
-        )
+          status: posStatus[status],
+        });
+        Promise.resolve(apiClient.editEntry(result.id, entryBody));
       }
-    )
-  }
+    );
+  };
 
   return (
     <Modal isOpen={isOpen} p={10} size={{ base: "sm", md: "xl" }} isCentered>
@@ -318,10 +325,29 @@ export default function BookForm({
               alt={"Book cover for " + title}
             />
             <Flex direction={"column"} px={5} w={"100%"} h={"100%"}>
-              <BookInput label={"Title"} input={title} size={"xl"} propName={"title"}/>
-              <BookInput label={"Author"} input={author} size={"lg"} propName={"author"}/>
-              <BasePageCount label={"Page Count"} pagesPass={normPages} handler={BookPageModifier}/>
-              <CurrPageCount label={"Current Page"} pagesPass={currentPage} handler={currentPageHandler} maxPage={normPages}/>
+              <BookInput
+                label={"Title"}
+                input={title}
+                size={"xl"}
+                propName={"title"}
+              />
+              <BookInput
+                label={"Author"}
+                input={author}
+                size={"lg"}
+                propName={"author"}
+              />
+              <BasePageCount
+                label={"Page Count"}
+                pagesPass={normPages}
+                handler={BookPageModifier}
+              />
+              <CurrPageCount
+                label={"Current Page"}
+                pagesPass={currentPage}
+                handler={currentPageHandler}
+                maxPage={normPages}
+              />
               <StatusPicker title={"Clasification"}></StatusPicker>
               <Rating title={"Rating"} />
             </Flex>
@@ -332,7 +358,7 @@ export default function BookForm({
             <Button
               variant={"solid"}
               colorScheme={"orange"}
-              onClick={(e) => submitBook(submitEntry)}
+              onClick={() => submitBook(submitEntry)}
             >
               Submit
             </Button>

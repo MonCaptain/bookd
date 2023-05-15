@@ -10,10 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { searchQuery } from "../api/BookAPI";
 import { useState, useEffect } from "react";
-import {
-  BookSearch,
-  SearchedBookCard,
-} from "../components/ExplorerComponents";
+import { BookSearch, SearchedBookCard } from "../components/ExplorerComponents";
 import BookForm from "../components/BookForm";
 import apiClient from "../services/apiClient";
 
@@ -25,9 +22,9 @@ export default function ExplorePage() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const modifyBook = (props) => {
-    let newBook = Object.assign(currentBook, props)
-    setCurrentBook(newBook)
-  }
+    let newBook = Object.assign(currentBook, props);
+    setCurrentBook(newBook);
+  };
 
   const fetchBooks = () => {
     if (query.length > 0) {
@@ -44,7 +41,7 @@ export default function ExplorePage() {
                 author={element.author}
                 pagecount={element.pages}
                 infopage={element.infopage}
-                clickHandle={(e) => {
+                clickHandle={() => {
                   setCurrentBook(element);
                   onOpen();
                 }}
@@ -96,16 +93,18 @@ export default function ExplorePage() {
           onOpen={onOpen}
           onClose={onClose}
           submitBook={(postEntry) => {
-            Promise.resolve(apiClient.postBook({
-              title: currentBook.title,
-              author: currentBook.author,
-              page_count: currentBook.pages,
-              publication_date: currentBook.publish_date,
-              cover_image: currentBook.cover,
-              isbn: currentBook.isbn,
-            })).then(result => {
+            Promise.resolve(
+              apiClient.postBook({
+                title: currentBook.title,
+                author: currentBook.author,
+                page_count: currentBook.pages,
+                publication_date: currentBook.publish_date,
+                cover_image: currentBook.cover,
+                isbn: currentBook.isbn,
+              })
+            ).then((result) => {
               onClose();
-              postEntry(result)
+              postEntry(result);
               return result;
             });
           }}

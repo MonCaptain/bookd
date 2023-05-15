@@ -1,4 +1,4 @@
-import React from "react";
+/* eslint-disable react/prop-types */
 import {
   IconButton,
   Avatar,
@@ -26,20 +26,20 @@ import {
   FiBookOpen,
   FiCheck,
   FiTrash2,
-  FiBook
+  FiBook,
 } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { useColorMode } from "@chakra-ui/react";
 import { HamburgerIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { useAuthContext } from "../contexts/AuthContext";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 
 const LinkItems = [
   { name: "Home", icon: FiHome, path: "/" },
   { name: "Currently Reading", icon: FiBookOpen, path: "/reading" },
   { name: "Completed", icon: FiCheck, path: "/completed" },
   { name: "Dropped", icon: FiTrash2, path: "/dropped" },
-  { name: "Explore", icon: FiBook, path:"/explore" },
+  { name: "Explore", icon: FiBook, path: "/explore" },
   { name: "Settings", icon: FiSettings },
 ];
 
@@ -62,7 +62,7 @@ export default function SidebarWithHeader({ children }) {
         size="full"
       >
         <DrawerContent>
-          <SidebarContent onClose={onClose}/>
+          <SidebarContent onClose={onClose} />
         </DrawerContent>
       </Drawer>
       {/* mobilenav */}
@@ -137,12 +137,12 @@ const NavItem = ({ icon, children, href, ...rest }) => {
 const MobileNav = ({ onOpen, ...rest }) => {
   const { colorMode, toggleColorMode } = useColorMode();
 
-  const authVariables = useAuthContext()
-  const navigate = useNavigate()
+  const authVariables = useAuthContext();
+  const navigate = useNavigate();
 
-  async function handleSignOut(){
-    await authVariables.logoutUser()
-    navigate("/")
+  async function handleSignOut() {
+    await authVariables.logoutUser();
+    navigate("/");
   }
 
   return (
@@ -162,7 +162,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
         onClick={onOpen}
         variant="outline"
         aria-label="open menu"
-        icon={<HamburgerIcon/>}
+        icon={<HamburgerIcon />}
       />
 
       <Text
