@@ -20,6 +20,6 @@ urlpatterns = [
 
     # Collection URLs
     path('<str:username>/collections', ManageUserCollections.as_view()),
-    path('<str:username>/collections/<int:collection_id>',
+    path('<str:username>/collections/<str:collection_uuid>',
          ManageUserCollectionDetail.as_view()),
 ]
