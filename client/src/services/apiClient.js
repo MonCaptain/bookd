@@ -71,6 +71,7 @@ class ApiClient {
     return await this.apiRequest({
       endpoint:"/users/logout",
       method:"POST",
+      requestBody: {refresh: this.refreshToken}
     })
   }
 
