@@ -145,7 +145,7 @@ class BookEntry(models.Model):
         )
 
     def __str__(self) -> str:
-        return f"{self.user.username} - {self.book.title}"
+        return f"{self.profile.user.username} - {self.book.title}"
 
 
 class Collection(models.Model):
@@ -175,4 +175,4 @@ class Collection(models.Model):
     objects = models.Manager()
 
     def __str__(self) -> str:
-        return self.title
+        return f"{self.title} - {self.profile.user.username}"
