@@ -38,8 +38,10 @@ export function AuthContextProvider({ children }) {
       localStorage.setItem(LOCAL_STORAGE_AUTH_KEY, JSON.stringify(tokensData));
       apiClient.setTokens(tokensData);
       // finally, login the user using the tokens
-      await apiClient.loginWithToken();
-      if (tokensData.access != undefined) setIsUserAuthed(true);
+      if (tokensData.access != undefined) {
+        setIsUserAuthed(true);
+        setUserData(await apiClient.loginWithToken());
+      }
     } catch (error) {
       console.log(error);
     }
