@@ -273,7 +273,6 @@ class ManageBookEntryDetail(APIView):
 
         data = request.data
 
-        # TODO : Validate current page
         current_page = data.get('current_page')
         book_status = data.get('status')
         book_rating = data.get('rating')
@@ -341,7 +340,7 @@ class ManageUserCollectionDetail(APIView):
             collection = get_object_or_404(
                 Collection, uuid=collection_uuid, profile=user_profile)
 
-            serializer = CollectionSerializer(collection, many=True)
+            serializer = CollectionSerializer(collection, many=False)
             return Response(
                 serializer.data,
                 status=status.HTTP_200_OK
