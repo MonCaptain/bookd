@@ -36,10 +36,10 @@ import { useNavigate } from "react-router-dom";
 
 const LinkItems = [
   { name: "Home", icon: FiHome, path: "/" },
+  { name: "Explore", icon: FiBook, path: "/explore" },
   { name: "Currently Reading", icon: FiBookOpen, path: "/reading" },
   { name: "Completed", icon: FiCheck, path: "/completed" },
   { name: "Dropped", icon: FiTrash2, path: "/dropped" },
-  { name: "Explore", icon: FiBook, path: "/explore" },
   { name: "Settings", icon: FiSettings },
 ];
 
