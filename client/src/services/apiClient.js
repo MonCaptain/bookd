@@ -114,6 +114,16 @@ class ApiClient {
       method: "GET",
     });
   }
+
+  async editProfile(username, profileSettings){
+    return await this.apiRequest({
+      endpoint: `/books/${username}`,
+      method:"PATCH",
+      requestBody:{
+        ...profileSettings
+      }
+    })
+  }
 }
 
 export default new ApiClient("http://localhost:8000");

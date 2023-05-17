@@ -1,29 +1,15 @@
 import { useParams } from "react-router-dom";
 import {
   Box,
-  Flex,
-  Heading,
-  Image,
-  Spacer,
-  Stack,
-  Switch,
-  Text,
-  Divider,
-  Button,
-  Icon,
-  SlideFade,
-  SimpleGrid
 } from "@chakra-ui/react";
-import { AddIcon, EditIcon } from "@chakra-ui/icons";
 import { useAuthContext } from "../contexts/AuthContext";
-import { useColorModeValue } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useState } from "react";
 import apiClient from "../services/apiClient";
 import ProfileBookList from "../components/UserProfile/ProfileBookList";
+import ProfileSettingsStats from "../components/UserProfile/ProfileSettingsStats";
 
 export default function UserProfile({ isOriginalUser = false }) {
-  const containerColor = useColorModeValue("whiteAlpha.900", "gray.800");
   // extract username that's being used if it exists in the paramter
   const usernameParams =
     Object.keys(useParams()).length === 1 ? useParams().username : "";
@@ -56,90 +42,7 @@ export default function UserProfile({ isOriginalUser = false }) {
       ) : (
         <Box display={"flex"} flexDirection={"column"} rowGap={"20px"}>
           {/* Display user stat and fun fact information */}
-          <Heading>User Profile</Heading>
-          <Flex
-            columnGap={"50px"}
-            height="100%"
-            maxHeight={"30vh"}
-            padding={"20px"}
-            bg={containerColor}
-            borderRadius={"5px"}
-          >
-            <Image
-              boxSize="250px"
-              objectFit="cover"
-              src={`http://localhost:8000${userProfile.profile_picture}`}
-              alt="Dan Abramov"
-            />
-            {/* Profile and Settings */}
-            <Box
-              display="flex"
-              flexDirection={"column"}
-              rowGap={"10px"}
-              width={"full"}
-              maxWidth={"425px"}
-            >
-              <Text color={"orange.600"} fontWeight={"bold"}>
-                {userProfile.user.username}
-              </Text>
-              <Text>Favorite Book: {userProfile.favorite_book.title}</Text>
-              <Text>{userProfile.book_list.length} book entries</Text>
-              <Stack direction="row">
-                <Text>Set Private Profile?</Text>
-                <Spacer />
-                <Switch
-                  colorScheme="orange"
-                  size="lg"
-                  isChecked={userProfile.private}
-                />
-              </Stack>
-              <Stack direction="row">
-                <Text>Dark mode?</Text>
-                <Spacer />
-                <Switch colorScheme="orange" size="lg" />
-              </Stack>
-              <Button leftIcon={<EditIcon />}>Change Profile Picture</Button>
-            </Box>
-            <Divider orientation="vertical" />
-
-            {/* Book Stats */}
-            <Box
-              display="flex"
-              flexDirection={"column"}
-              rowGap={"10px"}
-              width={"full"}
-              maxWidth={"425px"}
-            >
-              <Text color={"orange.600"} fontWeight={"bold"}>
-                Book Stats
-              </Text>
-              <Stack direction="row">
-                <Text>Favorite Book:</Text>
-                <Spacer />
-                <Text>{userProfile.favorite_book.title}</Text>
-              </Stack>
-              <Stack direction="row">
-                <Text>All</Text>
-                <Spacer />
-                <Text>20</Text>
-              </Stack>
-              <Stack direction="row">
-                <Text>Completed</Text>
-                <Spacer />
-                <Text>10</Text>
-              </Stack>
-              <Stack direction="row">
-                <Text>Dropped</Text>
-                <Spacer />
-                <Text>2</Text>
-              </Stack>
-              <Stack direction="row">
-                <Text>Not yet started</Text>
-                <Spacer />
-                <Text>2</Text>
-              </Stack>
-            </Box>
-          </Flex>
+          <ProfileSettingsStats userProfile={userProfile} isOriginalUser={isOriginalUser}/>
           {/* Display user books list */}
           <ProfileBookList bookList={bookList}/>
         </Box>
