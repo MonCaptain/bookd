@@ -6,6 +6,13 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
+def upload_to(instance, filename):
+    """
+    Formats the image path
+    """
+    return f'images/{filename}'
+
+
 class Book(models.Model):
     """
     Book Model
@@ -57,6 +64,8 @@ class Profile(models.Model):
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=False)
     private = models.BooleanField(default=False)
+    profile_picture = models.ImageField(
+        upload_to=upload_to, blank=True, null=True)
     favorite_book = models.ForeignKey(
         Book, on_delete=models.SET_NULL, null=True, related_name="favorite_book")
 
@@ -120,7 +129,8 @@ class BookEntry(models.Model):
 
     status = models.CharField(
         max_length=12, choices=Progress.choices, default=Progress.NOT_STARTED)
-    rating = models.IntegerField(null=True, choices=Rating.choices, default=None)
+    rating = models.IntegerField(
+        null=True, choices=Rating.choices, default=None)
     last_updated = models.DateTimeField(auto_now=True)
     datetime_added = models.DateTimeField(auto_now_add=True)
 
@@ -153,7 +163,8 @@ class Collection(models.Model):
     books : ManyToManyField
         Books in the collection
     """
-    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    uuid = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False)
     profile = models.ForeignKey(
         Profile, on_delete=models.CASCADE, related_name="collections")
     title = models.CharField(max_length=50, null=False)
