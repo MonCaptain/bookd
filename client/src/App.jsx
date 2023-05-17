@@ -11,6 +11,7 @@ import { useAuthContext } from "./contexts/AuthContext";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import ExplorePage from "./pages/ExplorePage";
+import ExploreUsersPage from "./pages/ExploreUsersPage";
 
 const authedRouter = createBrowserRouter(
   createRoutesFromElements(
@@ -20,7 +21,8 @@ const authedRouter = createBrowserRouter(
       <Route path="/reading" element={<BookList listType={"reading"} />} />
       <Route path="/completed" element={<BookList listType={"completed"} />} />
       <Route path="/dropped" element={<BookList listType={"dropped"} />} />
-      <Route path="/explore" element={<ExplorePage/>}/>
+      <Route path="/users" element={<ExploreUsersPage />} />
+      <Route path="/explore" element={<ExplorePage />} />
     </Route>
   )
 );
