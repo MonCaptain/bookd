@@ -26,7 +26,7 @@ const authedRouter = createBrowserRouter(
       <Route path="/users">
         <Route path=":username" element = {<UserProfile />}/>
       </Route>
-        <Route path="/me" element={<UserProfile />} />
+        <Route path="/me" element={<UserProfile isOriginalUser = {true} />} />
       <Route path="/explore" element={<ExplorePage />} />
     </Route>
   )
