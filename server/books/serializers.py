@@ -78,14 +78,21 @@ class CollectionSerializer(serializers.ModelSerializer):
         )
 
 
-class PublicProfileSerializer(serializers.ModelSerializer):
+class ProfileSerializer(serializers.ModelSerializer):
     """
     Serializer for public profiles
     """
 
-    user = UserSerializer()
-    favorite_book = BookSerializer()
-    book_list = BookEntrySerializer(many=True)
+    user = UserSerializer(read_only=True)
+    favorite_book = BookSerializer(required=False)
+    book_list = BookEntrySerializer(many=True, read_only=True)
+
+    private = serializers.BooleanField(required=False)
+    profile_picture = serializers.ImageField(
+        max_length=None,
+        use_url=True,
+        required=False
+    )
 
     class Meta:
         """
@@ -100,7 +107,14 @@ class PrivateProfileSerializer(serializers.ModelSerializer):
     Serializer for private profiles
     """
 
-    user = UserSerializer()
+    user = UserSerializer(read_only=True)
+    private = serializers.BooleanField(required=False)
+    favorite_book = serializers.IntegerField(required=False)
+    profile_picture = serializers.ImageField(
+        max_length=None,
+        use_url=True,
+        required=False
+    )
 
     class Meta:
         """
@@ -110,4 +124,5 @@ class PrivateProfileSerializer(serializers.ModelSerializer):
         fields = (
             'user',
             'private',
+            'profile_picture',
         )
