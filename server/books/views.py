@@ -10,7 +10,7 @@ from .models import Profile
 
 from .serializers import BookSerializer, BookEntrySerializer
 from .serializers import CollectionSerializer
-from .serializers import PublicProfileSerializer, PrivateProfileSerializer
+from .serializers import ProfileSerializer, PrivateProfileSerializer
 
 
 User = get_user_model()
@@ -37,7 +37,7 @@ class ManageUserProfiles(APIView):
         user_profile = get_object_or_404(Profile, user=user)
 
         if requester.username == username or not user_profile.private:
-            serializer = PublicProfileSerializer(user_profile, many=False)
+            serializer = ProfileSerializer(user_profile, many=False)
             return Response(
                 serializer.data,
                 status=status.HTTP_200_OK
@@ -64,30 +64,17 @@ class ManageUserProfiles(APIView):
         user_profile = get_object_or_404(Profile, user=user)
 
         data = request.data
+        data['user'] = user
 
-        private = data.get('private')
-        favorite_book_id = data.get('favorite_book_id')
+        serializer = ProfileSerializer(user_profile, data=data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                serializer.data,
+                status=status.HTTP_200_OK
+            )
 
-        if private is not None:
-            if not isinstance(private, bool):
-                return Response(
-                    {'error': 'There is an error parsing the private field'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            user_profile.private = private
-            user_profile.save()
-
-        if favorite_book_id is not None:
-            favorite_book = Book.objects.get(id=favorite_book_id)
-            if not isinstance(favorite_book_id, int):
-                return Response(
-                    {'error': 'There is an error parsing the favorite_book_id field'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            user_profile.favorite_book = favorite_book
-            user_profile.save()
-
-        return Response(status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ManageUserBookEntries(APIView):
