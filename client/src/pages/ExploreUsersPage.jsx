@@ -1,5 +1,5 @@
 import { Box, SimpleGrid, Center, Flex } from "@chakra-ui/react";
-import UserProfileCard from "../components/UserProfileCard";
+import UserProfileCard from "../components/UserProfile/UserProfileCard";
 
 export default function ExploreUsersPage() {
   return (

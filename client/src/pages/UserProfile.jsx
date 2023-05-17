@@ -11,6 +11,8 @@ import {
   Divider,
   Button,
   Icon,
+  SlideFade,
+  SimpleGrid
 } from "@chakra-ui/react";
 import { AddIcon, EditIcon } from "@chakra-ui/icons";
 import { useAuthContext } from "../contexts/AuthContext";
@@ -18,6 +20,7 @@ import { useColorModeValue } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useState } from "react";
 import apiClient from "../services/apiClient";
+import ProfileBookList from "../components/UserProfile/ProfileBookList";
 
 export default function UserProfile({ isOriginalUser = false }) {
   const containerColor = useColorModeValue("whiteAlpha.900", "gray.800");
@@ -31,14 +34,16 @@ export default function UserProfile({ isOriginalUser = false }) {
   // if the user is browsing their own profile, then allow them to edit it
   isOriginalUser = isOriginalUser || usernameParams === authedUser.username;
   const requestParams = isOriginalUser ? authedUser.username : usernameParams;
-
-  const [userProfile, setUserProfile] = useState(null); // statevariables required to rendering user profile
-  const [isLoading, setIsLoading] = useState(true); // don't render anything until the data is fetched
-
+  // statevariables required to rendering user related information
+  const [userProfile, setUserProfile] = useState(null);
+  const [bookList, setBookList] = useState([]);
+  // don't render anything until the data is fetched
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     async function fetchUserProfile() {
       const responseData = await apiClient.getUserProfile(requestParams);
       setUserProfile(responseData);
+      setBookList(responseData.book_list);
       if (!responseData.detail) setIsLoading(false);
     }
 
@@ -49,9 +54,9 @@ export default function UserProfile({ isOriginalUser = false }) {
       {isLoading ? (
         ""
       ) : (
-        <Box>
+        <Box display={"flex"} flexDirection={"column"} rowGap={"20px"}>
           {/* Display user stat and fun fact information */}
-          <Heading mb={"20px"}>User Profile</Heading>
+          <Heading>User Profile</Heading>
           <Flex
             columnGap={"50px"}
             height="100%"
@@ -97,7 +102,7 @@ export default function UserProfile({ isOriginalUser = false }) {
             </Box>
             <Divider orientation="vertical" />
 
-            {/* Book Stats*/}
+            {/* Book Stats */}
             <Box
               display="flex"
               flexDirection={"column"}
@@ -111,7 +116,7 @@ export default function UserProfile({ isOriginalUser = false }) {
               <Stack direction="row">
                 <Text>Favorite Book:</Text>
                 <Spacer />
-                {/* <Text>{userProfile.favorite_book.title}</Text> */}
+                <Text>{userProfile.favorite_book.title}</Text>
               </Stack>
               <Stack direction="row">
                 <Text>All</Text>
@@ -136,9 +141,7 @@ export default function UserProfile({ isOriginalUser = false }) {
             </Box>
           </Flex>
           {/* Display user books list */}
-          <Box mt={"20px"}>
-            <Heading>Book List</Heading>
-          </Box>
+          <ProfileBookList bookList={bookList}/>
         </Box>
       )}
     </>
