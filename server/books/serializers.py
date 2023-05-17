@@ -57,7 +57,6 @@ class BookEntrySerializer(serializers.ModelSerializer):
         exclude = (
             'profile',
             'datetime_added',
-            'id',
         )
 
 

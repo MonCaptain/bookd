@@ -98,7 +98,7 @@ class ManageUserBookEntries(APIView):
         user_profile = get_object_or_404(Profile, user=user)
 
         if not user_profile.private or requester.username == username:
-            book_list = user_profile.book_list.all()
+            book_list = user_profile.book_list.through.objects.all()
             serializer = BookEntrySerializer(book_list, many=True)
             return Response(
                 serializer.data,
@@ -134,6 +134,13 @@ class ManageUserBookEntries(APIView):
             )
 
         book = get_object_or_404(Book, id=book_id)
+
+        if BookEntry.objects.filter(book=book, profile=user_profile).exists():
+            return Response(
+                {'error': 'This entry already exists'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
         book_entry = BookEntry.objects.create(
             book=book,
             profile=user_profile
@@ -247,7 +254,9 @@ class ManageBookEntryDetail(APIView):
         if not user_profile.private or requester.username == username:
             book_entry = get_object_or_404(
                 BookEntry, id=entry_id, profile=user_profile)
+            print("Book Entry found")
             serializer = BookEntrySerializer(book_entry, many=False)
+            print("Book Entry Serialized")
             return Response(
                 serializer.data,
                 status=status.HTTP_200_OK
