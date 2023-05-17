@@ -38,8 +38,8 @@ export function AuthContextProvider({ children }) {
       localStorage.setItem(LOCAL_STORAGE_AUTH_KEY, JSON.stringify(tokensData));
       apiClient.setTokens(tokensData);
       // finally, login the user using the tokens
-      apiClient.loginWithToken();
-      if (tokensData.access != undefined) setIsUserAuthed(true)
+      await apiClient.loginWithToken();
+      if (tokensData.access != undefined) setIsUserAuthed(true);
     } catch (error) {
       console.log(error);
     }
@@ -47,7 +47,10 @@ export function AuthContextProvider({ children }) {
   async function registerUser(registerForm) {
     try {
       await apiClient.register(registerForm);
-      await loginUser({username: registerForm.username, password:registerForm.password})
+      await loginUser({
+        username: registerForm.username,
+        password: registerForm.password,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -57,7 +60,7 @@ export function AuthContextProvider({ children }) {
       await apiClient.logout();
       setUserData(userDataTemplate);
       setUserTokens(userTokensTemplate);
-      setIsUserAuthed(false)
+      setIsUserAuthed(false);
       localStorage.removeItem(LOCAL_STORAGE_AUTH_KEY);
     } catch (error) {
       console.log(error);
@@ -66,18 +69,22 @@ export function AuthContextProvider({ children }) {
   /* automatically login user upon refresh if refresh and access tokens
     are available in local storage */
   useEffect(() => {
-    function isString(value){
+    function isString(value) {
       return typeof value === "string";
+    }
+
+    async function login() {
+      setUserData(await apiClient.loginWithToken());
     }
     const tokenString = localStorage.getItem(LOCAL_STORAGE_AUTH_KEY);
     if (isString(tokenString)) {
       const tokens = JSON.parse(tokenString);
       setUserTokens(tokens);
       apiClient.setTokens(tokens);
-      apiClient.loginWithToken();
-      setIsUserAuthed(true)
+      login();
+      setIsUserAuthed(true);
     }
-    setIsLoading(false)
+    setIsLoading(false);
   }, []);
 
   const authVariables = {
