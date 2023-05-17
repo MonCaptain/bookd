@@ -243,26 +243,26 @@ export default function BookForm({
         >
           {ratingArray.map((starValue, index) => {
             return (
-          <SliderMark value={starValue} {...labelStyles} key={index}>
-            <Icon
-              as={rating >= starValue ? AiFillStar : AiOutlineStar}
-              color={"yellow.500"}
-            />
-          </SliderMark>
-            )
+              <SliderMark value={starValue} {...labelStyles} key={index}>
+                <Icon
+                  as={rating >= starValue ? AiFillStar : AiOutlineStar}
+                  color={"#faaf00"}
+                />
+              </SliderMark>
+            );
           })}
           <SliderTrack>
-            <SliderFilledTrack bg={"yellow.400"} />
+            <SliderFilledTrack bg={"#faaf00"} />
           </SliderTrack>
           <Tooltip
             hasArrow
-            bg="yellow.500"
+            bg="orange.500"
             color="white"
             placement="top"
             isOpen={tooltip}
             label={`${rating}`}
           >
-            <SliderThumb boxSize={6} color={"yellow.500"} />
+            <SliderThumb boxSize={6} color={"orange.700"} />
           </Tooltip>
         </Slider>
       </Box>
