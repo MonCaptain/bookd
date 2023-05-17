@@ -24,7 +24,6 @@ class UserSerializer(serializers.ModelSerializer):
         """
         model = User
         fields = (
-            'id',
             'username',
             'first_name',
             'last_name',
@@ -57,7 +56,8 @@ class BookEntrySerializer(serializers.ModelSerializer):
         model = BookEntry
         exclude = (
             'profile',
-            'datetime_added'
+            'datetime_added',
+            'id',
         )
 
 
@@ -99,7 +99,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         Metadata class
         """
         model = Profile
-        fields = '__all__'
+        exclude = ('id',)
 
 
 class PrivateProfileSerializer(serializers.ModelSerializer):
