@@ -222,7 +222,7 @@ export default function BookForm({
     };
     let [tooltip, setTooltip] = useState(false);
     let [rating, setRating] = useState(compRating);
-
+    const ratingArray = [1, 2, 3, 4, 5];
     return (
       <Box mb={6}>
         <FormLabel>{title}</FormLabel>
@@ -241,36 +241,16 @@ export default function BookForm({
           onMouseEnter={() => setTooltip(true)}
           onMouseLeave={() => setTooltip(false)}
         >
-          <SliderMark value={1} {...labelStyles}>
+          {ratingArray.map((starValue, index) => {
+            return (
+          <SliderMark value={starValue} {...labelStyles} key={index}>
             <Icon
-              as={rating >= 1 ? AiFillStar : AiOutlineStar}
+              as={rating >= starValue ? AiFillStar : AiOutlineStar}
               color={"yellow.500"}
             />
           </SliderMark>
-          <SliderMark value={2} {...labelStyles}>
-            <Icon
-              as={rating >= 2 ? AiFillStar : AiOutlineStar}
-              color={"yellow.500"}
-            />
-          </SliderMark>
-          <SliderMark value={3} {...labelStyles}>
-            <Icon
-              as={rating >= 3 ? AiFillStar : AiOutlineStar}
-              color={"yellow.500"}
-            />
-          </SliderMark>
-          <SliderMark value={4} {...labelStyles}>
-            <Icon
-              as={rating >= 4 ? AiFillStar : AiOutlineStar}
-              color={"yellow.500"}
-            />
-          </SliderMark>
-          <SliderMark value={5} {...labelStyles}>
-            <Icon
-              as={rating >= 5 ? AiFillStar : AiOutlineStar}
-              color={"yellow.500"}
-            />
-          </SliderMark>
+            )
+          })}
           <SliderTrack>
             <SliderFilledTrack bg={"yellow.400"} />
           </SliderTrack>
