@@ -74,7 +74,7 @@ class CollectionSerializer(serializers.ModelSerializer):
         """
         model = Collection
         exclude = (
-            'profile'
+            'profile',
         )
 
 
@@ -85,7 +85,8 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     user = UserSerializer(read_only=True)
     favorite_book = BookSerializer(required=False)
-    book_list = BookEntrySerializer(many=True, read_only=True)
+    book_list = BookEntrySerializer(source='bookentry_set', many=True, read_only=True)
+    collections = CollectionSerializer(many=True)
 
     private = serializers.BooleanField(required=False)
     profile_picture = serializers.ImageField(
