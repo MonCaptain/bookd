@@ -108,6 +108,14 @@ class ApiClient {
       requestBody: entryObject,
     });
   }
+
+  async retrieveEntries() {
+    let username = await this.retrieveUsername()
+    return await this.apiRequest({
+      endpoint: `/books/${username}/entries`,
+      method: "GET",
+    })
+  }
 }
 
 export default new ApiClient("http://localhost:8000");
