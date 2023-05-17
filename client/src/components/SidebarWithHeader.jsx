@@ -27,7 +27,7 @@ import {
   FiCheck,
   FiTrash2,
   FiBook,
-  FiTrendingUp
+  FiTrendingUp,
 } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { useColorMode } from "@chakra-ui/react";
@@ -218,9 +218,10 @@ const MobileNav = ({ onOpen, ...rest }) => {
               bg={useColorModeValue("white", "gray.900")}
               borderColor={useColorModeValue("gray.200", "gray.700")}
             >
-              <MenuItem>Profile</MenuItem>
+              <Link to={"/me"}>
+                <MenuItem>Profile</MenuItem>
+              </Link>
               <MenuItem>Settings</MenuItem>
-              <MenuItem>Billing</MenuItem>
               <MenuDivider />
               <MenuItem onClick={handleSignOut}>Sign out</MenuItem>
             </MenuList>

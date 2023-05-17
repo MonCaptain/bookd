@@ -12,6 +12,7 @@ import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import ExplorePage from "./pages/ExplorePage";
 import ExploreUsersPage from "./pages/ExploreUsersPage";
+import UserProfile from "./pages/UserProfile";
 
 const authedRouter = createBrowserRouter(
   createRoutesFromElements(
@@ -21,7 +22,11 @@ const authedRouter = createBrowserRouter(
       <Route path="/reading" element={<BookList listType={"reading"} />} />
       <Route path="/completed" element={<BookList listType={"completed"} />} />
       <Route path="/dropped" element={<BookList listType={"dropped"} />} />
-      <Route path="/users" element={<ExploreUsersPage />} />
+      <Route path="/users" element={<ExploreUsersPage />}/>
+      <Route path="/users">
+        <Route path=":username" element = {<UserProfile />}/>
+      </Route>
+        <Route path="/me" element={<UserProfile />} />
       <Route path="/explore" element={<ExplorePage />} />
     </Route>
   )
