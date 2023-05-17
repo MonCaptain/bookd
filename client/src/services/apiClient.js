@@ -43,43 +43,42 @@ class ApiClient {
     }
   }
 
-  
-  async login(loginForm){
+  async login(loginForm) {
     return await this.apiRequest({
-      endpoint:"/users/login",
-      method:"POST",
-      requestBody:loginForm
-    })
-  }
-  
-  async loginWithToken(){
-    return await this.apiRequest({
-      endpoint:"/users/me",
-      method:"GET",
-    })
+      endpoint: "/users/login",
+      method: "POST",
+      requestBody: loginForm,
+    });
   }
 
-  async register(registerForm){
+  async loginWithToken() {
     return await this.apiRequest({
-      endpoint:"/users/register",
-      method:"POST",
-      requestBody:registerForm
-    })
+      endpoint: "/users/me",
+      method: "GET",
+    });
   }
 
-  async logout(){
+  async register(registerForm) {
     return await this.apiRequest({
-      endpoint:"/users/logout",
-      method:"POST",
-    })
+      endpoint: "/users/register",
+      method: "POST",
+      requestBody: registerForm,
+    });
+  }
+
+  async logout() {
+    return await this.apiRequest({
+      endpoint: "/users/logout",
+      method: "POST",
+    });
   }
 
   async postBook(bookObject) {
     return await this.apiRequest({
-        endpoint: "/books/",
-        method: "POST",
-        requestBody: bookObject
-      });
+      endpoint: "/books/",
+      method: "POST",
+      requestBody: bookObject,
+    });
   }
 
   async retrieveUsername() {
@@ -105,6 +104,14 @@ class ApiClient {
       endpoint: `/books/${username}/entries/${entryID}`,
       method: "PATCH",
       requestBody: entryObject,
+    });
+  }
+
+  // retrieve user profile
+  async getUserProfile(username) {
+    return await this.apiRequest({
+      endpoint: `/books/${username}`,
+      method: "GET",
     });
   }
 }
