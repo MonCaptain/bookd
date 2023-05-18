@@ -11,6 +11,8 @@ import { useAuthContext } from "./contexts/AuthContext";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import ExplorePage from "./pages/ExplorePage";
+import ExploreUsersPage from "./pages/ExploreUsersPage";
+import UserProfile from "./pages/UserProfile";
 
 const authedRouter = createBrowserRouter(
   createRoutesFromElements(
@@ -21,7 +23,12 @@ const authedRouter = createBrowserRouter(
       <Route path="/starting" element={<BookList pageTitle={"Not Started"} category={"Not Started"} />} />
       <Route path="/completed" element={<BookList pageTitle={"Completed"} category={"Completed"}/>} />
       <Route path="/dropped" element={<BookList pageTitle={"Dropped"} category={"Dropped"}/>} />
-      <Route path="/explore" element={<ExplorePage/>}/>
+      <Route path="/users" element={<ExploreUsersPage />}/>
+      <Route path="/users">
+        <Route path=":username" element = {<UserProfile />}/>
+      </Route>
+        <Route path="/me" element={<UserProfile isOriginalUser = {true} />} />
+      <Route path="/explore" element={<ExplorePage />} />
     </Route>
   )
 );
