@@ -87,76 +87,87 @@ export default function ProfileSettingsStats({ userProfile, isOriginalUser }) {
           fallbackSrc="https://via.placeholder.com/250"
         />
         {/* Profile and Settings */}
-        {isOriginalUser && 
-        <Box
-          display="flex"
-          flexDirection={"column"}
-          rowGap={"10px"}
-          width={"full"}
-          maxWidth={"425px"}
-        >
-          <Text color={orangeTextTheme} fontWeight={"bold"}>
-            {userProfile.user.first_name} {userProfile.user.last_name}
-          </Text>
-          <Text>Favorite Book: {userProfile.favorite_book.title}</Text>
-          <Text>{userProfile.book_list.length} book entries</Text>
-          {isOriginalUser && (
-            <Stack direction="row">
-              <Text>Private Profile</Text>
-              <Spacer />
-              <Switch
-                colorScheme="orange"
-                size="lg"
-                isChecked={isProfilePrivate}
-                onChange={handleOnPrivacyToggle}
-              />
-            </Stack>
-          )}
-          {isOriginalUser && (
-            <Stack direction="row">
-              <Text>Dark mode</Text>
-              <Spacer />
-              <Switch
-                colorScheme="orange"
-                size="lg"
-                onChange={toggleColorMode}
-                isChecked={colorMode === "dark" ? true : false}
-              />
-            </Stack>
-          )}
-          {isOriginalUser && (
-            <Stack direction={"row"} alignItems={"center"}>
-              <Box
-                width={"full"}
-                fontWeight={"semibold"}
-                colorScheme="orange"
-                bg={colorMode == "light" ? "gray.100" : "gray.700"}
-                padding={"9px"}
-                borderRadius={"5px"}
-              >
-                <label
-                  htmlFor="file-upload"
-                  style={{ marginBottom: "1rem" }}
-                  width="100%"
-                >
-                  <Box _hover={{ cursor: "pointer" }} width={"full"}>
-                    Edit Profile Picture
-                  </Box>
-                </label>
-                <input
-                  id="file-upload"
-                  type="file"
-                  onChange={handleImageChange}
-                  style={{ display: "none" }}
-                  accept="image/jpeg,image/png,image/gif"
+        {isOriginalUser && (
+          <Box
+            display="flex"
+            flexDirection={"column"}
+            rowGap={"10px"}
+            width={"full"}
+            maxWidth={"425px"}
+          >
+            <Text color={orangeTextTheme} fontWeight={"bold"}>
+              {userProfile.user.first_name} {userProfile.user.last_name}
+            </Text>
+            <Text>Favorite Book: </Text>
+            <Spacer />
+            <Text>
+              {userProfile.favorite_book
+                ? userProfile.favorite_book.title
+                : "None"}
+            </Text>
+            <Text>{userProfile.book_list.length} book entries</Text>
+            {isOriginalUser && (
+              <Stack direction="row">
+                <Text>Private Profile</Text>
+                <Spacer />
+                <Switch
+                  colorScheme="orange"
+                  size="lg"
+                  isChecked={isProfilePrivate}
+                  onChange={handleOnPrivacyToggle}
                 />
-              </Box>
-              <Button colorScheme="orange" onClick={handleUpload} width={"50%"}>
-                Upload
-              </Button>
-            </Stack>
-          )}
-        </Box>}
+              </Stack>
+            )}
+            {isOriginalUser && (
+              <Stack direction="row">
+                <Text>Dark mode</Text>
+                <Spacer />
+                <Switch
+                  colorScheme="orange"
+                  size="lg"
+                  onChange={toggleColorMode}
+                  isChecked={colorMode === "dark" ? true : false}
+                />
+              </Stack>
+            )}
+            {isOriginalUser && (
+              <Stack direction={"row"} alignItems={"center"}>
+                <Box
+                  width={"full"}
+                  fontWeight={"semibold"}
+                  colorScheme="orange"
+                  bg={colorMode == "light" ? "gray.100" : "gray.700"}
+                  padding={"9px"}
+                  borderRadius={"5px"}
+                >
+                  <label
+                    htmlFor="file-upload"
+                    style={{ marginBottom: "1rem" }}
+                    width="100%"
+                  >
+                    <Box _hover={{ cursor: "pointer" }} width={"full"}>
+                      Edit Profile Picture
+                    </Box>
+                  </label>
+                  <input
+                    id="file-upload"
+                    type="file"
+                    onChange={handleImageChange}
+                    style={{ display: "none" }}
+                    accept="image/jpeg,image/png,image/gif"
+                  />
+                </Box>
+                <Button
+                  colorScheme="orange"
+                  onClick={handleUpload}
+                  width={"50%"}
+                >
+                  Upload
+                </Button>
+              </Stack>
+            )}
+          </Box>
+        )}
 
         {/* Book Stats */}
         <Box
@@ -172,7 +183,11 @@ export default function ProfileSettingsStats({ userProfile, isOriginalUser }) {
           <Stack direction="row">
             <Text>Favorite Book:</Text>
             <Spacer />
-            <Text>{userProfile.favorite_book.title}</Text>
+            <Text>
+              {userProfile.favorite_book
+                ? userProfile.favorite_book.title
+                : "None"}
+            </Text>
           </Stack>
           <Stack direction="row">
             <Text>All</Text>
