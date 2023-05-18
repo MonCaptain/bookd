@@ -98,13 +98,15 @@ export default function ProfileSettingsStats({ userProfile, isOriginalUser }) {
             <Text color={orangeTextTheme} fontWeight={"bold"}>
               {userProfile.user.first_name} {userProfile.user.last_name}
             </Text>
-            <Text>Favorite Book: </Text>
-            <Spacer />
-            <Text>
-              {userProfile.favorite_book
-                ? userProfile.favorite_book.title
-                : "None"}
-            </Text>
+            <Stack direction={"row"}>
+              <Text>Favorite Book: </Text>
+              <Spacer />
+              <Text>
+                {userProfile.favorite_book
+                  ? userProfile.favorite_book.title
+                  : "None"}
+              </Text>
+            </Stack>
             <Text>{userProfile.book_list.length} book entries</Text>
             {isOriginalUser && (
               <Stack direction="row">
