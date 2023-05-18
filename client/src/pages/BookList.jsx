@@ -1,13 +1,18 @@
-import { Box, Heading, SimpleGrid, SlideFade, useColorModeValue } from "@chakra-ui/react";
+/* eslint-disable react/prop-types */
+import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Heading, SimpleGrid, SlideFade, useColorModeValue, useDisclosure } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import apiClient from "../services/apiClient";
-import BookCard from "../components/BookComponents";
+import BookCard from "../components/BookCard";
+import EntryForm from "../components/EntryForm";
 
 export default function BookList({ pageTitle, category }) {
   // fetch user book list, and then filter them based on reading status
   // i.e. currently_reading, completed, dropped, all, etc...
 
-  let [bookEntries, setBookEntries] = useState([]);
+  const [bookEntries, setBookEntries] = useState([]);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const alertDiagHandler = useDisclosure();
+  const [currentEntry, setCurrentEntry] = useState({book: {}})
 
   const fetchEntries = () => 
   {
@@ -20,27 +25,91 @@ export default function BookList({ pageTitle, category }) {
           author={bookEntry.book.author}
           currentPage={bookEntry.current_page}
           pagecount={bookEntry.book.page_count}
+          dropped={category == "Dropped"}
           progress={(bookEntry.current_page/bookEntry.book.page_count)*100}
           rating={bookEntry.rating}
-          key={index}>
+          key={index}
+          clickHandle={() => {
+            setCurrentEntry(bookEntry);
+            onOpen();
+          }}
+          deleteHandle={() => {
+            setCurrentEntry(bookEntry);
+            alertDiagHandler.onOpen();
+          }}>
         </BookCard>
         }})
         setBookEntries(fetchedEntries)
       })
   }
 
+  const BookAlertDiag = ({isOpen, onClose}) => {
+    return (
+      <>
+        <AlertDialog
+          motionPreset='slideInBottom'
+          onClose={onClose}
+          isOpen={isOpen}
+          isCentered
+        >
+          <AlertDialogOverlay />
+  
+          <AlertDialogContent>
+            <AlertDialogHeader>Discard Changes?</AlertDialogHeader>
+            <AlertDialogCloseButton />
+            <AlertDialogBody>
+              Are you want to delete "{currentEntry.book.title}"" from your books?
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <Button onClick={onClose}>
+                No
+              </Button>
+              <Button colorScheme='red' ml={3} onClick={() => deleteEntry()}>
+                Yes
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </>
+    )
+  }
+  const updateEntryState = (props) => {
+    let newEntry = Object.assign(currentEntry, props);
+    setCurrentEntry(newEntry);
+  }
+
+  const updateEntry = () => {
+    Promise.resolve(apiClient.editEntry(currentEntry.id, currentEntry)).then(() => onClose()
+    )
+  }
+
+  const deleteEntry = () => {
+    Promise.resolve(apiClient.deleteEntry(currentEntry.id)).then(() => alertDiagHandler.onClose())
+  }
+
   useEffect(() => {
-    setBookEntries([])
-    fetchEntries();
-  }, [category]);
+    if (!isOpen) {
+      setBookEntries([]);
+      fetchEntries();
+    }
+  }, [category, isOpen]);
+
+  useEffect(() => {
+    if (!alertDiagHandler.isOpen) {
+      setBookEntries([]);
+      fetchEntries();
+    }
+  }, [category, alertDiagHandler.isOpen]);
 
   return (
     <Box minW={'100%'} minH={'85vh'} bg={useColorModeValue('white', 'gray.900')} p={5}>
       <Heading>{pageTitle}</Heading>
+      <BookAlertDiag isOpen={alertDiagHandler.isOpen} onClose={alertDiagHandler.onClose}/>
+      <EntryForm book={currentEntry.book} current={currentEntry.current_page} isOpen={isOpen} onOpen={onOpen} onClose={onClose} modifier={updateEntryState} submitEntry={updateEntry}/>
       <SlideFade
-              in={bookEntries.length > 0}
-              out={bookEntries.length === 0}
-            >
+          in={bookEntries.length > 0}
+          out={bookEntries.length === 0}
+        >
         <SimpleGrid spacing={10}
                 alignItems={"center"}
                 justifyContent={"center"}
