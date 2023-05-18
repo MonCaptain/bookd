@@ -8,20 +8,23 @@ import {
   Flex,
   Heading,
   Icon,
+  IconButton,
   Image,
-  Link,
   Progress,
   SimpleGrid,
   Stack,
   Text,
 } from "@chakra-ui/react";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
+import { BiTrash } from "react-icons/bi";
 
-export default function BookCard({ cover, author, currentPage, pagecount, title, progress, dropped, rating }) {
+export default function BookCard({ cover, author, currentPage, pagecount, title, progress, dropped, rating, clickHandle, deleteHandle }) {
   let ratingStars = []
   for (let index = 0; index < 5; index++) {
     ratingStars.push(<Icon as={(index < rating) ? AiFillStar : AiOutlineStar} boxSize={8} key={index} color={'#faaf00'}/>)
   }
+
+
   return (
     <>
       <Card
@@ -67,7 +70,7 @@ export default function BookCard({ cover, author, currentPage, pagecount, title,
                 <Progress colorScheme={'orange'} rounded={'full'} isIndeterminate/>
               }
               <Stack mt={"5!important"} mb={0} direction={{base: "row", md: "column"}}>
-                <Text fontSize={'lg'} fontWeight={"500"}>Rating:</Text>
+                <Text fontSize={'lg'} fontWeight={"500"}>Personal Rating:</Text>
                 <SimpleGrid columns={5} alignSelf={'center'} spacingX={3}>
                   {ratingStars}
                 </SimpleGrid>
@@ -79,14 +82,11 @@ export default function BookCard({ cover, author, currentPage, pagecount, title,
               <Button
                 variant="solid"
                 colorScheme="orange"
+                onClick={clickHandle}
               >
-                Track
+                Edit
               </Button>
-              <Button variant="ghost" colorScheme="orange">
-                <Link isExternal>
-                  More Info
-                </Link>
-              </Button>
+              <IconButton colorScheme="red" icon={<Icon as={BiTrash} onClick={() => deleteHandle()}/>}></IconButton>
             </ButtonGroup>
           </CardFooter>
         </Flex>
