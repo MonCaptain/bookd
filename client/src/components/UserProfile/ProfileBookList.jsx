@@ -34,8 +34,6 @@ export default function ProfileBookList({ bookList }) {
         <SlideFade in={bookList.length > 0} out={bookList.length === 0}>
           <SimpleGrid
             spacing={10}
-            minH={"80vh"}
-            alignItems={"center"}
             justifyContent={"center"}
             columns={[1, 1, 1, 1, 2, 3]}
             p={5}
