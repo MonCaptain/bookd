@@ -69,9 +69,10 @@ class ApiClient {
 
   async logout() {
     return await this.apiRequest({
-      endpoint: "/users/logout",
-      method: "POST",
-    });
+      endpoint:"/users/logout",
+      method:"POST",
+      requestBody: {refresh: this.refreshToken}
+    })
   }
 
   async postBook(bookObject) {
