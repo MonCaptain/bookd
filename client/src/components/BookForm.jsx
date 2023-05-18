@@ -192,7 +192,7 @@ export default function BookForm({
         <Select
           variant={"filled"}
           icon={<ChevronDownIcon />}
-          onSelect={(e) => {
+          onChange={(e) => {
             setStatus(e.target.value);
           }}
           defaultValue={status}
