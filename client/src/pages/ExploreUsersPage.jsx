@@ -10,7 +10,6 @@ export default function ExploreUsersPage() {
   useEffect(() => {
     async function fetchAllUsers() {
       const responseData = await apiClient.getAllUserProfiles();
-      console.log(responseData);
       setUserProfiles(responseData);
       setIsLoading(false);
     }

@@ -34,6 +34,8 @@ import { useColorMode } from "@chakra-ui/react";
 import { HamburgerIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { useAuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import apiClient from "../services/apiClient";
 
 const LinkItems = [
   { name: "Home", icon: FiHome, path: "/" },
@@ -138,15 +140,17 @@ const NavItem = ({ icon, children, href, ...rest }) => {
 
 const MobileNav = ({ onOpen, ...rest }) => {
   const { colorMode, toggleColorMode } = useColorMode();
-
   const authVariables = useAuthContext();
+  const userProfile = authVariables.userProfile;
+  const userProfilePicture = userProfile.profile_picture;
+
+  const username = userProfile.user ? userProfile.user.username : "";
   const navigate = useNavigate();
 
   async function handleSignOut() {
     await authVariables.logoutUser();
     navigate("/");
   }
-
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -194,20 +198,17 @@ const MobileNav = ({ onOpen, ...rest }) => {
               <HStack>
                 <Avatar
                   size={"sm"}
-                  src={
-                    "https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9"
-                  }
+                  src={`http://localhost:8000${userProfilePicture}`}
+                  fallbacksrc="https://via.placeholder.com/250"
                 />
+
                 <VStack
                   display={{ base: "none", md: "flex" }}
                   alignItems="flex-start"
                   spacing="1px"
                   ml="2"
                 >
-                  <Text fontSize="sm">Justina Clark</Text>
-                  <Text fontSize="xs" color="gray.600">
-                    Admin
-                  </Text>
+                  <Text fontSize="sm">{username}</Text>
                 </VStack>
                 <Box display={{ base: "none", md: "flex" }}>
                   <FiChevronDown />
@@ -221,7 +222,6 @@ const MobileNav = ({ onOpen, ...rest }) => {
               <Link to={"/me"}>
                 <MenuItem>Profile</MenuItem>
               </Link>
-              <MenuItem>Settings</MenuItem>
               <MenuDivider />
               <MenuItem onClick={handleSignOut}>Sign out</MenuItem>
             </MenuList>
