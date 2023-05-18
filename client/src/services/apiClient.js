@@ -116,6 +116,14 @@ class ApiClient {
       method: "GET",
     })
   }
+
+  async deleteEntry(entryID) {
+    let username = await this.retrieveUsername()
+    return await this.apiRequest({
+      endpoint: `/books/${username}/entries/${entryID}`,
+      method: "DELETE",
+    })
+  }
 }
 
 export default new ApiClient("http://localhost:8000");
