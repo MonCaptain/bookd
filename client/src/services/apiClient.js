@@ -1,3 +1,4 @@
+import axios from "axios";
 class ApiClient {
   constructor(baseUrl) {
     this.accessToken = "null";
@@ -43,31 +44,30 @@ class ApiClient {
     }
   }
 
-  
-  async login(loginForm){
+  async login(loginForm) {
     return await this.apiRequest({
-      endpoint:"/users/login",
-      method:"POST",
-      requestBody:loginForm
-    })
-  }
-  
-  async loginWithToken(){
-    return await this.apiRequest({
-      endpoint:"/users/me",
-      method:"GET",
-    })
+      endpoint: "/users/login",
+      method: "POST",
+      requestBody: loginForm,
+    });
   }
 
-  async register(registerForm){
+  async loginWithToken() {
     return await this.apiRequest({
-      endpoint:"/users/register",
-      method:"POST",
-      requestBody:registerForm
-    })
+      endpoint: "/users/me",
+      method: "GET",
+    });
   }
 
-  async logout(){
+  async register(registerForm) {
+    return await this.apiRequest({
+      endpoint: "/users/register",
+      method: "POST",
+      requestBody: registerForm,
+    });
+  }
+
+  async logout() {
     return await this.apiRequest({
       endpoint:"/users/logout",
       method:"POST",
@@ -77,10 +77,10 @@ class ApiClient {
 
   async postBook(bookObject) {
     return await this.apiRequest({
-        endpoint: "/books/",
-        method: "POST",
-        requestBody: bookObject
-      });
+      endpoint: "/books/",
+      method: "POST",
+      requestBody: bookObject,
+    });
   }
 
   async retrieveUsername() {
@@ -107,6 +107,51 @@ class ApiClient {
       method: "PATCH",
       requestBody: entryObject,
     });
+  }
+
+  // retrieve all user profiles
+  async getAllUserProfiles() {
+    return await this.apiRequest({
+      endpoint: "/users/",
+      method: "GET",
+    });
+  }
+
+  // retrieve user profile
+  async getUserProfile(username) {
+    return await this.apiRequest({
+      endpoint: `/books/${username}`,
+      method: "GET",
+    });
+  }
+
+  async editProfile(username, profileSettings) {
+    return await this.apiRequest({
+      endpoint: `/books/${username}`,
+      method: "PATCH",
+      requestBody: {
+        ...profileSettings,
+      },
+    });
+  }
+
+  async uploadProfilePicture(data) {
+    let form_data = new FormData();
+    form_data.append("image_url", data.image_url, data.image_url.name);
+
+    await axios
+      .post(`/media/images`, form_data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+      })
+      .then((res) => {
+        return res;
+      })
+      .catch((error) => {
+        return error.response;
+      });
   }
 }
 

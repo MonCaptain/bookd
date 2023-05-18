@@ -21,12 +21,12 @@ import {
 } from "@chakra-ui/react";
 import {
   FiHome,
-  FiSettings,
   FiChevronDown,
   FiBookOpen,
   FiCheck,
   FiTrash2,
   FiBook,
+  FiTrendingUp,
 } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { useColorMode } from "@chakra-ui/react";
@@ -36,11 +36,11 @@ import { useNavigate } from "react-router-dom";
 
 const LinkItems = [
   { name: "Home", icon: FiHome, path: "/" },
+  { name: "Explore", icon: FiBook, path: "/explore" },
+  { name: "Users are Reading", icon: FiTrendingUp, path: "/users" },
   { name: "Currently Reading", icon: FiBookOpen, path: "/reading" },
   { name: "Completed", icon: FiCheck, path: "/completed" },
   { name: "Dropped", icon: FiTrash2, path: "/dropped" },
-  { name: "Explore", icon: FiBook, path: "/explore" },
-  { name: "Settings", icon: FiSettings },
 ];
 
 export default function SidebarWithHeader({ children }) {
@@ -216,9 +216,10 @@ const MobileNav = ({ onOpen, ...rest }) => {
               bg={useColorModeValue("white", "gray.900")}
               borderColor={useColorModeValue("gray.200", "gray.700")}
             >
-              <MenuItem>Profile</MenuItem>
+              <Link to={"/me"}>
+                <MenuItem>Profile</MenuItem>
+              </Link>
               <MenuItem>Settings</MenuItem>
-              <MenuItem>Billing</MenuItem>
               <MenuDivider />
               <MenuItem onClick={handleSignOut}>Sign out</MenuItem>
             </MenuList>
