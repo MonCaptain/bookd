@@ -1,19 +1,14 @@
 /* eslint-disable react/prop-types */
-import { CheckIcon, ChevronDownIcon, CloseIcon } from "@chakra-ui/icons";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
   ButtonGroup,
-  Editable,
-  EditablePreview,
-  EditableInput,
   Flex,
   FormControl,
   FormLabel,
   Icon,
-  IconButton,
   Image,
-  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -29,65 +24,38 @@ import {
   Select,
   Stack,
   Tooltip,
-  useEditableControls,
   SliderTrack,
   SliderFilledTrack,
   SliderThumb,
   Slider,
   SliderMark,
   useToast,
+  Text,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
-import apiClient from "../services/apiClient";
 
 // Book Dialog
-export default function BookForm({
-  title,
-  author,
-  pages,
-  cover,
+export default function EntryForm({
+  book,
+  current,
   isOpen,
   onClose,
-  submitBook,
+  submitEntry,
   modifier,
 }) {
   const [status, setStatus] = useState(0);
   const [compRating, setCompRating] = useState(5);
-  const [currentPage, setCurrentPage] = useState(0);
-  const [normPages, setNormPages] = useState(pages);
+  const [currentPage, setCurrentPage] = useState(current);
   const toast = useToast();
 
+  // For bookEntry Submission:
+  const posStatus = ["Not Started", "In Progress", "Completed", "Dropped"];
+
   // For bookPages state (Might remove later)
-  useEffect(() => setNormPages(pages), [pages]);
-
-  // Change book status dinamically
   useEffect(() => {
-    if (status !== 3) {
-      if (currentPage == 0) {
-        setStatus(currentPage);
-      } else if (currentPage == normPages) {
-        setStatus(2);
-      } else {
-        setStatus(currentPage > 0 ? 1 : status);
-      }
-    }
-  }, [currentPage]);
-  // Controls for editable fields
-  const EditableControls = () => {
-    const { isEditing, getSubmitButtonProps, getCancelButtonProps } =
-      useEditableControls();
-
-    return isEditing ? (
-      <ButtonGroup justifyContent="end" size="sm" w="full" spacing={2} mt={2}>
-        <IconButton icon={<CheckIcon />} {...getSubmitButtonProps()} />
-        <IconButton
-          icon={<CloseIcon boxSize={3} />}
-          {...getCancelButtonProps()}
-        />
-      </ButtonGroup>
-    ) : null;
-  };
+    setCurrentPage(current)
+  }, [current])
 
   // Handles prop modification:
   const modifierHandler = (propName, propValue) => {
@@ -96,43 +64,25 @@ export default function BookForm({
     modifier(propObject);
   };
 
-  // Input fields for title and author
-  const BookInput = ({ label, input, size, propName }) => {
-    return (
-      <FormControl pb={3}>
-        <FormLabel>{label}</FormLabel>
-        <Editable defaultValue={input} isPreviewFocusable>
-          <Tooltip label={"Click to edit"} shouldWrapChildren>
-            <EditablePreview fontSize={size} />
-          </Tooltip>
-          <Input
-            as={EditableInput}
-            fontSize={size}
-            onBlur={(e) => modifierHandler(propName, e.target.value)}
-          />
-          <EditableControls />
-        </Editable>
-      </FormControl>
-    );
-  };
+  // Change book status dinamically
+  useEffect(() => {
+    if (status !== 3) {
+      if (currentPage == 0) {
+        setStatus(currentPage);
+      } else if (currentPage == book.page_count) {
+        setStatus(2);
+      } else {
+        setStatus(currentPage > 0 ? 1 : status);
+      }
+    }
+  }, [currentPage]);
 
-  // Input fields for page counts
-  const BasePageCount = ({ label, handler }) => {
+  // Input fields for title and author
+  const PropField = ({ label, input, size}) => {
     return (
       <FormControl pb={3}>
         <FormLabel>{label}</FormLabel>
-        <NumberInput
-          defaultValue={normPages}
-          min={1}
-          size={"md"}
-          onBlur={handler}
-        >
-          <NumberInputField />
-          <NumberInputStepper>
-            <NumberIncrementStepper />
-            <NumberDecrementStepper />
-          </NumberInputStepper>
-        </NumberInput>
+        <Text fontSize={size}>{input}</Text>
       </FormControl>
     );
   };
@@ -144,7 +94,7 @@ export default function BookForm({
         <NumberInput
           defaultValue={currentPage}
           min={0}
-          max={normPages}
+          max={book.page_count}
           size={"md"}
           onBlur={(e) => handler(e)}
         >
@@ -162,30 +112,23 @@ export default function BookForm({
   const currentPageHandler = (e) => {
     let curr = e.target.value;
 
-    if (curr > normPages) {
+    if (curr > book.page_count) {
       toast({
         title: "Page Limit Exceeded",
-        description: `Maximum value is ${normPages}.`,
+        description: `Maximum value is ${book.page_count}.`,
         status: "error",
         duration: "5000",
         isClosable: true,
       });
     }
-    setCurrentPage(curr <= normPages ? curr : normPages);
-  };
-
-  // When book total pages are modified
-  const BookPageModifier = (e) => {
-    let curr = e.target.value;
-    modifierHandler("pages", curr);
-    if (currentPage > curr) {
-      setCurrentPage(curr);
-    }
-    setNormPages(curr);
+    let newCurr = curr <= book.page_count ? curr : book.page_count
+    setCurrentPage(newCurr);
+    modifierHandler('current_page', newCurr)
   };
 
   // To pick Book status
   const StatusPicker = ({ title }) => {
+    modifierHandler('status', posStatus[status])
     return (
       <Box pb={3}>
         <FormLabel>{title}</FormLabel>
@@ -194,6 +137,7 @@ export default function BookForm({
           icon={<ChevronDownIcon />}
           onChange={(e) => {
             setStatus(e.target.value);
+            modifierHandler('status', posStatus[e.target.value]);
           }}
           defaultValue={status}
         >
@@ -237,6 +181,7 @@ export default function BookForm({
           }}
           onChangeEnd={() => {
             setCompRating(rating);
+            modifierHandler('rating', rating)
           }}
           onMouseEnter={() => setTooltip(true)}
           onMouseLeave={() => setTooltip(false)}
@@ -269,26 +214,12 @@ export default function BookForm({
     );
   };
 
-  // For bookEntry Submission:
-  const posStatus = ["Not Started", "In Progress", "Completed", "Dropped"];
-  const submitEntry = (result) => {
-    Promise.resolve(apiClient.postEntry({ book_id: result.id })).then(
-      (result) => {
-        let entryBody = Object.assign(result, {
-          current_page: currentPage,
-          rating: compRating,
-          status: posStatus[status],
-        });
-        Promise.resolve(apiClient.editEntry(result.id, entryBody));
-      }
-    );
-  };
 
   return (
     <Modal isOpen={isOpen} p={10} size={{ base: "sm", md: "xl" }} isCentered>
       <ModalOverlay backdropFilter="blur(10px) hue-rotate(90deg)" />
       <ModalContent>
-        <ModalHeader>Add book</ModalHeader>
+        <ModalHeader>Edit progress</ModalHeader>
         <ModalCloseButton onClick={onClose} />
         <ModalBody pb={6} alignItems={"center"}>
           <Stack
@@ -297,36 +228,34 @@ export default function BookForm({
             justifyContent={"space-around"}
           >
             <Image
-              src={cover}
+              src={book.cover_image}
               width={"200px"}
               rounded={"md"}
               alignSelf={"center"}
               mb={6}
-              alt={"Book cover for " + title}
+              alt={"Book cover for " + book.title}
             />
             <Flex direction={"column"} px={5} w={"100%"} h={"100%"}>
-              <BookInput
+              <PropField
                 label={"Title"}
-                input={title}
+                input={book.title}
                 size={"xl"}
-                propName={"title"}
               />
-              <BookInput
+              <PropField
                 label={"Author"}
-                input={author}
+                input={book.author}
                 size={"lg"}
-                propName={"author"}
               />
-              <BasePageCount
+              <PropField
                 label={"Page Count"}
-                pagesPass={normPages}
-                handler={BookPageModifier}
+                input={book.page_count}
+                size={"lg"}
               />
               <CurrPageCount
                 label={"Current Page"}
                 pagesPass={currentPage}
                 handler={currentPageHandler}
-                maxPage={normPages}
+                maxPage={book.page_count}
               />
               <StatusPicker title={"Clasification"}></StatusPicker>
               <Rating title={"Rating"} />
@@ -338,7 +267,7 @@ export default function BookForm({
             <Button
               variant={"solid"}
               colorScheme={"orange"}
-              onClick={() => submitBook(submitEntry)}
+              onClick={() => {submitEntry()}}
             >
               Submit
             </Button>

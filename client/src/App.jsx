@@ -19,9 +19,10 @@ const authedRouter = createBrowserRouter(
     <Route path="/" element={<RootLayout />}>
       {/* TODO: need to figure out what would be the index page the user will see upon login*/}
       {/* <Route index element={</>} /> */}
-      <Route path="/reading" element={<BookList listType={"reading"} />} />
-      <Route path="/completed" element={<BookList listType={"completed"} />} />
-      <Route path="/dropped" element={<BookList listType={"dropped"} />} />
+      <Route path="/reading" element={<BookList pageTitle={"Currently Reading"} category={"In Progress"} />} />
+      <Route path="/starting" element={<BookList pageTitle={"Not Started"} category={"Not Started"} />} />
+      <Route path="/completed" element={<BookList pageTitle={"Completed"} category={"Completed"}/>} />
+      <Route path="/dropped" element={<BookList pageTitle={"Dropped"} category={"Dropped"}/>} />
       <Route path="/users" element={<ExploreUsersPage />}/>
       <Route path="/users">
         <Route path=":username" element = {<UserProfile />}/>

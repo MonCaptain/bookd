@@ -27,6 +27,7 @@ import {
   FiTrash2,
   FiBook,
   FiTrendingUp,
+  FiBookmark,
 } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { useColorMode } from "@chakra-ui/react";
@@ -39,6 +40,7 @@ const LinkItems = [
   { name: "Explore", icon: FiBook, path: "/explore" },
   { name: "Users are Reading", icon: FiTrendingUp, path: "/users" },
   { name: "Currently Reading", icon: FiBookOpen, path: "/reading" },
+  { name: "Not Started", icon: FiBookmark, path: "/starting"},
   { name: "Completed", icon: FiCheck, path: "/completed" },
   { name: "Dropped", icon: FiTrash2, path: "/dropped" },
 ];
