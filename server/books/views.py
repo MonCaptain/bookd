@@ -397,7 +397,7 @@ class ManageUserCollectionDetail(APIView):
 
         collection = Collection.objects.get(
             uuid=collection_uuid, profile=user_profile)
-        serializer = BookEntrySerializer(collection, many=False)
+        serializer = CollectionSerializer(collection, many=False)
         return Response(
             serializer.data,
             status=status.HTTP_200_OK
@@ -417,7 +417,7 @@ class ManageUserCollectionDetail(APIView):
         user = get_object_or_404(User, username=username)
         user_profile = get_object_or_404(Profile, user=user)
         collection = get_object_or_404(
-            BookEntry, uuid=collection_uuid, profile=user_profile)
+            Collection, uuid=collection_uuid, profile=user_profile)
 
         collection.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
