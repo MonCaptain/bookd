@@ -27,7 +27,7 @@ export default function UserProfileCard({ username, bookEntryCount, avatar }) {
           <Avatar
             size={"xl"}
             src={`http://localhost:8000${avatar}`}
-            alt={"Author"}
+            alt={"User"}
             css={{
               border: "2px solid white",
             }}
