@@ -21,7 +21,7 @@ import { BiTrash } from "react-icons/bi";
 export default function BookCard({ cover, author, currentPage, pagecount, title, progress, dropped, rating, clickHandle, deleteHandle }) {
   let ratingStars = []
   for (let index = 0; index < 5; index++) {
-    ratingStars.push(<Icon as={(index < rating) ? AiFillStar : AiOutlineStar} boxSize={8} key={index} color={'#faaf00'}/>)
+    ratingStars.push(<Icon as={(index < rating) ? AiFillStar : AiOutlineStar} boxSize={8} key={index} color={dropped ? 'gray' : '#faaf00'}/>)
   }
 
 
@@ -59,15 +59,13 @@ export default function BookCard({ cover, author, currentPage, pagecount, title,
                 {title.slice(0, 64)}
               </Heading>
               <Text m={"0!important"}>{author ? author : "N/A"}</Text>
-              <Text color={progress === 100 ? "green" : "orange"} fontSize="2xl">
+              <Text color={dropped ? 'gray' : (progress === 100 ? "green" : "orange")} fontSize="2xl">
                 {currentPage ? `${currentPage}/${pagecount} Pages` : ""}
               </Text>
               { 
                 progress ? 
-                ( progress == 100 ?
-                  <Progress value={progress} rounded={'full'} colorScheme="green"/>:
-                  <Progress value={progress} rounded={'full'} colorScheme="orange"/>) : 
-                <Progress colorScheme={'orange'} rounded={'full'} isIndeterminate/>
+                <Progress value={progress} rounded={'full'} colorScheme={dropped ? 'gray' : (progress == 100 ? "green" : "orange")}/> : 
+                <Progress colorScheme={dropped ? 'gray' : 'orange'} rounded={'full'} isIndeterminate/>
               }
               <Stack mt={"5!important"} mb={0} direction={{base: "row", md: "column"}}>
                 <Text fontSize={'lg'} fontWeight={"500"}>Personal Rating:</Text>
