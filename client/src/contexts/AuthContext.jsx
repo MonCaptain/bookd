@@ -26,6 +26,7 @@ export function AuthContextProvider({ children }) {
   const [userTokens, setUserTokens] = useState(userTokensTemplate);
   const [userData, setUserData] = useState(userDataTemplate);
   const [isUserAuthed, setIsUserAuthed] = useState(false);
+  const [userProfile, setUserProfile] = useState({}); 
   const [isLoading, setIsLoading] = useState(true);
 
   async function loginUser(loginForm) {
@@ -40,7 +41,11 @@ export function AuthContextProvider({ children }) {
       // finally, login the user using the tokens
       if (tokensData.access != undefined) {
         setIsUserAuthed(true);
-        setUserData(await apiClient.loginWithToken());
+        const responseUserData = await apiClient.loginWithToken()
+        const responseUserProfileData = await apiClient.getUserProfile(responseUserData.username) 
+        setUserData(userData);
+        setUserProfile(responseUserProfileData)
+
       }
     } catch (error) {
       console.log(error);
@@ -76,7 +81,10 @@ export function AuthContextProvider({ children }) {
     }
 
     async function login() {
-      setUserData(await apiClient.loginWithToken());
+      const responseUserData = await apiClient.loginWithToken()
+      const responseUserProfileData = await apiClient.getUserProfile(responseUserData.username) 
+      setUserData(userData);
+      setUserProfile(responseUserProfileData)
     }
     const tokenString = localStorage.getItem(LOCAL_STORAGE_AUTH_KEY);
     if (isString(tokenString)) {
@@ -94,7 +102,9 @@ export function AuthContextProvider({ children }) {
     userTokens,
     isUserAuthed,
     isLoading,
+    userProfile,
     setUserData,
+    setUserProfile,
     loginUser,
     registerUser,
     logoutUser,
