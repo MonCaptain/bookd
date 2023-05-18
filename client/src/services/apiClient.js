@@ -136,9 +136,7 @@ class ApiClient {
 
   async uploadProfilePicture(data) {
     let form_data = new FormData();
-    console.log(data);
     form_data.append("image_url", data.image_url, data.image_url.name);
-    console.log(form_data);
 
     await axios
       .post(`/media/images`, form_data, {

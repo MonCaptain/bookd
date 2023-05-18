@@ -46,11 +46,7 @@ export default function ProfileSettingsStats({ userProfile, isOriginalUser }) {
   }
 
   function handleUpload() {
-    // Perform upload logic here
-    // You can access the selected file using `selectedImage` state
     if (selectedImage) {
-      console.log("Uploading file:", selectedImage);
-      // Add your upload logic here
       apiClient.uploadProfilePicture({ image_url: selectedImage });
     }
   }
