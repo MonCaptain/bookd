@@ -211,7 +211,7 @@ class ManageUserCollections(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        duplicate = Collection.objects.filter(title=title)
+        duplicate = Collection.objects.filter(title__contains=title)
         if duplicate.exists():
             title = title + f"({duplicate.count() + 1})"
 
