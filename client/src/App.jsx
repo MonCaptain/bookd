@@ -17,8 +17,7 @@ import UserProfile from "./pages/UserProfile";
 const authedRouter = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<RootLayout />}>
-      {/* TODO: need to figure out what would be the index page the user will see upon login*/}
-      {/* <Route index element={</>} /> */}
+      <Route index element={<BookList pageTitle={"All Book Entries"} category={""}/>} />
       <Route path="/reading" element={<BookList pageTitle={"Currently Reading"} category={"In Progress"} />} />
       <Route path="/starting" element={<BookList pageTitle={"Not Started"} category={"Not Started"} />} />
       <Route path="/completed" element={<BookList pageTitle={"Completed"} category={"Completed"}/>} />

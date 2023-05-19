@@ -86,11 +86,12 @@ export default function ProfileSettingsStats({
       <Heading textColor={orangeTextTheme}>User Profile</Heading>
       <Flex
         columnGap={"50px"}
+        rowGap={"50px"}
         height="100%"
-        maxHeight={"30vh"}
         padding={"20px"}
         bg={containerColor}
         borderRadius={"5px"}
+        flexDirection={{base:"column", md:"row"}}
       >
         <Image
           boxSize="250px"
