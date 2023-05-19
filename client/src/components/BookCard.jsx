@@ -12,13 +12,14 @@ import {
   Image,
   Progress,
   SimpleGrid,
+  Spacer,
   Stack,
   Text,
 } from "@chakra-ui/react";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { BiTrash } from "react-icons/bi";
 
-export default function BookCard({ cover, author, currentPage, pagecount, title, progress, dropped, rating, clickHandle, deleteHandle }) {
+export default function BookCard({ cover, author, currentPage, pagecount, title, progress, dropped, rating, clickHandle, deleteHandle, favoriteHandle, isFavorite }) {
   let ratingStars = []
   for (let index = 0; index < 5; index++) {
     ratingStars.push(<Icon as={(index < rating) ? AiFillStar : AiOutlineStar} boxSize={8} key={index} color={dropped ? 'gray' : '#faaf00'}/>)
@@ -76,7 +77,6 @@ export default function BookCard({ cover, author, currentPage, pagecount, title,
             </Stack>
           </CardBody>
           <CardFooter>
-            <ButtonGroup spacing="2">
               <Button
                 variant="solid"
                 colorScheme="orange"
@@ -84,8 +84,9 @@ export default function BookCard({ cover, author, currentPage, pagecount, title,
               >
                 Edit
               </Button>
-              <IconButton colorScheme="red" icon={<Icon as={BiTrash} onClick={() => deleteHandle()}/>}></IconButton>
-            </ButtonGroup>
+              <Spacer></Spacer>
+              <IconButton colorScheme="red" mr={2} onClick={() => deleteHandle()} icon={<Icon as={BiTrash}/>}></IconButton>
+              <IconButton isDisabled={isFavorite} onClick={() => favoriteHandle()} icon={<Icon as={isFavorite? AiFillStar : AiOutlineStar}></Icon>}></IconButton>
           </CardFooter>
         </Flex>
       </Card>

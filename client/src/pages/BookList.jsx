@@ -12,13 +12,17 @@ export default function BookList({ pageTitle, category }) {
   const [bookEntries, setBookEntries] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const alertDiagHandler = useDisclosure();
+  const favoriteAlertDiagHandler = useDisclosure();
   const [currentEntry, setCurrentEntry] = useState({book: {}})
 
   const fetchEntries = () => 
   {
-    Promise.resolve(apiClient.retrieveEntries()).then((results) => {
+    Promise.resolve(apiClient.retrieveUsername()).then((username) => 
+    Promise.resolve(apiClient.getUserProfile(username)).then((profile) => {
+      Promise.resolve(apiClient.retrieveEntries()).then((results) => {
       let fetchedEntries = results.map((bookEntry, index) => {
         if (bookEntry.status === category || pageTitle === "All Book Entries" ) {
+        let isFavorite = (profile.favorite_book === null) ? false : (bookEntry.book.id === profile.favorite_book.id);
         return <BookCard 
           cover={bookEntry.book.cover_image} 
           title={bookEntry.book.title} 
@@ -36,11 +40,18 @@ export default function BookList({ pageTitle, category }) {
           deleteHandle={() => {
             setCurrentEntry(bookEntry);
             alertDiagHandler.onOpen();
-          }}>
+          }}
+          isFavorite={isFavorite}
+          favoriteHandle={() => {
+            setCurrentEntry(bookEntry);
+            favoriteAlertDiagHandler.onOpen();
+          }
+          }>
         </BookCard>
         }})
         setBookEntries(fetchedEntries)
       })
+    }))
   }
 
   const BookAlertDiag = ({isOpen, onClose}) => {
@@ -58,13 +69,44 @@ export default function BookList({ pageTitle, category }) {
             <AlertDialogHeader>Discard Changes?</AlertDialogHeader>
             <AlertDialogCloseButton />
             <AlertDialogBody>
-              Are you want to delete "{currentEntry.book.title}"" from your books?
+              Are you want to delete "{currentEntry.book.title}" from your books?
             </AlertDialogBody>
             <AlertDialogFooter>
               <Button onClick={onClose}>
                 No
               </Button>
               <Button colorScheme='red' ml={3} onClick={() => deleteEntry()}>
+                Yes
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </>
+    )
+  }
+
+  const FavoriteAlertDiag = ({isOpen, onClose}) => {
+    return (
+      <>
+        <AlertDialog
+          motionPreset='slideInBottom'
+          onClose={onClose}
+          isOpen={isOpen}
+          isCentered
+        >
+          <AlertDialogOverlay />
+  
+          <AlertDialogContent>
+            <AlertDialogHeader>Discard Changes?</AlertDialogHeader>
+            <AlertDialogCloseButton />
+            <AlertDialogBody>
+              Are you want to make "{currentEntry.book.title}" your favorite book?
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <Button onClick={onClose}>
+                No
+              </Button>
+              <Button colorScheme='red' ml={3} onClick={() => selectFavorite()}>
                 Yes
               </Button>
             </AlertDialogFooter>
@@ -87,6 +129,23 @@ export default function BookList({ pageTitle, category }) {
     Promise.resolve(apiClient.deleteEntry(currentEntry.id)).then(() => alertDiagHandler.onClose())
   }
 
+  const selectFavorite = () => {
+    Promise.resolve(apiClient.retrieveUsername()).then((username) => {
+      console.log(username)
+      Promise.resolve(apiClient.editProfile(username, {favorite_book_id: currentEntry.book.id})).then((profile) => {
+        favoriteAlertDiagHandler.onClose()
+        console.log(profile)
+      })
+    })
+  };
+
+  useEffect(() => {
+    if (!favoriteAlertDiagHandler.isOpen) {
+      setBookEntries([]);
+      fetchEntries();
+    }
+  }, [category, favoriteAlertDiagHandler.isOpen]);
+
   useEffect(() => {
     if (!isOpen) {
       setBookEntries([]);
@@ -105,6 +164,7 @@ export default function BookList({ pageTitle, category }) {
     <Box minW={'100%'} minH={'85vh'} bg={useColorModeValue('white', 'gray.900')} p={5}>
       <Heading>{pageTitle}</Heading>
       <BookAlertDiag isOpen={alertDiagHandler.isOpen} onClose={alertDiagHandler.onClose}/>
+      <FavoriteAlertDiag isOpen={favoriteAlertDiagHandler.isOpen} onClose={favoriteAlertDiagHandler.onClose}/>
       <EntryForm book={currentEntry.book} current={currentEntry.current_page} isOpen={isOpen} onOpen={onOpen} onClose={onClose} modifier={updateEntryState} submitEntry={updateEntry}/>
       <SlideFade
           in={bookEntries.length > 0}
