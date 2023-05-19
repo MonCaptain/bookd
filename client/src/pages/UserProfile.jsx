@@ -15,8 +15,7 @@ export default function UserProfile({ isOriginalUser = false }) {
   const authVariables = useAuthContext();
   const isUserAuthed = authVariables.isUserAuthed;
   const authedUser = authVariables.userData;
-  // if the user is browsing their own profi
-  le, then allow them to edit it
+  // if the user is browsing their own profile, then allow them to edit it
   isOriginalUser = isOriginalUser || usernameParams === authedUser.username;
   const requestParams = isOriginalUser ? authedUser.username : usernameParams;
   // statevariables required to rendering user related information
