@@ -98,7 +98,7 @@ class ManageUserBookEntries(APIView):
         user_profile = get_object_or_404(Profile, user=user)
 
         if requester.username == username:
-            book_list = user_profile.book_list.through.objects.all()
+            book_list = user_profile.book_list.through.objects.filter(profile=user_profile)
             serializer = BookEntrySerializer(book_list, many=True)
             return Response(
                 serializer.data,
