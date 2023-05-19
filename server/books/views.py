@@ -97,7 +97,7 @@ class ManageUserBookEntries(APIView):
         user = get_object_or_404(User, username=username)
         user_profile = get_object_or_404(Profile, user=user)
 
-        if not user_profile.private or requester.username == username:
+        if requester.username == username:
             book_list = user_profile.book_list.through.objects.all()
             serializer = BookEntrySerializer(book_list, many=True)
             return Response(
@@ -173,7 +173,7 @@ class ManageUserCollections(APIView):
         user = get_object_or_404(User, username=username)
         user_profile = get_object_or_404(Profile, user=user)
 
-        if not user_profile.private or requester.username == username:
+        if requester.username == username:
             collections = user_profile.collections.all()
             serializer = CollectionSerializer(collections, many=True)
 
