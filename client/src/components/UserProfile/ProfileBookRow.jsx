@@ -13,8 +13,11 @@ import {
   Image,
   Badge,
   Alert,
+  Icon,
+  SimpleGrid,
+  useColorModeValue
 } from "@chakra-ui/react";
-
+import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 export default function ProfileBookRow({
   title,
   author,
@@ -23,6 +26,8 @@ export default function ProfileBookRow({
   rating,
   lastUpdated,
 }) {
+  const orangeTextTheme = useColorModeValue("orange.500", "orange.200");
+
   let alertTypeByStatus = {
     "Not started": "warning",
     Dropped: "error",
@@ -61,7 +66,19 @@ export default function ProfileBookRow({
               {readingStatus}
             </Alert>
           </Text>
-          <Text py="2">{rating ? "Rating: " + rating : ""}</Text>
+          <Text py="2">{rating ? `Rating: ${rating}/5 ` : ""}</Text>
+          <SimpleGrid columns={5} alignSelf={"center"} spacingX={3}>
+            {[...Array(5)].map((element, index) => {
+              return (
+                <Icon
+                  as={index < rating ? AiFillStar : AiOutlineStar}
+                  boxSize={8}
+                  key={index}
+                  color={readingStatus == "Dropped" ? "gray" : orangeTextTheme}
+                />
+              );
+            })}
+          </SimpleGrid>
         </CardBody>
       </Stack>
     </Card>
