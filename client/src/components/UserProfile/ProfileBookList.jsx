@@ -13,16 +13,19 @@ import {
   Icon,
   SlideFade,
   SimpleGrid,
-  useColorModeValue
+  useColorModeValue,
 } from "@chakra-ui/react";
 import ProfileBookRow from "./ProfileBookRow";
 
 export default function ProfileBookList({ bookList }) {
   const containerColor = useColorModeValue("whiteAlpha.900", "gray.800");
+  const orangeTextTheme = useColorModeValue("orange.500", "orange.200");
 
   return (
     <Box>
-      <Heading mb={"20px"}>Book List</Heading>
+      <Heading color={orangeTextTheme} mb={"20px"}>
+        Book List
+      </Heading>
       <Flex
         flexDirection={"column"}
         columnGap={"50px"}
@@ -45,9 +48,9 @@ export default function ProfileBookList({ bookList }) {
                   title={bookObject.book.title}
                   author={bookObject.book.author}
                   cover={bookObject.book.cover_image}
-                  status = {bookObject.status}
-                  rating = {bookObject.rating}
-                  currentPage = {bookObject.current_page}
+                  readingStatus={bookObject.status}
+                  rating={bookObject.rating}
+                  currentPage={bookObject.current_page}
                 />
               );
             })}

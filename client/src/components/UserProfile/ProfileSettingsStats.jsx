@@ -16,7 +16,11 @@ import {
 import apiClient from "../../services/apiClient";
 import { useEffect, useState } from "react";
 import BookList from "./../../pages/BookList";
-export default function ProfileSettingsStats({isOriginalUser, userProfile, setUserProfile }) {
+export default function ProfileSettingsStats({
+  isOriginalUser,
+  userProfile,
+  setProfilePicture,
+}) {
   // styling related
   const { colorMode, toggleColorMode } = useColorMode();
   const containerColor = useColorModeValue("whiteAlpha.900", "gray.800");
@@ -31,6 +35,7 @@ export default function ProfileSettingsStats({isOriginalUser, userProfile, setUs
     "Not started": 0,
     Dropped: 0,
     Completed: 0,
+    "In Progress": 0,
   });
 
   async function handleOnPrivacyToggle() {
@@ -50,7 +55,10 @@ export default function ProfileSettingsStats({isOriginalUser, userProfile, setUs
       await apiClient.uploadProfilePicture(userProfile.user.username, {
         image_url: selectedImage,
       });
-      await apiClient.getUserProfile(userProfile.user.username);
+      const fetchedUserProfile = await apiClient.getUserProfile(
+        userProfile.user.username
+      );
+      setProfilePicture(fetchedUserProfile.profile_picture);
     }
   }
 
@@ -60,7 +68,9 @@ export default function ProfileSettingsStats({isOriginalUser, userProfile, setUs
       "Not started": 0,
       Dropped: 0,
       Completed: 0,
+      "In Progress": 0,
     };
+
     if (userProfile) {
       bookList.map((element, index) => {
         categoryCountObject[`${element.status}`] += 1;
@@ -203,6 +213,11 @@ export default function ProfileSettingsStats({isOriginalUser, userProfile, setUs
             <Text>Completed</Text>
             <Spacer />
             <Text>{bookCountByCategory.Completed}</Text>
+          </Stack>
+          <Stack direction="row">
+            <Text>In Progress</Text>
+            <Spacer />
+            <Text>{bookCountByCategory["In Progress"]}</Text>
           </Stack>
           <Stack direction="row">
             <Text>Not yet started</Text>

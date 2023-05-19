@@ -20,6 +20,7 @@ export default function UserProfile({ isOriginalUser = false }) {
   const requestParams = isOriginalUser ? authedUser.username : usernameParams;
   // statevariables required to rendering user related information
   const [userProfile, setUserProfile] = useState(null);
+  const [profilePicture, setProfilePicture] = useState(null);
   const [bookList, setBookList] = useState([]);
   // don't render anything until the data is fetched
   const [isLoading, setIsLoading] = useState(true);
@@ -28,11 +29,13 @@ export default function UserProfile({ isOriginalUser = false }) {
       const responseData = await apiClient.getUserProfile(requestParams);
       setUserProfile(responseData);
       setBookList(responseData.book_list);
+      setProfilePicture(responseData.profile_picture);
       if (!responseData.detail) setIsLoading(false);
     }
 
     if (isUserAuthed && requestParams) fetchUserProfile();
-  }, [requestParams, isUserAuthed, userProfile]);
+  }, [requestParams, isUserAuthed, profilePicture]);
+
   return (
     <>
       {isLoading ? (
@@ -44,6 +47,7 @@ export default function UserProfile({ isOriginalUser = false }) {
             userProfile={userProfile}
             setUserProfile={setUserProfile}
             isOriginalUser={isOriginalUser}
+            setProfilePicture={setProfilePicture}
           />
           {/* Display user books list */}
           <ProfileBookList bookList={bookList} />
