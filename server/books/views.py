@@ -105,7 +105,7 @@ class ManageUserBookEntries(APIView):
                 status=status.HTTP_200_OK
             )
         return Response(
-            {'Detail': 'This profile is private'},
+            {'detail': 'Only the user who made the entries can view'},
             status=status.HTTP_403_FORBIDDEN
         )
 
