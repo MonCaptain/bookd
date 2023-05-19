@@ -47,7 +47,7 @@ export default function ProfileSettingsStats({ userProfile, isOriginalUser }) {
 
   function handleUpload() {
     if (selectedImage) {
-      apiClient.uploadProfilePicture({ image_url: selectedImage });
+      apiClient.uploadProfilePicture(userProfile.user.username, { image_url: selectedImage });
     }
   }
 
