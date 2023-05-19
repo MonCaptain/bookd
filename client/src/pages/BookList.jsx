@@ -6,6 +6,9 @@ import BookCard from "../components/BookCard";
 import EntryForm from "../components/EntryForm";
 
 export default function BookList({ pageTitle, category }) {
+  // color themes 
+  const orangeTextTheme = useColorModeValue("orange.500", "orange.200");
+  
   // fetch user book list, and then filter them based on reading status
   // i.e. currently_reading, completed, dropped, all, etc...
 
@@ -162,7 +165,7 @@ export default function BookList({ pageTitle, category }) {
 
   return (
     <Box minW={'100%'} minH={'85vh'} bg={useColorModeValue('white', 'gray.900')} p={5}>
-      <Heading>{pageTitle}</Heading>
+      <Heading color={orangeTextTheme}>{pageTitle}</Heading>
       <BookAlertDiag isOpen={alertDiagHandler.isOpen} onClose={alertDiagHandler.onClose}/>
       <FavoriteAlertDiag isOpen={favoriteAlertDiagHandler.isOpen} onClose={favoriteAlertDiagHandler.onClose}/>
       <EntryForm book={currentEntry.book} current={currentEntry.current_page} isOpen={isOpen} onOpen={onOpen} onClose={onClose} modifier={updateEntryState} submitEntry={updateEntry}/>

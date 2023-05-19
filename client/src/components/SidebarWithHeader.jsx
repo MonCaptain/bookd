@@ -161,8 +161,8 @@ const MobileNav = ({ onOpen, ...rest }) => {
   const navigate = useNavigate();
 
   async function handleSignOut() {
-    await authVariables.logoutUser();
     navigate("/");
+    await authVariables.logoutUser();
   }
   return (
     <Flex
