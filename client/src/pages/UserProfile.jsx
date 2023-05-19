@@ -1,7 +1,5 @@
 import { useParams } from "react-router-dom";
-import {
-  Box,
-} from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { useAuthContext } from "../contexts/AuthContext";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -34,7 +32,7 @@ export default function UserProfile({ isOriginalUser = false }) {
     }
 
     if (isUserAuthed && requestParams) fetchUserProfile();
-  }, [requestParams, isUserAuthed]);
+  }, [requestParams, isUserAuthed, userProfile]);
   return (
     <>
       {isLoading ? (
@@ -42,9 +40,13 @@ export default function UserProfile({ isOriginalUser = false }) {
       ) : (
         <Box display={"flex"} flexDirection={"column"} rowGap={"20px"}>
           {/* Display user stat and fun fact information */}
-          <ProfileSettingsStats userProfile={userProfile} isOriginalUser={isOriginalUser}/>
+          <ProfileSettingsStats
+            userProfile={userProfile}
+            setUserProfile={setUserProfile}
+            isOriginalUser={isOriginalUser}
+          />
           {/* Display user books list */}
-          <ProfileBookList bookList={bookList}/>
+          <ProfileBookList bookList={bookList} />
         </Box>
       )}
     </>

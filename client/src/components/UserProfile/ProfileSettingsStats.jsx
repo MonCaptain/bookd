@@ -16,7 +16,7 @@ import {
 import apiClient from "../../services/apiClient";
 import { useEffect, useState } from "react";
 import BookList from "./../../pages/BookList";
-export default function ProfileSettingsStats({ userProfile, isOriginalUser }) {
+export default function ProfileSettingsStats({isOriginalUser, userProfile, setUserProfile }) {
   // styling related
   const { colorMode, toggleColorMode } = useColorMode();
   const containerColor = useColorModeValue("whiteAlpha.900", "gray.800");
@@ -45,9 +45,12 @@ export default function ProfileSettingsStats({ userProfile, isOriginalUser }) {
     setSelectedImage(file);
   }
 
-  function handleUpload() {
+  async function handleUpload() {
     if (selectedImage) {
-      apiClient.uploadProfilePicture({ image_url: selectedImage });
+      await apiClient.uploadProfilePicture(userProfile.user.username, {
+        image_url: selectedImage,
+      });
+      await apiClient.getUserProfile(userProfile.user.username);
     }
   }
 
