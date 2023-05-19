@@ -1,4 +1,5 @@
 import axios from "axios";
+
 class ApiClient {
   constructor(baseUrl) {
     this.accessToken = "null";
@@ -69,10 +70,10 @@ class ApiClient {
 
   async logout() {
     return await this.apiRequest({
-      endpoint:"/users/logout",
-      method:"POST",
-      requestBody: {refresh: this.refreshToken}
-    })
+      endpoint: "/users/logout",
+      method: "POST",
+      requestBody: { refresh: this.refreshToken },
+    });
   }
 
   async postBook(bookObject) {
@@ -135,12 +136,11 @@ class ApiClient {
     });
   }
 
-  async uploadProfilePicture(data) {
+  async uploadProfilePicture(username, data) {
     let form_data = new FormData();
-    form_data.append("image_url", data.image_url, data.image_url.name);
-
+    form_data.append("profile_picture", data.image_url, data.image_url.name);
     await axios
-      .post(`/media/images`, form_data, {
+      .patch(`http://localhost:8000/books/${username}`, form_data, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${this.accessToken}`,
@@ -155,19 +155,19 @@ class ApiClient {
   }
 
   async retrieveEntries() {
-    let username = await this.retrieveUsername()
+    let username = await this.retrieveUsername();
     return await this.apiRequest({
       endpoint: `/books/${username}/entries`,
       method: "GET",
-    })
+    });
   }
 
   async deleteEntry(entryID) {
-    let username = await this.retrieveUsername()
+    let username = await this.retrieveUsername();
     return await this.apiRequest({
       endpoint: `/books/${username}/entries/${entryID}`,
       method: "DELETE",
-    })
+    });
   }
 }
 
