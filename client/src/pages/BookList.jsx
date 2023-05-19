@@ -18,7 +18,7 @@ export default function BookList({ pageTitle, category }) {
   {
     Promise.resolve(apiClient.retrieveEntries()).then((results) => {
       let fetchedEntries = results.map((bookEntry, index) => {
-        if (bookEntry.status === category) {
+        if (bookEntry.status === category || pageTitle === "All Book Entries" ) {
         return <BookCard 
           cover={bookEntry.book.cover_image} 
           title={bookEntry.book.title} 
