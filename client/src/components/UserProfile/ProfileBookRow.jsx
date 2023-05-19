@@ -19,10 +19,16 @@ export default function ProfileBookRow({
   title,
   author,
   cover,
-  status,
+  readingStatus,
   rating,
   lastUpdated,
 }) {
+  let alertTypeByStatus = {
+    "Not started": "warning",
+    Dropped: "error",
+    Completed: "success",
+    "In Progress": "info",
+  };
   return (
     <Card
       direction={{ base: "column", sm: "row" }}
@@ -43,12 +49,19 @@ export default function ProfileBookRow({
             Written by {author}
           </Text>
           <Text py="2">
-            <Alert status="success" variant="subtle" width={"full"}>
-              {status}
+            <Alert
+              status={
+                readingStatus == "In Progress"
+                  ? "warning"
+                  : alertTypeByStatus[`${readingStatus}`]
+              }
+              variant="subtle"
+              width={"full"}
+            >
+              {readingStatus}
             </Alert>
           </Text>
-          <Text py="2">Last updated {lastUpdated}</Text>
-          <Text py="2">{ rating ? "Rating: " +  rating : ""}</Text>
+          <Text py="2">{rating ? "Rating: " + rating : ""}</Text>
         </CardBody>
       </Stack>
     </Card>
