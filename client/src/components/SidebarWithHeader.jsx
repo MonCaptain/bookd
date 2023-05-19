@@ -18,6 +18,7 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  Divider
 } from "@chakra-ui/react";
 import {
   FiHome,
@@ -39,12 +40,12 @@ import apiClient from "../services/apiClient";
 
 const LinkItems = [
   { name: "Home", icon: FiHome, path: "/" },
-  { name: "Explore", icon: FiBook, path: "/explore" },
-  { name: "Users are Reading", icon: FiTrendingUp, path: "/users" },
   { name: "Currently Reading", icon: FiBookOpen, path: "/reading" },
-  { name: "Not Started", icon: FiBookmark, path: "/starting" },
   { name: "Completed", icon: FiCheck, path: "/completed" },
+  { name: "Not Started", icon: FiBookmark, path: "/starting" },
   { name: "Dropped", icon: FiTrash2, path: "/dropped" },
+  { name: "Users are Reading", icon: FiTrendingUp, path: "/users" },
+  { name: "Explore", icon: FiBook, path: "/explore" },
 ];
 
 export default function SidebarWithHeader({ children }) {
@@ -104,9 +105,12 @@ const SidebarContent = ({ onClose, ...rest }) => {
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
+        <>
+        {link.name === "Users are Reading" && <Divider />}
         <NavItem key={link.name} icon={link.icon} href={link.path}>
           {link.name}
         </NavItem>
+        </>
       ))}
     </Box>
   );
