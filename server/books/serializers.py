@@ -120,6 +120,7 @@ class ProfileSerializer(serializers.ModelSerializer):
             favorite_book = None
 
         instance.favorite_book = favorite_book
+        instance.save()
         return instance
 
 
