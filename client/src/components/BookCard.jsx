@@ -86,7 +86,7 @@ export default function BookCard({ cover, author, currentPage, pagecount, title,
               </Button>
               <Spacer></Spacer>
               <IconButton colorScheme="red" mr={2} onClick={() => deleteHandle()} icon={<Icon as={BiTrash}/>}></IconButton>
-              <IconButton isDisabled={isFavorite} onClick={() => favoriteHandle()} icon={<Icon as={isFavorite? AiFillStar : AiOutlineStar}></Icon>}></IconButton>
+              <IconButton isDisabled={isFavorite} onClick={() => favoriteHandle()} icon={<Icon as={isFavorite? AiFillStar : AiOutlineStar} color={isFavorite? "#faaf00" : ""}></Icon>}></IconButton>
           </CardFooter>
         </Flex>
       </Card>
