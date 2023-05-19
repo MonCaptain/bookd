@@ -44,8 +44,8 @@ const LinkItems = [
   { name: "Completed", icon: FiCheck, path: "/completed" },
   { name: "Not Started", icon: FiBookmark, path: "/starting" },
   { name: "Dropped", icon: FiTrash2, path: "/dropped" },
-  { name: "Users are Reading", icon: FiTrendingUp, path: "/users" },
   { name: "Explore", icon: FiBook, path: "/explore" },
+  { name: "Users are Reading", icon: FiTrendingUp, path: "/users" },
 ];
 
 export default function SidebarWithHeader({ children }) {
@@ -106,7 +106,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
       </Flex>
       {LinkItems.map((link) => (
         <>
-        {link.name === "Users are Reading" && <Divider />}
+        {link.name === "Explore" && <Divider />}
         <NavItem key={link.name} icon={link.icon} href={link.path}>
           {link.name}
         </NavItem>
