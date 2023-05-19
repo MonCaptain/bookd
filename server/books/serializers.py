@@ -84,7 +84,8 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     user = UserSerializer(read_only=True)
     favorite_book = BookSerializer(required=False)
-    book_list = BookEntrySerializer(source='bookentry_set', many=True, read_only=True)
+    book_list = BookEntrySerializer(
+        source='bookentry_set', many=True, read_only=True)
     collections = CollectionSerializer(many=True)
 
     private = serializers.BooleanField(required=False)
@@ -100,6 +101,26 @@ class ProfileSerializer(serializers.ModelSerializer):
         """
         model = Profile
         exclude = ('id',)
+
+    def update(self, instance, validated_data):
+        instance.user = validated_data.get('user', instance.user)
+        instance.private = validated_data.get('private', instance.private)
+        instance.profile_picture = validated_data.get(
+            'profile_picture', instance.profile_picture)
+
+        if validated_data.get('favorite_book'):
+            print(validated_data['favorite_book'])
+            favorite_book = Book.objects.filter(
+                title=validated_data['favorite_book']['title'],
+                author=validated_data['favorite_book']['author'],
+                isbn=validated_data['favorite_book']['isbn'],
+                cover_image=validated_data['favorite_book']['cover_image']
+            ).first()
+        else:
+            favorite_book = None
+
+        instance.favorite_book = favorite_book
+        return instance
 
 
 class PrivateProfileSerializer(serializers.ModelSerializer):
