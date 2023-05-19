@@ -134,10 +134,8 @@ export default function BookList({ pageTitle, category }) {
 
   const selectFavorite = () => {
     Promise.resolve(apiClient.retrieveUsername()).then((username) => {
-      console.log(username)
       Promise.resolve(apiClient.editProfile(username, {favorite_book_id: currentEntry.book.id})).then((profile) => {
         favoriteAlertDiagHandler.onClose()
-        console.log(profile)
       })
     })
   };

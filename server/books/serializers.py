@@ -109,7 +109,6 @@ class ProfileSerializer(serializers.ModelSerializer):
             'profile_picture', instance.profile_picture)
 
         if validated_data.get('favorite_book'):
-            print(validated_data['favorite_book'])
             favorite_book = Book.objects.filter(
                 title=validated_data['favorite_book']['title'],
                 author=validated_data['favorite_book']['author'],
