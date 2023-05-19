@@ -42,7 +42,7 @@ const LinkItems = [
   { name: "Explore", icon: FiBook, path: "/explore" },
   { name: "Users are Reading", icon: FiTrendingUp, path: "/users" },
   { name: "Currently Reading", icon: FiBookOpen, path: "/reading" },
-  { name: "Not Started", icon: FiBookmark, path: "/starting"},
+  { name: "Not Started", icon: FiBookmark, path: "/starting" },
   { name: "Completed", icon: FiCheck, path: "/completed" },
   { name: "Dropped", icon: FiTrash2, path: "/dropped" },
 ];
@@ -79,6 +79,8 @@ export default function SidebarWithHeader({ children }) {
 }
 
 const SidebarContent = ({ onClose, ...rest }) => {
+  const orangeTextTheme = useColorModeValue("orange.500", "orange.200");
+
   return (
     <Box
       transition="3s ease"
@@ -91,8 +93,13 @@ const SidebarContent = ({ onClose, ...rest }) => {
       {...rest}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-          Logo
+        <Text
+          fontSize="2xl"
+          fontFamily="monospace"
+          fontWeight="bold"
+          color={orangeTextTheme}
+        >
+          Get Book'd
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
@@ -140,6 +147,8 @@ const NavItem = ({ icon, children, href, ...rest }) => {
 
 const MobileNav = ({ onOpen, ...rest }) => {
   const { colorMode, toggleColorMode } = useColorMode();
+  const orangeTextTheme = useColorModeValue("orange.500", "orange.200");
+
   const authVariables = useAuthContext();
   const userProfile = authVariables.userProfile;
   const userProfilePicture = userProfile.profile_picture;
@@ -176,8 +185,9 @@ const MobileNav = ({ onOpen, ...rest }) => {
         fontSize="2xl"
         fontFamily="monospace"
         fontWeight="bold"
+        color={orangeTextTheme}
       >
-        Logo
+        Get Book'd
       </Text>
 
       <HStack spacing={{ base: "0", md: "6" }}>
