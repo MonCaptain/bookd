@@ -65,6 +65,11 @@ class ManageUserProfiles(APIView):
 
         data = request.data
         data['user'] = user
+        favorite_book_id = data.pop('favorite_book_id') if data.get('favorite_book_id') else None
+
+        if favorite_book_id:
+            favorite_book = Book.objects.get(id=favorite_book_id)
+            data['favorite_book'] = BookSerializer(favorite_book, many=False).data
 
         serializer = ProfileSerializer(user_profile, data=data, partial=True)
         if serializer.is_valid():
