@@ -100,7 +100,7 @@ export default function BookList({ pageTitle, category }) {
           <AlertDialogOverlay />
   
           <AlertDialogContent>
-            <AlertDialogHeader>Discard Changes?</AlertDialogHeader>
+            <AlertDialogHeader>Set Favorite Book</AlertDialogHeader>
             <AlertDialogCloseButton />
             <AlertDialogBody>
               Are you want to make "{currentEntry.book.title}" your favorite book?
