@@ -66,7 +66,6 @@ export default function BookCard({
           roundedBottomLeft={{ base: "0", sm: "xl" }}
           roundedTopRight={{ base: "xl", sm: "0" }}
         />
-        {/* <Stack> */}
           <Flex direction={"column"} alignContent={"end"} w={"100%"}>
             <CardBody>
               <Stack>
@@ -134,7 +133,6 @@ export default function BookCard({
               ></IconButton>
             </CardFooter>
           </Flex>
-        {/* </Stack> */}
       </Card>
     </>
   );
