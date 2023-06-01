@@ -121,7 +121,7 @@ export default function ExplorePage() {
                 minH={"80vh"}
                 alignItems={"center"}
                 justifyContent={"center"}
-                columns={[1, null, 2, 3, 4, null]}
+                columns={[1, null, 1, 1, 2, 3]}
                 p={5}
               >
                 {fetchedBooks}
