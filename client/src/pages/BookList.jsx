@@ -171,12 +171,14 @@ export default function BookList({ pageTitle, category }) {
           in={bookEntries.length > 0}
           out={bookEntries.length === 0}
         >
-        <SimpleGrid spacing={10}
+        <SimpleGrid spacing={5}
                 alignItems={"center"}
                 justifyContent={"center"}
                 columns={[1, 1, 1, 1, 2, 3]}
                 gridRow={'unset'}
-                p={5}
+                // padding
+                pt={5}
+                pb={5}
                 >
           {bookEntries}
         </SimpleGrid>
