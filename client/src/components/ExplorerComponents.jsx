@@ -53,29 +53,24 @@ export function SearchedBookCard({
   return (
     <>
       <Card
-        direction={{ base: "row", md: "column" }}
+        direction={{ base: "column", sm: "row" }}
         rounded={"xl"}
-        minH={{ base: "230px", sm: "100%" }}
-        alignItems={"center"}
-        justifyContent={{ base: "center", md: "space-between" }}
+        justifyContent={"flex-start"}
+        maxH={{ sm: "367px" }}
+        h={"100%"}
       >
-        <Flex
-          justifyContent={"center"}
-          h={{ base: "100%", md: "" }}
-          w={{ base: "200px", md: "100%" }}
-        >
-          <Image
-            src={cover}
-            alt={author}
-            roundedTopLeft={"xl"}
-            roundedBottomLeft={{ base: "xl", md: "0" }}
-            roundedTopRight={{ base: "0", md: "xl" }}
-            h={{ base: "100%", md: "350px" }}
-            objectFit={"cover"}
-            objectPosition={"center"}
-            w={{ base: "200px", md: "100%" }}
-          />
-        </Flex>
+        <Image
+          src={cover}
+          alt={author}
+          objectFit={"cover"}
+          objectPosition={"center"}
+          maxW={{ sm: "200px" }}
+          w={"100%"}
+          roundedTopLeft={"xl"}
+          roundedBottomLeft={{ base: "0", sm: "xl" }}
+          roundedTopRight={{ base: "xl", sm: "0" }}
+        />
+
         <Flex direction={"column"} alignContent={"end"} w={"100%"}>
           <CardBody>
             <Stack>
