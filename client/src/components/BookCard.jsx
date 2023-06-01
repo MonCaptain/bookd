@@ -29,30 +29,25 @@ export default function BookCard({ cover, author, currentPage, pagecount, title,
   return (
     <>
       <Card
-        direction={{ base: "row", md: "column" }}
+        direction={{ base: "column", md: "row" }}
         rounded={"xl"}
-        minH={{ base: "230px", sm: "100%" }}
         alignItems={"center"}
-        justifyContent={{ base: "center", md: "space-between" }}
+        justifyContent={"flex-start"}
       >
-        <Flex
-          justifyContent={"center"}
-          h={{ base: "100%", md: "" }}
-          w={{ base: "200px", md: "100%" }}
-        >
           <Image
             src={cover}
             alt={author}
-            roundedTopLeft={"xl"}
-            roundedBottomLeft={{ base: "xl", md: "0" }}
-            roundedTopRight={{ base: "0", md: "xl" }}
-            h={{ base: "100%", md: "350px" }}
             objectFit={"cover"}
             objectPosition={"center"}
             filter={dropped ? "grayscale(100%)" : ""}
-            w={{ base: "200px", md: "100%" }}
+            h={{ base: "100%", md: "350px" }}
+            // the following two lines may be removed
+            w={"100%"}
+            maxW={"250px"}
+            roundedTopLeft={"xl"}
+            roundedBottomLeft={{ base: "0", md: "xl" }}
+            roundedTopRight={{ base: "xl", md: "0" }}
           />
-        </Flex>
         <Flex direction={"column"} alignContent={"end"} w={"100%"}>
           <CardBody>
             <Stack>
@@ -68,25 +63,26 @@ export default function BookCard({ cover, author, currentPage, pagecount, title,
                 <Progress value={progress} rounded={'full'} colorScheme={dropped ? 'gray' : (progress == 100 ? "green" : "orange")}/> : 
                 <Progress colorScheme={dropped ? 'gray' : 'orange'} rounded={'full'} isIndeterminate/>
               }
-              <Stack mt={"5!important"} mb={0} direction={{base: "row", md: "column"}}>
+              <Stack mt={"5!important"} mb={0} direction={'column'}>
                 <Text fontSize={'lg'} fontWeight={"500"}>Personal Rating:</Text>
-                <SimpleGrid columns={5} alignSelf={'center'} spacingX={3}>
+                <SimpleGrid columns={5} alignSelf={'flex-start'} spacingX={3}>
                   {ratingStars}
                 </SimpleGrid>
               </Stack>
             </Stack>
           </CardBody>
-          <CardFooter>
+          <CardFooter columnGap={"5px"}>
               <Button
                 variant="solid"
                 colorScheme="orange"
                 onClick={clickHandle}
+                mr={2}
               >
                 Edit
               </Button>
-              <Spacer></Spacer>
-              <IconButton colorScheme="red" mr={2} onClick={() => deleteHandle()} icon={<Icon as={BiTrash}/>}></IconButton>
               <IconButton isDisabled={isFavorite} onClick={() => favoriteHandle()} icon={<Icon as={isFavorite? AiFillStar : AiOutlineStar} color={isFavorite? "#faaf00" : ""}></Icon>}></IconButton>
+              <Spacer/>
+              <IconButton colorScheme="red" onClick={() => deleteHandle()} icon={<Icon as={BiTrash}/>}></IconButton>
           </CardFooter>
         </Flex>
       </Card>
