@@ -9,6 +9,7 @@ import ExplorePage from "./pages/ExplorePage";
 import ExploreUsersPage from "./pages/ExploreUsersPage";
 import UserProfile from "./pages/UserProfile";
 import ProtectedRoute from "./components/ProtectedRoute";
+import NotFound from "./pages/NotFound";
 
 export default function App() {
   const authVariables = useAuthContext();
@@ -35,6 +36,7 @@ export default function App() {
             path="/register"
             element={<LoginPage logOrRegValue={false} />}
           />
+          <Route path="*" element={<NotFound />} />
           {/* Private routes */}
           <Route
             path="/reading"
