@@ -10,8 +10,14 @@ import {
 } from "@chakra-ui/react";
 import RegisterDiag from "../components/RegisterDiag";
 import Navbar from "../components/NavBar";
+import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../contexts/AuthContext";
 
 export default function LoginPage({ logOrRegValue }) {
+  const navigate = useNavigate()
+  const isUserAuthed = useAuthContext().isUserAuthed
+  if (isUserAuthed) navigate("/")
+
   const [logOrReg, setLogOrReg] = useState(logOrRegValue);
   return (
     <>

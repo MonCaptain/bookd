@@ -1,18 +1,12 @@
-import { Outlet } from "react-router-dom";
 import SidebarWithHeader from "../components/SidebarWithHeader";
 import { useAuthContext } from "../contexts/AuthContext";
 
-export default function RootLayout() {
+export default function RootLayout({ children }) {
   const authVariables = useAuthContext();
   const isUserAuthed = authVariables.isUserAuthed;
-
   return isUserAuthed ? (
-    <SidebarWithHeader>
-      <Outlet />
-    </SidebarWithHeader>
+    <SidebarWithHeader>{children}</SidebarWithHeader>
   ) : (
-    <>
-      <Outlet />
-    </>
+    <>{children}</>
   );
 }
