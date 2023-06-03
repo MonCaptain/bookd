@@ -5,13 +5,19 @@ import {
   Heading,
   Text,
   Stack,
-  Link,
   useColorModeValue,
 } from "@chakra-ui/react";
 import RegisterDiag from "../components/RegisterDiag";
 import Navbar from "../components/NavBar";
+import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../contexts/AuthContext";
+import { Link } from "react-router-dom";
 
 export default function LoginPage({ logOrRegValue }) {
+  const navigate = useNavigate();
+  const isUserAuthed = useAuthContext().isUserAuthed;
+  if (isUserAuthed) navigate("/");
+
   const [logOrReg, setLogOrReg] = useState(logOrRegValue);
   return (
     <>
@@ -45,7 +51,11 @@ export default function LoginPage({ logOrRegValue }) {
             {logOrReg ? (
               <Text align={"center"}>
                 Haven't joined yet? Click{" "}
-                <Link color={"orange.400"} onClick={(e) => setLogOrReg(false)}>
+                <Link
+                  to={"/register"}
+                  color={"orange.400"}
+                  onClick={() => setLogOrReg(false)}
+                >
                   here
                 </Link>{" "}
                 👈
@@ -53,7 +63,11 @@ export default function LoginPage({ logOrRegValue }) {
             ) : (
               <Text align={"center"}>
                 Already have an account? Click{" "}
-                <Link color={"orange.400"} onClick={(e) => setLogOrReg(true)}>
+                <Link
+                  to={"/login"}
+                  color={"orange.400"}
+                  onClick={() => setLogOrReg(true)}
+                >
                   here
                 </Link>{" "}
                 👈

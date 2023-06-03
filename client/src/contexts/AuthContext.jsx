@@ -82,9 +82,12 @@ export function AuthContextProvider({ children }) {
 
     async function login() {
       const responseUserData = await apiClient.loginWithToken()
-      const responseUserProfileData = await apiClient.getUserProfile(responseUserData.username) 
-      setUserData(responseUserData);
-      setUserProfile(responseUserProfileData)
+      if (responseUserData.username){
+        const responseUserProfileData = await apiClient.getUserProfile(responseUserData.username) 
+        setUserData(responseUserData);
+        setUserProfile(responseUserProfileData)
+        setIsUserAuthed(true);
+      }
     }
     const tokenString = localStorage.getItem(LOCAL_STORAGE_AUTH_KEY);
     if (isString(tokenString)) {
@@ -92,7 +95,6 @@ export function AuthContextProvider({ children }) {
       setUserTokens(tokens);
       apiClient.setTokens(tokens);
       login();
-      setIsUserAuthed(true);
     }
     setIsLoading(false);
   }, []);
