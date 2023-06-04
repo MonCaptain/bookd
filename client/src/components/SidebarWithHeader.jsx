@@ -39,13 +39,13 @@ import { useEffect, useState } from "react";
 import apiClient from "../services/apiClient";
 
 const LinkItems = [
-  { name: "Home", icon: FiHome, path: "/" },
+  { name: "All Books", icon: FiHome, path: "/" },
   { name: "Currently Reading", icon: FiBookOpen, path: "/reading" },
   { name: "Completed", icon: FiCheck, path: "/completed" },
   { name: "Not Started", icon: FiBookmark, path: "/starting" },
   { name: "Dropped", icon: FiTrash2, path: "/dropped" },
-  { name: "Explore", icon: FiBook, path: "/explore" },
-  { name: "Users are Reading", icon: FiTrendingUp, path: "/users" },
+  { name: "Explore Books", icon: FiBook, path: "/explore" },
+  { name: "Explore Users", icon: FiTrendingUp, path: "/users" },
 ];
 
 export default function SidebarWithHeader({ children }) {
@@ -108,7 +108,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
       </Flex>
       {LinkItems.map((link) => (
         <>
-          {link.name === "Explore" && <Divider />}
+          {link.name === "Explore Books" && <Divider />}
           <NavItem key={link.name} icon={link.icon} href={link.path}>
             {link.name}
           </NavItem>
