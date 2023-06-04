@@ -198,6 +198,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
 
       <HStack spacing={{ base: "0", md: "6" }}>
         <IconButton
+        display={{base:"none", md:"block"}}
           size="lg"
           variant="ghost"
           aria-label="open menu"
