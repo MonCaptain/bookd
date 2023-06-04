@@ -18,7 +18,7 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
-  Divider
+  Divider,
 } from "@chakra-ui/react";
 import {
   FiHome,
@@ -94,22 +94,24 @@ const SidebarContent = ({ onClose, ...rest }) => {
       {...rest}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Text
-          fontSize="2xl"
-          fontFamily="monospace"
-          fontWeight="bold"
-          color={orangeTextTheme}
-        >
-          Get Book'd
-        </Text>
+        <Link to={"/"}>
+          <Text
+            fontSize="2xl"
+            fontFamily="monospace"
+            fontWeight="bold"
+            color={orangeTextTheme}
+          >
+            Get Book'd
+          </Text>
+        </Link>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
         <>
-        {link.name === "Explore" && <Divider />}
-        <NavItem key={link.name} icon={link.icon} href={link.path}>
-          {link.name}
-        </NavItem>
+          {link.name === "Explore" && <Divider />}
+          <NavItem key={link.name} icon={link.icon} href={link.path}>
+            {link.name}
+          </NavItem>
         </>
       ))}
     </Box>
