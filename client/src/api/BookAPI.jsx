@@ -12,17 +12,22 @@ export function searchQuery(bookName) {
     .then((searchResults) => {
       let obtainedBooks = [];
       searchResults.docs.forEach((element) => {
-        obtainedBooks.push({
-          title: element.title ? element.title : "Untitled",
-          author: element.author_name ? element.author_name[0] : "Unknown",
-          cover: element.cover_i
-            ? `https://covers.openlibrary.org/b/id/${element.cover_i}-L.jpg`
-            : unavailable,
-          pages: element.number_of_pages_median,
-          publish_date: element.publish_date !== undefined ? formatDate(element.publish_date[0]) : formatDate("Jan 1, 0001"),
-          infopage: `https://openlibrary.org/${element.key}`,
-          isbn: element.isbn ? element.isbn[0] : "Unknown",
-        });
+        if (element.cover_i) {
+          obtainedBooks.push({
+            title: element.title ? element.title : "Untitled",
+            author: element.author_name ? element.author_name[0] : "Unknown",
+            cover: element.cover_i
+              ? `https://covers.openlibrary.org/b/id/${element.cover_i}-L.jpg`
+              : unavailable,
+            pages: element.number_of_pages_median,
+            publish_date:
+              element.publish_date !== undefined
+                ? formatDate(element.publish_date[0])
+                : formatDate("Jan 1, 0001"),
+            infopage: `https://openlibrary.org/${element.key}`,
+            isbn: element.isbn ? element.isbn[0] : "Unknown",
+          });
+        }
       });
       return obtainedBooks;
     })
@@ -31,6 +36,10 @@ export function searchQuery(bookName) {
 }
 
 function formatDate(date) {
-  let newDate = new Date(isNaN(date == undefined ?  "Jan 1, 0001" : Date.parse(date)) ? "Jan 1, 0001" : date);
+  let newDate = new Date(
+    isNaN(date == undefined ? "Jan 1, 0001" : Date.parse(date))
+      ? "Jan 1, 0001"
+      : date
+  );
   return newDate.toISOString().split("T")[0];
 }
