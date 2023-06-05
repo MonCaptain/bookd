@@ -6,12 +6,12 @@ import {
   Text,
   Stack,
   useColorModeValue,
+  Link
 } from "@chakra-ui/react";
 import RegisterDiag from "../components/RegisterDiag";
 import Navbar from "../components/NavBar";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../contexts/AuthContext";
-import { Link } from "react-router-dom";
 
 export default function LoginPage({ logOrRegValue }) {
   const navigate = useNavigate();
@@ -24,25 +24,22 @@ export default function LoginPage({ logOrRegValue }) {
       <Navbar />
       <Flex
         minH={"100vh"}
-        align={"center"}
         justify={"center"}
         bg={useColorModeValue("gray.50", "gray.800")}
       >
-        <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+        <Stack spacing={8} mx={"auto"} w={"full"} maxW={"700px"} py={12} px={6} >
           {logOrReg ? (
             <Stack align={"center"}>
               <Heading fontSize={"4xl"}>Welcome back!</Heading>
               <Text fontSize={"lg"} color={"gray.600"}>
-                Sign in to keep track of your{" "}
-                <Link color={"orange.400"}>books</Link> 📖
+                Sign in to track of your books 📖
               </Text>
             </Stack>
           ) : (
             <Stack align={"center"}>
               <Heading fontSize={"4xl"}>Glad you're joining us!</Heading>
               <Text fontSize={"lg"} color={"gray.600"}>
-                Register to start your <Link color={"orange.400"}>book</Link> 📖
-                journey!
+                Register to start your 📖 reading journey!
               </Text>
             </Stack>
           )}
