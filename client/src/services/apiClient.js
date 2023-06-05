@@ -19,7 +19,7 @@ class ApiClient {
   }
 
   async apiRequest({ endpoint, method, requestBody = {} }) {
-    if (this.accessToken !== "null") {
+    if (this.accessToken !== "null" && endpoint !== "/users/register") {
       this.headers[`Authorization`] = `Bearer ${this.accessToken}`;
     }
     let requestInit;
