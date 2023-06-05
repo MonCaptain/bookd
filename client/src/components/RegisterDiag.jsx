@@ -63,7 +63,6 @@ export default function RegisterDiag() {
   }
 
   async function handleOnSubmit() {
-    console.log(registerForm);
     if (testRegisterForm()) {
       setIsLoading(true);
       await authVariables.registerUser(registerForm);
