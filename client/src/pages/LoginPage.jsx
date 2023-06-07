@@ -23,7 +23,6 @@ export default function LoginPage({ logOrRegValue }) {
     <>
       <Navbar />
       <Flex
-        minH={"100vh"}
         justify={"center"}
         bg={useColorModeValue("gray.50", "gray.800")}
       >
