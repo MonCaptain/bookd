@@ -4,7 +4,7 @@ class ApiClient {
   constructor(baseUrl) {
     this.accessToken = "null";
     this.refreshToken = "null";
-    this.LOCAL_STORAGE_AUTH_KEY = "donut_pcs_local_storage_tokens_key";
+    this.LOCAL_STORAGE_AUTH_KEY = "local_storage_tokens_key";
     this.headers = {
       "Content-Type": "application/json",
       Authorization: "",
