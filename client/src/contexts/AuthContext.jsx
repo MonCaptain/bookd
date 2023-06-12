@@ -90,7 +90,7 @@ export function AuthContextProvider({ children }) {
       }
     }
     const tokenString = localStorage.getItem(LOCAL_STORAGE_AUTH_KEY);
-    if (isString(tokenString)) {
+    if (tokenString!="undefined" && isString(tokenString)) {
       const tokens = JSON.parse(tokenString);
       setUserTokens(tokens);
       apiClient.setTokens(tokens);
