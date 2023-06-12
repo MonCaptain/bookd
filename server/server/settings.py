@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
+
+
 from datetime import timedelta
 from dotenv import load_dotenv
 
@@ -27,28 +30,23 @@ load_dotenv(os.path.join(BASE_DIR, ".env"))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY")
+POSTGRES_USERNAME = os.environ.get("POSTGRES_USERNAME")
+POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD")
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
+# SECURE_HSTS_SECONDS = 0
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',  # whitenoise
     'django.contrib.staticfiles',
-
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
-
     'corsheaders',
-
     'users',
     'books',
 ]
@@ -99,12 +97,11 @@ SIMPLE_JWT = {
 }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # whitenoise
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-
-    'corsheaders.middleware.CorsMiddleware',
-
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -136,16 +133,27 @@ WSGI_APPLICATION = 'server.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
+    # sqlite3
+    #     'default': {
+    #         'ENGINE': 'django.db.backends.sqlite3',
+    #         'NAME': BASE_DIR / 'db.sqlite3',
+    #     }
+    # }
+    # postgres
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'get_bookd',
+        'USER': POSTGRES_USERNAME,
+        'PASSWORD': POSTGRES_PASSWORD,
+    },
+    # fly.io
+    # 'default': dj_database_url.config(
+    #     default='sqlite:///' + os.path.join('db.sqlite3')
+    # ),
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -177,6 +185,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_URL = 'static/'
 
 # Actual directory user files go to
@@ -192,6 +201,43 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.UserAccount'
 
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
 # For Development
-ALLOWED_HOSTS = ['*']
-CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ORIGIN_ALLOW_ALL = True
+# ALLOWED_HOSTS = ['*']
+# Some security Django stuff (makes the API uncallable though)
+# CSRF_COOKIE_SECURE = False
+# SESSION_COOKIE_SECURE = False
+
+# essentially converts HTTP requests to HTTPS
+# set to True in production, set to false in development
+SECURE_SSL_REDIRECT = False
+
+
+# For Production
+# Some security Django stuff (makes the API uncallable though)
+# CSRF_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
+
+# essentially converts HTTP requests to HTTPS
+# set to True in production, set to false in development
+# SECURE_SSL_REDIRECT = True
+ALLOWED_HOSTS = [
+    'https://get-bookd-server.fly.dev',
+    'get-bookd-server.fly.dev',
+    'localhost', 
+    'http://127.0.0.1:8080', 
+    'http://localhost:8080', 
+    'http://127.0.0.1:8000/ ',
+    'http://127.0.0.1:5173',
+    'http://localhost:5173',
+]
+CORS_ALLOWED_ORIGINS = [
+    'https://get-bookd-server.fly.dev',
+    'http://127.0.0.1:8080',
+    'http://localhost:8080',
+    'http://127.0.0.1:5173',
+    'http://localhost:5173',
+]
