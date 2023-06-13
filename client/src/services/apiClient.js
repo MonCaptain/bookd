@@ -7,7 +7,6 @@ class ApiClient {
     this.LOCAL_STORAGE_AUTH_KEY = "local_storage_tokens_key";
     this.headers = {
       "Content-Type": "application/json",
-      Authorization: "",
     };
     this.baseUrl = baseUrl;
   }
