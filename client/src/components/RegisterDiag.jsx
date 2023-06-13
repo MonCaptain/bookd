@@ -13,7 +13,7 @@ import {
   AlertDescription,
   AlertIcon,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useAuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -29,24 +29,28 @@ export default function RegisterDiag() {
   });
   // loading spinner
   const [isLoading, setIsLoading] = useState(false);
-  // login error message
-  const [errorMsg, setErrorMsg] = useState("");
-
   const authVariables = useAuthContext();
+  // register error message
+  const setErrorMsg = authVariables.setErrorMsg
+  const errorMsg = authVariables.errorMsg
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (authVariables.isUserAuthed) navigate("/");
+  }, [authVariables.isUserAuthed]);
 
   function testRegisterForm() {
     let isAnyFieldEmpty = false;
     Object.keys(registerForm).forEach((field) => {
       if (registerForm[field].length === 0)
-        setErrorMsg("Please make sure that all fields are not empty");
       isAnyFieldEmpty = true;
     });
-
+    
     if (isAnyFieldEmpty) {
+      setErrorMsg("Please make sure that all fields are not empty");
       return false;
-    } else if (registerForm.username.length < 5) {
-      setErrorMsg("Username length must be at least 6 characters long.");
+    } else if (registerForm.username.length < 3) {
+      setErrorMsg("Username length must be at least 3 characters long");
       return false;
     } else if (registerForm.password == !registerForm.re_password) {
       setErrorMsg("Passwords do not match.");
@@ -55,7 +59,7 @@ export default function RegisterDiag() {
       registerForm.password.length < 8 &&
       registerForm.re_password.length < 8
     ) {
-      setErrorMsg("Password length must be at least 8 characters long.");
+      setErrorMsg("Password length must be at least 8 characters long");
       return false;
     }
 
@@ -67,9 +71,6 @@ export default function RegisterDiag() {
       setIsLoading(true);
       await authVariables.registerUser(registerForm);
       if (authVariables.isUserAuthed) navigate("/");
-      else {
-        setErrorMsg("An error has occured. Please try again.");
-      }
       setIsLoading(false);
     }
   }
