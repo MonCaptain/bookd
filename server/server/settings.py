@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'whitenoise.runserver_nostatic',  # whitenoise
+    # 'whitenoise.runserver_nostatic',  # whitenoise
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
@@ -99,7 +99,7 @@ SIMPLE_JWT = {
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # whitenoise
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',  # whitenoise
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -140,16 +140,16 @@ DATABASES = {
     #     }
     # }
     # postgres
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'get_bookd',
-        'USER': POSTGRES_USERNAME,
-        'PASSWORD': POSTGRES_PASSWORD,
-    },
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': 'get_bookd',
+    #     'USER': POSTGRES_USERNAME,
+    #     'PASSWORD': POSTGRES_PASSWORD,
+    # },
     # fly.io
-    # 'default': dj_database_url.config(
-    #     default='sqlite:///' + os.path.join('db.sqlite3')
-    # ),
+    'default': dj_database_url.config(
+        default='sqlite:///' + os.path.join('db.sqlite3')
+    ),
 }
 
 # Password validation
@@ -185,7 +185,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_URL = 'static/'
 
 # Actual directory user files go to
@@ -205,8 +205,8 @@ AUTH_USER_MODEL = 'users.UserAccount'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 # For Development
-# CORS_ORIGIN_ALLOW_ALL = True
-# ALLOWED_HOSTS = ['*']
+CORS_ORIGIN_ALLOW_ALL = True
+ALLOWED_HOSTS = ['*']
 # Some security Django stuff (makes the API uncallable though)
 # CSRF_COOKIE_SECURE = False
 # SESSION_COOKIE_SECURE = False
@@ -224,20 +224,20 @@ SECURE_SSL_REDIRECT = False
 # essentially converts HTTP requests to HTTPS
 # set to True in production, set to false in development
 # SECURE_SSL_REDIRECT = True
-ALLOWED_HOSTS = [
-    'https://get-bookd-server.fly.dev',
-    'get-bookd-server.fly.dev',
-    'localhost', 
-    'http://127.0.0.1:8080', 
-    'http://localhost:8080', 
-    'http://127.0.0.1:8000/ ',
-    'http://127.0.0.1:5173',
-    'http://localhost:5173',
-]
-CORS_ALLOWED_ORIGINS = [
-    'https://get-bookd-server.fly.dev',
-    'http://127.0.0.1:8080',
-    'http://localhost:8080',
-    'http://127.0.0.1:5173',
-    'http://localhost:5173',
-]
+# ALLOWED_HOSTS = [
+#     'https://get-bookd-server.fly.dev',
+#     'get-bookd-server.fly.dev',
+#     'localhost', 
+#     'http://127.0.0.1:8080', 
+#     'http://localhost:8080', 
+#     'http://127.0.0.1:8000/ ',
+#     'http://127.0.0.1:5173',
+#     'http://localhost:5173',
+# ]
+# CORS_ALLOWED_ORIGINS = [
+#     'https://get-bookd-server.fly.dev',
+#     'http://127.0.0.1:8080',
+#     'http://localhost:8080',
+#     'http://127.0.0.1:5173',
+#     'http://localhost:5173',
+# ]
