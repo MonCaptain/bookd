@@ -6,7 +6,7 @@ import {
   Text,
   Stack,
   useColorModeValue,
-  Link
+  Link,
 } from "@chakra-ui/react";
 import RegisterDiag from "../components/RegisterDiag";
 import Navbar from "../components/NavBar";
@@ -17,16 +17,15 @@ export default function LoginPage({ logOrRegValue }) {
   const navigate = useNavigate();
   const isUserAuthed = useAuthContext().isUserAuthed;
   if (isUserAuthed) navigate("/");
-
   const [logOrReg, setLogOrReg] = useState(logOrRegValue);
+  const authVariables = useAuthContext();
+  // register error message
+  const setErrorMsg = authVariables.setErrorMsg;
   return (
     <>
       <Navbar />
-      <Flex
-        justify={"center"}
-        bg={useColorModeValue("gray.50", "gray.800")}
-      >
-        <Stack spacing={8} mx={"auto"} w={"full"} maxW={"700px"} py={12} px={6} >
+      <Flex justify={"center"} bg={useColorModeValue("gray.50", "gray.800")}>
+        <Stack spacing={8} mx={"auto"} w={"full"} maxW={"700px"} py={12} px={6}>
           {logOrReg ? (
             <Stack align={"center"}>
               <Heading fontSize={"4xl"}>Welcome back!</Heading>
@@ -50,7 +49,10 @@ export default function LoginPage({ logOrRegValue }) {
                 <Link
                   to={"/register"}
                   color={"orange.400"}
-                  onClick={() => setLogOrReg(false)}
+                  onClick={() => {
+                    setErrorMsg("");
+                    setLogOrReg(false);
+                  }}
                 >
                   here
                 </Link>{" "}
@@ -62,7 +64,10 @@ export default function LoginPage({ logOrRegValue }) {
                 <Link
                   to={"/login"}
                   color={"orange.400"}
-                  onClick={() => setLogOrReg(true)}
+                  onClick={() => {
+                    setErrorMsg("");
+                    setLogOrReg(true);
+                  }}
                 >
                   here
                 </Link>{" "}
