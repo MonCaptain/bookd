@@ -53,10 +53,14 @@ class ApiClient {
   }
 
   async loginWithToken() {
-    return await this.apiRequest({
+    const profileData = await this.apiRequest({
       endpoint: "/users/me",
       method: "GET",
     });
+    return {
+      ...profileData,
+      profile_picture:this.baseUrl + profileData.profile_picture
+    }
   }
 
   async register(registerForm) {
@@ -119,10 +123,14 @@ class ApiClient {
 
   // retrieve user profile
   async getUserProfile(username) {
-    return await this.apiRequest({
+    const profileData = await this.apiRequest({
       endpoint: `/books/${username}`,
       method: "GET",
     });
+    return {
+      ...profileData,
+      profile_picture:this.baseUrl + profileData.profile_picture
+    }
   }
 
   async editProfile(username, profileSettings) {
@@ -139,7 +147,7 @@ class ApiClient {
     let form_data = new FormData();
     form_data.append("profile_picture", data.image_url, data.image_url.name);
     await axios
-      .patch(`http://localhost:8000/books/${username}`, form_data, {
+      .patch(`${this.baseUrl}/books/${username}`, form_data, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${this.accessToken}`,

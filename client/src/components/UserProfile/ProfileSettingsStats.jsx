@@ -80,7 +80,6 @@ export default function ProfileSettingsStats({
       setBookCountByCategory(categoryCountObject);
     }
   }, [bookList]);
-
   return (
     <>
       <Heading textColor={orangeTextTheme}>User Profile</Heading>
@@ -96,7 +95,7 @@ export default function ProfileSettingsStats({
         <Image
           boxSize="250px"
           objectFit="cover"
-          src={`http://localhost:8000${userProfile.profile_picture}`}
+          src={userProfile.profile_picture}
           alt="Dan Abramov"
           fallbackSrc="https://via.placeholder.com/250"
         />
