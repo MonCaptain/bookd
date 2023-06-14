@@ -9,9 +9,12 @@ import {
   Button,
   useColorModeValue,
   ScaleFade,
+  Alert,
+  AlertDescription,
+  AlertIcon,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
@@ -21,14 +24,27 @@ export default function LoginDiag() {
     username: "",
     password: "",
   });
+  // loading spinner
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  // login error message
   const authVariables = useAuthContext();
+  // register error message
+  const setErrorMsg = authVariables.setErrorMsg;
+  const errorMsg = authVariables.errorMsg;
+
+  useEffect(() => {
+    if (authVariables.isUserAuthed) navigate("/");
+  }, [authVariables.isUserAuthed]);
 
   async function handleOnSubmit() {
+    setIsLoading(true);
     await authVariables.loginUser(loginForm);
-    if (authVariables.isUserAuthed) navigate("/");
+    setIsLoading(false);
   }
   function handleInputChange(event) {
+    // remove error message
+    setErrorMsg("");
     const fieldName = event.target.name;
     const fieldValue = event.target.value;
     setLoginForm({
@@ -42,10 +58,15 @@ export default function LoginDiag() {
         rounded={"lg"}
         bg={useColorModeValue("white", "gray.700")}
         boxShadow={"lg"}
-        maxW={"400px"}
-        w="100%"
         p={8}
+        alignSelf={"center"}
       >
+        {errorMsg && (
+          <Alert status="error" variant={"subtle"} mb={"10px"}>
+            <AlertIcon />
+            <AlertDescription>{errorMsg}</AlertDescription>
+          </Alert>
+        )}
         <Stack spacing={4}>
           <FormControl id="username">
             <FormLabel>Username</FormLabel>
@@ -76,6 +97,7 @@ export default function LoginDiag() {
               </InputRightElement>
             </InputGroup>
           </FormControl>
+
           <Stack spacing={10}>
             <Stack
               direction={{ base: "column", sm: "row" }}
@@ -84,6 +106,7 @@ export default function LoginDiag() {
             ></Stack>
             <Button
               onClick={handleOnSubmit}
+              isLoading={isLoading}
               bg={"orange.400"}
               color={"white"}
               _hover={{

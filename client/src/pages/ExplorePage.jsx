@@ -20,7 +20,6 @@ export default function ExplorePage() {
   const [query, setQuery] = useState("");
   const [searching, setSearching] = useState(<Spinner size={"xl"} />);
   const { isOpen, onOpen, onClose } = useDisclosure();
-
   const modifyBook = (props) => {
     let newBook = Object.assign(currentBook, props);
     setCurrentBook(newBook);
@@ -81,8 +80,8 @@ export default function ExplorePage() {
       <Flex
         bg={useColorModeValue("whiteAlpha.900", "gray.800")}
         minH={"80vh"}
-        alignItems={"center"}
-        justifyContent={"center"}
+        alignItems={fetchedBooks.length > 0 ? "flex-start" : "center"}
+        justifyContent={fetchedBooks.length > 0 ? "flex-start" : "center"}
       >
         <BookForm
           title={currentBook.title}
@@ -119,9 +118,7 @@ export default function ExplorePage() {
               <SimpleGrid
                 spacing={10}
                 minH={"80vh"}
-                alignItems={"center"}
-                justifyContent={"center"}
-                columns={[1, null, 2, 3, 4, null]}
+                columns={[1, null, 1, 1, 2, 3]}
                 p={5}
               >
                 {fetchedBooks}

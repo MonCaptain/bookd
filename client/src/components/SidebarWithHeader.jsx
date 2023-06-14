@@ -18,7 +18,7 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
-  Divider
+  Divider,
 } from "@chakra-ui/react";
 import {
   FiHome,
@@ -39,13 +39,13 @@ import { useEffect, useState } from "react";
 import apiClient from "../services/apiClient";
 
 const LinkItems = [
-  { name: "Home", icon: FiHome, path: "/" },
+  { name: "All Books", icon: FiHome, path: "/" },
   { name: "Currently Reading", icon: FiBookOpen, path: "/reading" },
   { name: "Completed", icon: FiCheck, path: "/completed" },
   { name: "Not Started", icon: FiBookmark, path: "/starting" },
   { name: "Dropped", icon: FiTrash2, path: "/dropped" },
-  { name: "Explore", icon: FiBook, path: "/explore" },
-  { name: "Users are Reading", icon: FiTrendingUp, path: "/users" },
+  { name: "Explore Books", icon: FiBook, path: "/explore" },
+  { name: "Explore Users", icon: FiTrendingUp, path: "/users" },
 ];
 
 export default function SidebarWithHeader({ children }) {
@@ -94,22 +94,24 @@ const SidebarContent = ({ onClose, ...rest }) => {
       {...rest}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Text
-          fontSize="2xl"
-          fontFamily="monospace"
-          fontWeight="bold"
-          color={orangeTextTheme}
-        >
-          Get Book'd
-        </Text>
+        <Link to={"/"}>
+          <Text
+            fontSize="2xl"
+            fontFamily="monospace"
+            fontWeight="bold"
+            color={orangeTextTheme}
+          >
+            Get Book'd
+          </Text>
+        </Link>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
         <>
-        {link.name === "Explore" && <Divider />}
-        <NavItem key={link.name} icon={link.icon} href={link.path}>
-          {link.name}
-        </NavItem>
+          {link.name === "Explore Books" && <Divider />}
+          <NavItem key={link.name} icon={link.icon} href={link.path}>
+            {link.name}
+          </NavItem>
         </>
       ))}
     </Box>
@@ -196,6 +198,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
 
       <HStack spacing={{ base: "0", md: "6" }}>
         <IconButton
+        display={{base:"none", md:"block"}}
           size="lg"
           variant="ghost"
           aria-label="open menu"
@@ -212,7 +215,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
               <HStack>
                 <Avatar
                   size={"sm"}
-                  src={`http://localhost:8000${userProfilePicture}`}
+                  src={userProfilePicture}
                   fallbacksrc="https://via.placeholder.com/250"
                 />
 

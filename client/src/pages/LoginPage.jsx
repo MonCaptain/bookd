@@ -5,38 +5,38 @@ import {
   Heading,
   Text,
   Stack,
-  Link,
   useColorModeValue,
+  Link,
 } from "@chakra-ui/react";
 import RegisterDiag from "../components/RegisterDiag";
 import Navbar from "../components/NavBar";
+import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../contexts/AuthContext";
 
 export default function LoginPage({ logOrRegValue }) {
+  const navigate = useNavigate();
+  const isUserAuthed = useAuthContext().isUserAuthed;
+  if (isUserAuthed) navigate("/");
   const [logOrReg, setLogOrReg] = useState(logOrRegValue);
+  const authVariables = useAuthContext();
+  const setErrorMsg = authVariables.setErrorMsg;
   return (
     <>
       <Navbar />
-      <Flex
-        minH={"100vh"}
-        align={"center"}
-        justify={"center"}
-        bg={useColorModeValue("gray.50", "gray.800")}
-      >
-        <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+      <Flex justify={"center"} bg={useColorModeValue("gray.50", "gray.800")}>
+        <Stack spacing={8} mx={"auto"} w={"full"} maxW={"700px"} py={12} px={6}>
           {logOrReg ? (
             <Stack align={"center"}>
               <Heading fontSize={"4xl"}>Welcome back!</Heading>
               <Text fontSize={"lg"} color={"gray.600"}>
-                Sign in to keep track of your{" "}
-                <Link color={"orange.400"}>books</Link> 📖
+                Sign in to track of your books 📖
               </Text>
             </Stack>
           ) : (
             <Stack align={"center"}>
               <Heading fontSize={"4xl"}>Glad you're joining us!</Heading>
               <Text fontSize={"lg"} color={"gray.600"}>
-                Register to start your <Link color={"orange.400"}>book</Link> 📖
-                journey!
+                Register to start your 📖 reading journey!
               </Text>
             </Stack>
           )}
@@ -45,7 +45,14 @@ export default function LoginPage({ logOrRegValue }) {
             {logOrReg ? (
               <Text align={"center"}>
                 Haven't joined yet? Click{" "}
-                <Link color={"orange.400"} onClick={(e) => setLogOrReg(false)}>
+                <Link
+                  to={"/register"}
+                  color={"orange.400"}
+                  onClick={() => {
+                    setErrorMsg("");
+                    setLogOrReg(false);
+                  }}
+                >
                   here
                 </Link>{" "}
                 👈
@@ -53,7 +60,14 @@ export default function LoginPage({ logOrRegValue }) {
             ) : (
               <Text align={"center"}>
                 Already have an account? Click{" "}
-                <Link color={"orange.400"} onClick={(e) => setLogOrReg(true)}>
+                <Link
+                  to={"/login"}
+                  color={"orange.400"}
+                  onClick={() => {
+                    setErrorMsg("");
+                    setLogOrReg(true);
+                  }}
+                >
                   here
                 </Link>{" "}
                 👈
