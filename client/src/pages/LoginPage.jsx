@@ -19,7 +19,6 @@ export default function LoginPage({ logOrRegValue }) {
   if (isUserAuthed) navigate("/");
   const [logOrReg, setLogOrReg] = useState(logOrRegValue);
   const authVariables = useAuthContext();
-  // register error message
   const setErrorMsg = authVariables.setErrorMsg;
   return (
     <>

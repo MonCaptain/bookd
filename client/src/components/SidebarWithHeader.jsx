@@ -215,7 +215,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
               <HStack>
                 <Avatar
                   size={"sm"}
-                  src={`http://localhost:8000${userProfilePicture}`}
+                  src={userProfilePicture}
                   fallbacksrc="https://via.placeholder.com/250"
                 />
 
