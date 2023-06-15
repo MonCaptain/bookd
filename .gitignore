@@ -1,1 +1,4 @@
 mediafiles/
+.vercel
+.vscode
+env
