@@ -52,7 +52,7 @@ export default function RegisterDiag() {
     } else if (registerForm.username.length < 3) {
       setErrorMsg("Username length must be at least 3 characters long");
       return false;
-    } else if (registerForm.password ==! registerForm.re_password) {
+    } else if (registerForm.password != registerForm.re_password) {
       setErrorMsg("Passwords do not match.");
       return false;
     } else if (
