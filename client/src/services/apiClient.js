@@ -115,10 +115,16 @@ class ApiClient {
 
   // retrieve all user profiles
   async getAllUserProfiles() {
-    return await this.apiRequest({
+    const userProfiles = await this.apiRequest({
       endpoint: "/users/",
       method: "GET",
     });
+    return userProfiles.map((userProfile)=>{
+      return {
+        ...userProfile,
+        profile_picture: this.baseUrl + userProfile.profile_picture
+      }
+    })
   }
 
   // retrieve user profile
