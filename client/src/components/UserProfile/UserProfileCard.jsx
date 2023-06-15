@@ -26,7 +26,7 @@ export default function UserProfileCard({ username, bookEntryCount, avatar }) {
         <Flex justify={"center"} mt={5}>
           <Avatar
             size={"xl"}
-            src={`http://localhost:8000${avatar}`}
+            src={avatar}
             alt={"User"}
             css={{
               border: "2px solid white",
