@@ -41,7 +41,7 @@ export function AuthContextProvider({ children }) {
         setUserProfile(responseUserProfileData)
         setIsUserAuthed(true);
       }
-      else if (tokensData.error == "No active account found with the given credentials"){
+      else if (tokensData.detail == "No active account found with the given credentials"){
         setErrorMsg("No active account found with the given credentials")
       }
       else {
