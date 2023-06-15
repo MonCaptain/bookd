@@ -90,7 +90,7 @@ export default function ProfileSettingsStats({
         padding={"20px"}
         bg={containerColor}
         borderRadius={"5px"}
-        flexDirection={{base:"column", md:"row"}}
+        flexDirection={{base:"column", lg:"row"}}
       >
         <Image
           boxSize="250px"
