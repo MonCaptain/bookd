@@ -139,16 +139,16 @@ DATABASES = {
     #         'NAME': BASE_DIR / 'db.sqlite3',
     #     }
     # postgres
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': 'get_bookd',
-    #     'USER': POSTGRES_USERNAME,
-    #     'PASSWORD': POSTGRES_PASSWORD,
-    # },
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'get_bookd',
+        'USER': POSTGRES_USERNAME,
+        'PASSWORD': POSTGRES_PASSWORD,
+    },
     # fly.io
-    'default': dj_database_url.config(
-        default='sqlite:///' + os.path.join('db.sqlite3')
-    ),
+    # 'default': dj_database_url.config(
+    #     default='sqlite:///' + os.path.join('db.sqlite3')
+    # ),
 }
 
 # Password validation
@@ -200,9 +200,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.UserAccount'
 
-
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG") == 'True'
+
 # For Development
 CORS_ORIGIN_ALLOW_ALL = True
 ALLOWED_HOSTS = ['*']
