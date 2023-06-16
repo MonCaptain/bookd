@@ -37,7 +37,7 @@ import { useAuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import apiClient from "../services/apiClient";
-
+import React from "react";
 const LinkItems = [
   { name: "All Books", icon: FiHome, path: "/" },
   { name: "Currently Reading", icon: FiBookOpen, path: "/reading" },
@@ -106,13 +106,13 @@ const SidebarContent = ({ onClose, ...rest }) => {
         </Link>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
-      {LinkItems.map((link) => (
-        <>
-          {link.name === "Explore Books" && <Divider />}
-          <NavItem key={link.name} icon={link.icon} href={link.path}>
+      {LinkItems.map((link, index) => (
+        <React.Fragment key={index}>
+          {link.name === "Explore Books" && <Divider/>}
+          <NavItem icon={link.icon} href={link.path}>
             {link.name}
           </NavItem>
-        </>
+        </React.Fragment>
       ))}
     </Box>
   );
@@ -198,7 +198,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
 
       <HStack spacing={{ base: "0", md: "6" }}>
         <IconButton
-        display={{base:"none", md:"block"}}
+          display={{ base: "none", md: "block" }}
           size="lg"
           variant="ghost"
           aria-label="open menu"
