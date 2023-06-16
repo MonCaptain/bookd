@@ -56,8 +56,10 @@ export function AuthContextProvider({ children }) {
     }
   }
   async function registerUser(registerForm) {
+    apiClient.removeTokens();
     try {
       const response = await apiClient.register(registerForm);
+      console.log(response);
       if (response.success) {
         await loginUser({
           username: registerForm.username,
@@ -77,10 +79,11 @@ export function AuthContextProvider({ children }) {
       await apiClient.logout();
       setUserData(userDataTemplate);
       setIsUserAuthed(false);
-      localStorage.removeItem(LOCAL_STORAGE_AUTH_KEY);
     } catch (error) {
       if (import.meta.env.VITE_ENV === "development") console.log(error);
-    }
+    } finally {
+      apiClient.removeTokens();
+    } 
   }
   /* automatically login user upon refresh if refresh and access tokens
     are available in local storage */
