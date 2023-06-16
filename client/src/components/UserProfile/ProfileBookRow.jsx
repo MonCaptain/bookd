@@ -48,7 +48,7 @@ export default function ProfileBookRow({
           </Text>
           <Alert
             status={
-              readingStatus == "In Progress"
+              readingStatus == "Not Started"
                 ? "warning"
                 : alertTypeByStatus[`${readingStatus}`]
             }
