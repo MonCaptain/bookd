@@ -83,7 +83,7 @@ export function AuthContextProvider({ children }) {
       if (import.meta.env.VITE_ENV === "development") console.log(error);
     } finally {
       apiClient.removeTokens();
-    } 
+    }
   }
   /* automatically login user upon refresh if refresh and access tokens
     are available in local storage */
@@ -102,14 +102,14 @@ export function AuthContextProvider({ children }) {
         setUserProfile(responseUserProfileData);
         setIsUserAuthed(true);
       }
+      setIsLoading(false);
     }
     const tokenString = localStorage.getItem(LOCAL_STORAGE_AUTH_KEY);
     if (tokenString != "undefined" && isString(tokenString)) {
       const tokens = JSON.parse(tokenString);
       apiClient.setTokens(tokens);
       login();
-    }
-    setIsLoading(false);
+    } else setIsLoading(false);
   }, []);
 
   const authVariables = {

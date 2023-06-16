@@ -10,12 +10,16 @@ import ExploreUsersPage from "./pages/ExploreUsersPage";
 import UserProfile from "./pages/UserProfile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
+import {Flex, Spinner } from '@chakra-ui/react'
 
 export default function App() {
   const authVariables = useAuthContext();
   const isUserAuthed = authVariables.isUserAuthed;
+  console.log(authVariables.isLoading, authVariables.isUserAuthed)
   return authVariables.isLoading ? (
-    <></>
+    <Flex h={"100vh"} justifyContent={"center"} alignItems={"center"}>
+      <Spinner/>
+    </Flex>
   ) : (
     <BrowserRouter>
       <RootLayout>
