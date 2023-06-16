@@ -1,5 +1,4 @@
 import axios from "axios";
-
 class ApiClient {
   constructor(baseUrl) {
     this.accessToken = "null";
@@ -15,6 +14,12 @@ class ApiClient {
     this.accessToken = tokens.access;
     this.refreshToken = tokens.refresh;
     localStorage.setItem(this.LOCAL_STORAGE_AUTH_KEY, JSON.stringify(tokens));
+  }
+
+  removeTokens(){
+    this.accessToken = null;
+    this.refreshToken = null;
+    localStorage.removeItem(this.LOCAL_STORAGE_AUTH_KEY);
   }
 
   async apiRequest({ endpoint, method, requestBody = {} }) {
@@ -40,7 +45,9 @@ class ApiClient {
       const response = await fetch(requestUrl, requestInit);
       return await response.json();
     } catch (error) {
-      console.error(error.response);
+      if (import.meta.env.VITE_ENV === "development") {
+        console.error(error.response);
+      }
     }
   }
 
@@ -59,8 +66,8 @@ class ApiClient {
     });
     return {
       ...profileData,
-      profile_picture:this.baseUrl + profileData.profile_picture
-    }
+      profile_picture: this.baseUrl + profileData.profile_picture,
+    };
   }
 
   async register(registerForm) {
@@ -72,7 +79,7 @@ class ApiClient {
   }
 
   async logout() {
-    return await this.apiRequest({
+    await this.apiRequest({
       endpoint: "/users/logout",
       method: "POST",
       requestBody: { refresh: this.refreshToken },
@@ -119,12 +126,12 @@ class ApiClient {
       endpoint: "/users/",
       method: "GET",
     });
-    return userProfiles.map((userProfile)=>{
+    return userProfiles.map((userProfile) => {
       return {
         ...userProfile,
-        profile_picture: this.baseUrl + userProfile.profile_picture
-      }
-    })
+        profile_picture: this.baseUrl + userProfile.profile_picture,
+      };
+    });
   }
 
   // retrieve user profile
@@ -135,8 +142,8 @@ class ApiClient {
     });
     return {
       ...profileData,
-      profile_picture:this.baseUrl + profileData.profile_picture
-    }
+      profile_picture: this.baseUrl + profileData.profile_picture,
+    };
   }
 
   async editProfile(username, profileSettings) {
@@ -184,5 +191,4 @@ class ApiClient {
   }
 }
 
-// export default new ApiClient("http://localhost:8000");
-export default new ApiClient("https://get-bookd-server.fly.dev");
+export default new ApiClient(import.meta.env.VITE_API_URL);

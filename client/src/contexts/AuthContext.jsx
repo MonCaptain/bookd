@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useState, useEffect, createContext, useContext } from "react";
 import apiClient from "../services/apiClient";
 
@@ -20,10 +19,9 @@ export const userDataTemplate = {
 export function AuthContextProvider({ children }) {
   const [userData, setUserData] = useState(userDataTemplate);
   const [isUserAuthed, setIsUserAuthed] = useState(false);
-  const [userProfile, setUserProfile] = useState({}); 
+  const [userProfile, setUserProfile] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
-
 
   async function loginUser(loginForm) {
     try {
@@ -33,41 +31,47 @@ export function AuthContextProvider({ children }) {
         /* put tokens in local storage to use for login persistance. 
         (the following two lines do the same thing, will delete one of them later) */
         apiClient.setTokens(tokensData);
-        localStorage.setItem(LOCAL_STORAGE_AUTH_KEY, JSON.stringify(tokensData));
+        localStorage.setItem(
+          LOCAL_STORAGE_AUTH_KEY,
+          JSON.stringify(tokensData)
+        );
         // finally, login the user using the tokens
-        const responseUserData = await apiClient.loginWithToken()
-        const responseUserProfileData = await apiClient.getUserProfile(responseUserData.username) 
+        const responseUserData = await apiClient.loginWithToken();
+        const responseUserProfileData = await apiClient.getUserProfile(
+          responseUserData.username
+        );
         setUserData(responseUserData);
-        setUserProfile(responseUserProfileData)
+        setUserProfile(responseUserProfileData);
         setIsUserAuthed(true);
-      }
-      else if (tokensData.detail == "No active account found with the given credentials"){
-        setErrorMsg("No active account found with the given credentials")
-      }
-      else {
-        setErrorMsg("An error has occurred. Please try again")
+      } else if (
+        tokensData.detail ==
+        "No active account found with the given credentials"
+      ) {
+        setErrorMsg("No active account found with the given credentials");
+      } else {
+        setErrorMsg("An error has occurred. Please try again");
       }
     } catch (error) {
-      console.log(error);
+      if (import.meta.env.VITE_ENV === "development") console.log(error);
     }
   }
   async function registerUser(registerForm) {
+    apiClient.removeTokens();
     try {
       const response = await apiClient.register(registerForm);
-      if (response.success){
+      console.log(response);
+      if (response.success) {
         await loginUser({
           username: registerForm.username,
           password: registerForm.password,
         });
-      }
-      else if (response.error == "User with this username already exists") {
-        setErrorMsg("User with this username already exists")
-      }
-      else {
-        setErrorMsg("An error has occurred. Please try again")
+      } else if (response.error == "User with this username already exists") {
+        setErrorMsg("User with this username already exists");
+      } else {
+        setErrorMsg("An error has occurred. Please try again");
       }
     } catch (error) {
-      console.log(error);
+      if (import.meta.env.VITE_ENV === "development") console.log(error);
     }
   }
   async function logoutUser() {
@@ -75,9 +79,10 @@ export function AuthContextProvider({ children }) {
       await apiClient.logout();
       setUserData(userDataTemplate);
       setIsUserAuthed(false);
-      localStorage.removeItem(LOCAL_STORAGE_AUTH_KEY);
     } catch (error) {
-      console.log(error);
+      if (import.meta.env.VITE_ENV === "development") console.log(error);
+    } finally {
+      apiClient.removeTokens();
     }
   }
   /* automatically login user upon refresh if refresh and access tokens
@@ -88,21 +93,23 @@ export function AuthContextProvider({ children }) {
     }
 
     async function login() {
-      const responseUserData = await apiClient.loginWithToken()
-      if (responseUserData.username){
-        const responseUserProfileData = await apiClient.getUserProfile(responseUserData.username) 
+      const responseUserData = await apiClient.loginWithToken();
+      if (responseUserData.username) {
+        const responseUserProfileData = await apiClient.getUserProfile(
+          responseUserData.username
+        );
         setUserData(responseUserData);
-        setUserProfile(responseUserProfileData)
+        setUserProfile(responseUserProfileData);
         setIsUserAuthed(true);
       }
+      setIsLoading(false);
     }
     const tokenString = localStorage.getItem(LOCAL_STORAGE_AUTH_KEY);
-    if (tokenString!="undefined" && isString(tokenString)) {
+    if (tokenString != "undefined" && isString(tokenString)) {
       const tokens = JSON.parse(tokenString);
       apiClient.setTokens(tokens);
       login();
-    }
-    setIsLoading(false);
+    } else setIsLoading(false);
   }, []);
 
   const authVariables = {
@@ -116,7 +123,7 @@ export function AuthContextProvider({ children }) {
     loginUser,
     registerUser,
     logoutUser,
-    setErrorMsg
+    setErrorMsg,
   };
   return (
     <AuthContext.Provider value={authVariables}>

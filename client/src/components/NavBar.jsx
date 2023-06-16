@@ -1,11 +1,8 @@
-import { ReactNode } from "react";
 import {
   Box,
-  Button,
   Flex,
   Text,
   HStack,
-  Icon,
   useColorModeValue,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";

@@ -14,7 +14,6 @@ from pathlib import Path
 import os
 import dj_database_url
 
-
 from datetime import timedelta
 from dotenv import load_dotenv
 
@@ -24,16 +23,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Load environment variables
 load_dotenv(os.path.join(BASE_DIR, ".env"))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY")
-POSTGRES_USERNAME = os.environ.get("POSTGRES_USERNAME")
-POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD")
 
-# SECURE_HSTS_SECONDS = 0
 
 # Application definition
 INSTALLED_APPS = [
@@ -126,31 +121,6 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'server.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
-DATABASES = {
-    # sqlite3
-    #     'default': {
-    #         'ENGINE': 'django.db.backends.sqlite3',
-    #         'NAME': BASE_DIR / 'db.sqlite3',
-    #     }
-    # postgres
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': 'get_bookd',
-    #     'USER': POSTGRES_USERNAME,
-    #     'PASSWORD': POSTGRES_PASSWORD,
-    # },
-    # fly.io
-    'default': dj_database_url.config(
-        default='sqlite:///' + os.path.join('db.sqlite3')
-    ),
-}
-
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
@@ -168,6 +138,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+WSGI_APPLICATION = 'server.wsgi.application'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
@@ -187,11 +158,6 @@ USE_TZ = True
 # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_URL = 'static/'
 
-# Actual directory user files go to
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'mediafiles')
-
-# URL used to access the media
-MEDIA_URL = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -200,43 +166,70 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.UserAccount'
 
-
+ENVIRONMENT = os.environ.get("DJANGO_ENVIRONMENT", "development")
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-# For Development
-CORS_ORIGIN_ALLOW_ALL = True
-ALLOWED_HOSTS = ['*']
-# Some security Django stuff (makes the API uncallable though)
-# CSRF_COOKIE_SECURE = False
-# SESSION_COOKIE_SECURE = False
+DEBUG = os.environ.get("DEBUG") == 'True'
 
-# essentially converts HTTP requests to HTTPS
-# set to True in production, set to false in development
-SECURE_SSL_REDIRECT = False
+if ENVIRONMENT == "development":
+    POSTGRES_USERNAME = os.environ.get("POSTGRES_USERNAME")
+    POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD")
 
+    # Database
+    # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-# For Production
-# Some security Django stuff (makes the API uncallable though)
-# CSRF_COOKIE_SECURE = True
-# SESSION_COOKIE_SECURE = True
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'get_bookd',
+            'USER': POSTGRES_USERNAME,
+            'PASSWORD': POSTGRES_PASSWORD,
+        },
+    }
+    # (Development) Actual directory user files go to
+    MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'mediafiles')
+    MEDIA_URL = '/media/'
 
-# essentially converts HTTP requests to HTTPS
-# set to True in production, set to false in development
-# SECURE_SSL_REDIRECT = True
-# ALLOWED_HOSTS = [
-#     'https://get-bookd-server.fly.dev',
-#     'get-bookd-server.fly.dev',
-#     'localhost', 
-#     'http://127.0.0.1:8080', 
-#     'http://localhost:8080', 
-#     'http://127.0.0.1:8000/ ',
-#     'http://127.0.0.1:5173',
-#     'http://localhost:5173',
-# ]
-# CORS_ALLOWED_ORIGINS = [
-#     'https://get-bookd-server.fly.dev',
-#     'http://127.0.0.1:8080',
-#     'http://localhost:8080',
-#     'http://127.0.0.1:5173',
-#     'http://localhost:5173',
-# ]
+    CORS_ORIGIN_ALLOW_ALL = True
+    ALLOWED_HOSTS = ['*']
+    CSRF_COOKIE_SECURE = False
+    SESSION_COOKIE_SECURE = False
+
+elif ENVIRONMENT == "production":
+
+    # Database
+    # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
+    DATABASES = {
+        'default': dj_database_url.config(
+            default='sqlite:///' + os.path.join('db.sqlite3')
+        ),
+    }
+    # (Production) Since we're using volumes
+    MEDIA_ROOT = "/data/mediafiles"
+    # URL used to access the media
+    MEDIA_URL = '/data/media/'
+
+    SECURE_SSL_REDIRECT = False
+    CSRF_COOKIE_SECURE = False
+    SESSION_COOKIE_SECURE = False
+    SECURE_HSTS_SECONDS = 0
+
+    CORS_ORIGIN_ALLOW_ALL = True
+    ALLOWED_HOSTS = ['*']
+
+    # ALLOWED_HOSTS = [
+    #     'https://get-bookd-server.fly.dev',
+    #     'get-bookd-server.fly.dev',
+    #     'localhost', 
+    #     'http://127.0.0.1:8080', 
+    #     'http://localhost:8080', 
+    #     'http://127.0.0.1:8000/ ',
+    #     'http://127.0.0.1:5173',
+    #     'http://localhost:5173',
+    # ]
+    # CORS_ALLOWED_ORIGINS = [
+    #     'https://get-bookd-server.fly.dev',
+    #     'http://127.0.0.1:8080',
+    #     'http://localhost:8080',
+    #     'http://127.0.0.1:5173',
+    #     'http://localhost:5173',
+    # ]

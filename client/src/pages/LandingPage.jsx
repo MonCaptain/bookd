@@ -6,7 +6,6 @@ import {
   Image,
   Stack,
   Text,
-  Box,
   useBreakpointValue,
 } from "@chakra-ui/react";
 import { BiLogIn } from "react-icons/bi";

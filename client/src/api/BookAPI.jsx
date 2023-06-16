@@ -1,5 +1,3 @@
-import unavailable from "../assets/book-cover-unavailable.jpg";
-
 export function bookSearch(bookName) {
   let fetchPromise = Promise.resolve(
     fetch(`https://openlibrary.org/search.json?q=${bookName}`)
@@ -12,7 +10,12 @@ export function searchQuery(bookName) {
     .then((searchResults) => {
       let obtainedBooks = [];
       searchResults.docs.forEach((element) => {
-        if (element.cover_i) {
+        if (
+          element.title &&
+          element.author_name &&
+          element.cover_i &&
+          element.number_of_pages_median
+        ) {
           obtainedBooks.push({
             title: element.title ? element.title : "Untitled",
             author: element.author_name ? element.author_name[0] : "Unknown",

@@ -37,7 +37,7 @@ import { useAuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import apiClient from "../services/apiClient";
-
+import React from "react";
 const LinkItems = [
   { name: "All Books", icon: FiHome, path: "/" },
   { name: "Currently Reading", icon: FiBookOpen, path: "/reading" },
@@ -106,13 +106,13 @@ const SidebarContent = ({ onClose, ...rest }) => {
         </Link>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
-      {LinkItems.map((link) => (
-        <>
+      {LinkItems.map((link, index) => (
+        <React.Fragment key={index}>
           {link.name === "Explore Books" && <Divider />}
-          <NavItem key={link.name} icon={link.icon} href={link.path}>
+          <NavItem icon={link.icon} href={link.path}>
             {link.name}
           </NavItem>
-        </>
+        </React.Fragment>
       ))}
     </Box>
   );
@@ -157,7 +157,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
 
   const authVariables = useAuthContext();
   const userProfile = authVariables.userProfile;
-  const userProfilePicture = userProfile.profile_picture;
+  const [profilePicture, setProfilePicture] = useState();
 
   const username = userProfile.user ? userProfile.user.username : "";
   const navigate = useNavigate();
@@ -166,6 +166,11 @@ const MobileNav = ({ onOpen, ...rest }) => {
     navigate("/");
     await authVariables.logoutUser();
   }
+
+  useEffect(() => {
+    setProfilePicture(userProfile.profile_picture);
+  }, [userProfile]);
+
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -198,7 +203,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
 
       <HStack spacing={{ base: "0", md: "6" }}>
         <IconButton
-        display={{base:"none", md:"block"}}
+          display={{ base: "none", md: "block" }}
           size="lg"
           variant="ghost"
           aria-label="open menu"
@@ -215,7 +220,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
               <HStack>
                 <Avatar
                   size={"sm"}
-                  src={userProfilePicture}
+                  src={profilePicture}
                   fallbacksrc="https://via.placeholder.com/250"
                 />
 

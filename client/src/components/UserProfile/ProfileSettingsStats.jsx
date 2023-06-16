@@ -1,4 +1,3 @@
-import { useParams } from "react-router-dom";
 import {
   Box,
   Flex,
@@ -8,14 +7,13 @@ import {
   Stack,
   Switch,
   Text,
-  Divider,
   Button,
   useColorModeValue,
   useColorMode,
 } from "@chakra-ui/react";
 import apiClient from "../../services/apiClient";
 import { useEffect, useState } from "react";
-import BookList from "./../../pages/BookList";
+import { AuthContext, useAuthContext } from "../../contexts/AuthContext";
 export default function ProfileSettingsStats({
   isOriginalUser,
   userProfile,
@@ -30,6 +28,7 @@ export default function ProfileSettingsStats({
   const [selectedImage, setSelectedImage] = useState(null);
   // book stats related
   const [bookList, setBookList] = useState(userProfile.book_list);
+  const setUserProfile = useAuthContext().setUserProfile
   const [bookCountByCategory, setBookCountByCategory] = useState({
     All: 0,
     "Not started": 0,
@@ -58,6 +57,7 @@ export default function ProfileSettingsStats({
       const fetchedUserProfile = await apiClient.getUserProfile(
         userProfile.user.username
       );
+      setUserProfile(fetchedUserProfile)
       setProfilePicture(fetchedUserProfile.profile_picture);
     }
   }
@@ -90,7 +90,7 @@ export default function ProfileSettingsStats({
         padding={"20px"}
         bg={containerColor}
         borderRadius={"5px"}
-        flexDirection={{base:"column", md:"row"}}
+        flexDirection={{base:"column", lg:"row"}}
       >
         <Image
           boxSize="250px"
@@ -150,7 +150,6 @@ export default function ProfileSettingsStats({
                 <Box
                   width={"full"}
                   fontWeight={"semibold"}
-                  colorScheme="orange"
                   bg={colorMode == "light" ? "gray.100" : "gray.700"}
                   padding={"9px"}
                   borderRadius={"5px"}
