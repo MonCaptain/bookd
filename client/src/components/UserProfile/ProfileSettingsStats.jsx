@@ -126,7 +126,7 @@ export default function ProfileSettingsStats({
                 <Text>Private Profile</Text>
                 <Spacer />
                 <Switch
-                  colorscheme="orange"
+                  colorScheme="orange"
                   size="lg"
                   isChecked={isProfilePrivate}
                   onChange={handleOnPrivacyToggle}
@@ -138,7 +138,7 @@ export default function ProfileSettingsStats({
                 <Text>Dark mode</Text>
                 <Spacer />
                 <Switch
-                  colorscheme="orange"
+                  colorScheme="orange"
                   size="lg"
                   onChange={toggleColorMode}
                   isChecked={colorMode === "dark" ? true : false}
@@ -150,7 +150,6 @@ export default function ProfileSettingsStats({
                 <Box
                   width={"full"}
                   fontWeight={"semibold"}
-                  colorscheme="orange"
                   bg={colorMode == "light" ? "gray.100" : "gray.700"}
                   padding={"9px"}
                   borderRadius={"5px"}
@@ -173,7 +172,7 @@ export default function ProfileSettingsStats({
                   />
                 </Box>
                 <Button
-                  colorscheme="orange"
+                  colorScheme="orange"
                   onClick={handleUpload}
                   width={"50%"}
                 >
