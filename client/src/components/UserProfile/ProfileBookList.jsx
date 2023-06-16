@@ -1,16 +1,7 @@
-import { useParams } from "react-router-dom";
 import {
   Box,
   Flex,
   Heading,
-  Image,
-  Spacer,
-  Stack,
-  Switch,
-  Text,
-  Divider,
-  Button,
-  Icon,
   SlideFade,
   SimpleGrid,
   useColorModeValue,

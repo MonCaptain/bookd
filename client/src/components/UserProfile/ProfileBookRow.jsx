@@ -1,21 +1,14 @@
 import {
   Card,
-  Flex,
-  Box,
   Text,
-  Spacer,
-  CardHeader,
   Heading,
   CardBody,
   Stack,
-  CardFooter,
-  Button,
   Image,
-  Badge,
   Alert,
   Icon,
   SimpleGrid,
-  useColorModeValue
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 export default function ProfileBookRow({
@@ -53,19 +46,17 @@ export default function ProfileBookRow({
           <Text size={"md"} py="2">
             Written by {author}
           </Text>
-          <Text py="2">
-            <Alert
-              status={
-                readingStatus == "In Progress"
-                  ? "warning"
-                  : alertTypeByStatus[`${readingStatus}`]
-              }
-              variant="subtle"
-              width={"full"}
-            >
-              {readingStatus}
-            </Alert>
-          </Text>
+          <Alert
+            status={
+              readingStatus == "In Progress"
+                ? "warning"
+                : alertTypeByStatus[`${readingStatus}`]
+            }
+            variant="subtle"
+            width={"full"}
+          >
+            <Text py="2">{readingStatus}</Text>
+          </Alert>
           <Text py="2">{rating ? `Rating: ${rating}/5 ` : ""}</Text>
           <SimpleGrid columns={5} alignSelf={"center"} spacingX={3}>
             {[...Array(5)].map((element, index) => {
