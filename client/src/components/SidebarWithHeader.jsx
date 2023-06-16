@@ -108,7 +108,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
       </Flex>
       {LinkItems.map((link, index) => (
         <React.Fragment key={index}>
-          {link.name === "Explore Books" && <Divider/>}
+          {link.name === "Explore Books" && <Divider />}
           <NavItem icon={link.icon} href={link.path}>
             {link.name}
           </NavItem>
@@ -157,7 +157,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
 
   const authVariables = useAuthContext();
   const userProfile = authVariables.userProfile;
-  const userProfilePicture = userProfile.profile_picture;
+  const [profilePicture, setProfilePicture] = useState();
 
   const username = userProfile.user ? userProfile.user.username : "";
   const navigate = useNavigate();
@@ -166,6 +166,11 @@ const MobileNav = ({ onOpen, ...rest }) => {
     navigate("/");
     await authVariables.logoutUser();
   }
+
+  useEffect(() => {
+    setProfilePicture(userProfile.profile_picture);
+  }, [userProfile]);
+
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -215,7 +220,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
               <HStack>
                 <Avatar
                   size={"sm"}
-                  src={userProfilePicture}
+                  src={profilePicture}
                   fallbacksrc="https://via.placeholder.com/250"
                 />
 
