@@ -16,6 +16,12 @@ class ApiClient {
     localStorage.setItem(this.LOCAL_STORAGE_AUTH_KEY, JSON.stringify(tokens));
   }
 
+  removeTokens(){
+    this.accessToken = null;
+    this.refreshToken = null;
+    localStorage.removeItem(this.LOCAL_STORAGE_AUTH_KEY);
+  }
+
   async apiRequest({ endpoint, method, requestBody = {} }) {
     if (this.accessToken !== "null" && endpoint !== "/users/register") {
       this.headers[`Authorization`] = `Bearer ${this.accessToken}`;
@@ -73,7 +79,7 @@ class ApiClient {
   }
 
   async logout() {
-    return await this.apiRequest({
+    await this.apiRequest({
       endpoint: "/users/logout",
       method: "POST",
       requestBody: { refresh: this.refreshToken },
