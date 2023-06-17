@@ -70,7 +70,6 @@ export default function RegisterDiag() {
     if (testRegisterForm()) {
       setIsLoading(true);
       await authVariables.registerUser(registerForm);
-      if (authVariables.isUserAuthed) navigate("/");
       setIsLoading(false);
     }
   }

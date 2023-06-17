@@ -1,4 +1,4 @@
-import { Box, SimpleGrid, Center, Flex } from "@chakra-ui/react";
+import { Box, SimpleGrid, Flex } from "@chakra-ui/react";
 import UserProfileCard from "../components/UserProfile/UserProfileCard";
 import { useState, useEffect } from "react";
 import apiClient from "../services/apiClient";
@@ -22,12 +22,14 @@ export default function ExploreUsersPage() {
           {!isLoading &&
             userProfiles.length > 0 &&
             userProfiles.map((profileElement, index) => {
-              return <UserProfileCard
-                key={index}
-                username={profileElement.user.username}
-                bookEntryCount={profileElement.book_list.length}
-                avatar={profileElement.profile_picture}
-              />;
+              return (
+                <UserProfileCard
+                  key={index}
+                  username={profileElement.user.username}
+                  bookEntryCount={profileElement.book_list.length}
+                  avatar={profileElement.profile_picture}
+                />
+              );
             })}
         </SimpleGrid>
       </Box>
