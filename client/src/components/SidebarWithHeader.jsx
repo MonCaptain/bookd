@@ -34,9 +34,7 @@ import { Link } from "react-router-dom";
 import { useColorMode } from "@chakra-ui/react";
 import { HamburgerIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { useAuthContext } from "../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import apiClient from "../services/apiClient";
 import React from "react";
 const LinkItems = [
   { name: "All Books", icon: FiHome, path: "/" },
@@ -160,10 +158,8 @@ const MobileNav = ({ onOpen, ...rest }) => {
   const [profilePicture, setProfilePicture] = useState();
 
   const username = userProfile.user ? userProfile.user.username : "";
-  const navigate = useNavigate();
 
   async function handleSignOut() {
-    navigate("/");
     await authVariables.logoutUser();
   }
 

@@ -59,7 +59,6 @@ export function AuthContextProvider({ children }) {
     apiClient.removeTokens();
     try {
       const response = await apiClient.register(registerForm);
-      console.log(response);
       if (response.success) {
         await loginUser({
           username: registerForm.username,
