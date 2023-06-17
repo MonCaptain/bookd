@@ -1,4 +1,4 @@
-import { useState, React } from "react";
+import { useState, React, useEffect } from "react";
 import LoginDiag from "../components/LoginDiag";
 import {
   Flex,
@@ -16,10 +16,12 @@ import { useAuthContext } from "../contexts/AuthContext";
 export default function LoginPage({ logOrRegValue }) {
   const navigate = useNavigate();
   const isUserAuthed = useAuthContext().isUserAuthed;
-  if (isUserAuthed) navigate("/");
   const [logOrReg, setLogOrReg] = useState(logOrRegValue);
   const authVariables = useAuthContext();
   const setErrorMsg = authVariables.setErrorMsg;
+  useEffect(() => {
+    if (isUserAuthed) navigate("/");
+  }, [isUserAuthed]);
   return (
     <>
       <Navbar />
