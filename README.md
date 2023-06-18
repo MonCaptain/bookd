@@ -152,8 +152,19 @@ python manage.py runserver
   python manage.py flush
   ```
 
-- How can I fully reset the database if I'm having issues with `makemigrations` and `migrate`?
+- How can I reset the database if I'm having issues with `makemigrations` and `migrate`?
 
-  1. Delete the `db.sqlite3` file inside the server folder.
+  1. Use `psql` to recreate the database.
+
+     ```txt
+     postgres#= DROP DATABASE get_bookd;
+     DROP DATABASE
+     postgres#= CREATE DATABASE get_bookd;
+     CREATE DATABASE
+     ```
+
+   > if the psql doesn't work, then you may need to drop the database and create it again via pgAdmin4
 
   2. Run `makemigrations` and `migrate`.
+
+  User data will be lost so you will need to create another superuser and other users you may have created.
