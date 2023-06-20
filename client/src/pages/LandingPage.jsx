@@ -38,7 +38,7 @@ function SplitScreen() {
                 zIndex: -1,
               }}
             >
-              Get Book'd
+              Book'd
             </Text>
             <br />{" "}
             <Text color={"orange.400"} as={"span"}>
