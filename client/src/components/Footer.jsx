@@ -9,10 +9,11 @@ import {
   Image,
   HStack,
   Spacer,
+  Icon,
 } from "@chakra-ui/react";
 import React from "react";
 import OrangeGitHubLogo from "../assets/OrangeGitHubLogo.png";
-
+import bookLogo from "../assets/bookLogo.png";
 const ListHeader = ({ children }) => {
   return (
     <Text fontWeight={"500"} fontSize={"lg"} mb={2}>
@@ -40,12 +41,15 @@ export default function Footer() {
                 <Text
                   textColor={useColorModeValue("orange.500", "orange.400")}
                   fontWeight={"bold"}
+                  display={"flex"}
+                  alignItems={"center"}
                 >
-                  Get Book'd
+                <Image src={bookLogo} width={8}/>
+                  Book'd
                 </Text>
               </HStack>
             </Box>
-            <Text fontSize={"sm"}>© 2023 Get Book'd . All rights reserved</Text>
+            <Text fontSize={"sm"}>© 2023 Book'd . All rights reserved</Text>
           </Stack>
           {/* Section 2 */}
           <Stack align={"center"}>

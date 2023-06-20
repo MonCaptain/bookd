@@ -19,6 +19,7 @@ import {
   MenuItem,
   MenuList,
   Divider,
+  Image,
 } from "@chakra-ui/react";
 import {
   FiHome,
@@ -35,6 +36,7 @@ import { useColorMode } from "@chakra-ui/react";
 import { HamburgerIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { useAuthContext } from "../contexts/AuthContext";
 import { useEffect, useState } from "react";
+import bookLogo from "../assets/bookLogo.png";
 import React from "react";
 const LinkItems = [
   { name: "All Books", icon: FiHome, path: "/" },
@@ -98,8 +100,11 @@ const SidebarContent = ({ onClose, ...rest }) => {
             fontFamily="monospace"
             fontWeight="bold"
             color={orangeTextTheme}
+            display={"flex"}
+            alignItems={"center"}
           >
-            Get Book'd
+            <Image src={bookLogo} width={8} />
+            Book'd
           </Text>
         </Link>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
@@ -193,8 +198,10 @@ const MobileNav = ({ onOpen, ...rest }) => {
         fontFamily="monospace"
         fontWeight="bold"
         color={orangeTextTheme}
+        alignItems={"center"}
       >
-        Get Book'd
+        <Image src={bookLogo} width={8} />
+        Book'd
       </Text>
 
       <HStack spacing={{ base: "0", md: "6" }}>

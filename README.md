@@ -1,4 +1,4 @@
-# Get Book'd
+# Book'd
 
 ## Setting Up Development Environment
 
