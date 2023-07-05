@@ -49,7 +49,7 @@ export default function Footer() {
                 </Text>
               </HStack>
             </Box>
-            <Text fontSize={"sm"}>© 2023 Book'd . All rights reserved</Text>
+            <Text fontSize={"sm"}>© 2023 Book'd. All rights reserved</Text>
           </Stack>
           {/* Section 2 */}
           <Stack align={"center"}>
