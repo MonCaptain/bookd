@@ -55,7 +55,7 @@ export default function Footer() {
           <Stack align={"center"}>
             <ListHeader>Our Developers</ListHeader>
             <HStack>
-              <Link href={"https://github.com/ShehabMohsen"} isExternal>
+              <Link href={"https://github.com/moncaptain"} isExternal>
                 Shehab Mohsen
               </Link>
               <Spacer />
