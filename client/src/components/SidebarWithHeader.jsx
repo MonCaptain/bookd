@@ -112,7 +112,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
       {LinkItems.map((link, index) => (
         <React.Fragment key={index}>
           {link.name === "Explore Books" && <Divider />}
-          <NavItem icon={link.icon} href={link.path}>
+          <NavItem icon={link.icon} href={link.path} onClose = {onClose}>
             {link.name}
           </NavItem>
         </React.Fragment>
@@ -121,9 +121,9 @@ const SidebarContent = ({ onClose, ...rest }) => {
   );
 };
 
-const NavItem = ({ icon, children, href, ...rest }) => {
+const NavItem = ({ icon, children, href, onClose, ...rest }) => {
   return (
-    <Link to={href}>
+    <Link to={href} onClick={onClose}>
       {/* <Link to={href} style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}> */}
       <Flex
         align="center"
